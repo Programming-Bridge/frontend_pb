@@ -1,0 +1,124 @@
+@import "tailwindcss";
+
+/* Custom variant for selector-based (.dark) dark mode in Tailwind v4 */
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  /* Light Mode Palette */
+  --background: #FFFFFF;
+  --surface: #F8FAFC;
+  --surface-hover: #F1F5F9;
+  --card: #FFFFFF;
+  --card-hover: #F8FAFC;
+  --card-border: #E2E8F0;
+  
+  --foreground: #0F172A;
+  --foreground-muted: #64748B;
+  --foreground-subtle: #94A3B8;
+
+  --border: #E2E8F0;
+  --border-subtle: #F1F5F9;
+  --border-hover: #CBD5E1;
+
+  /* Brand Colors & Accents */
+  --brand: #00C466;
+  --brand-hover: #059669;
+  --brand-tint: #ECFDF5;
+  --brand-glow: rgba(0, 196, 102, 0.2);
+  --brand-cyan: #38BDF8;
+}
+
+.dark {
+  /* Dark Mode Palette */
+  --background: #0B0F12;
+  --surface: #11171A;
+  --surface-hover: #182226;
+  --card: #182226;
+  --card-hover: #1E2B30;
+  --card-border: #223036;
+
+  --foreground: #F8FAFC;
+  --foreground-muted: #94A3B8;
+  --foreground-subtle: #64748B;
+
+  --border: #1B262B;
+  --border-subtle: #141D21;
+  --border-hover: #2B3B42;
+
+  /* Brand Colors & Accents */
+  --brand: #00C466;
+  --brand-hover: #00E676;
+  --brand-tint: rgba(0, 196, 102, 0.12);
+  --brand-glow: rgba(0, 196, 102, 0.35);
+  --brand-cyan: #38BDF8;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-surface-hover: var(--surface-hover);
+  --color-card: var(--card);
+  --color-card-hover: var(--card-hover);
+  --color-card-border: var(--card-border);
+
+  --color-foreground: var(--foreground);
+  --color-foreground-muted: var(--foreground-muted);
+  --color-foreground-subtle: var(--foreground-subtle);
+
+  --color-border: var(--border);
+  --color-border-subtle: var(--border-subtle);
+  --color-border-hover: var(--border-hover);
+
+  --color-brand: var(--brand);
+  --color-brand-hover: var(--brand-hover);
+  --color-brand-tint: var(--brand-tint);
+  --color-brand-glow: var(--brand-glow);
+  --color-brand-cyan: var(--brand-cyan);
+}
+
+/* Base HTML & Body Styles */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+/* Infinite Marquee Animations */
+@keyframes marquee-left {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes marquee-right {
+  0% {
+    transform: translateX(-50%);
+  }
+  100% {
+    transform: translateX(0%);
+  }
+}
+
+.animate-marquee-left {
+  display: flex;
+  width: max-content;
+  animation: marquee-left 32s linear infinite;
+}
+
+.animate-marquee-right {
+  display: flex;
+  width: max-content;
+  animation: marquee-right 32s linear infinite;
+}
+
+.animate-marquee-left:hover,
+.animate-marquee-right:hover {
+  animation-play-state: paused;
+}

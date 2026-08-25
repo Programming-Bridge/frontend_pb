@@ -1,0 +1,11 @@
+{
+  "customLayouts": {
+    "brand": {},
+    "category": {},
+    "page": {},
+    "product": {}
+  },
+  "normalStoreUrl": "https://teckwrap-uae-sandbox.mybigcommerce.com/",
+  "port": "8000",
+  "packageManager": "npm"
+}
