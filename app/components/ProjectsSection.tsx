@@ -8,8 +8,10 @@ import {
   setProjectsLoading,
   setProjectsError,
   selectProjects,
+  selectProjectsLoading,
 } from "@/lib/store/features/projects/projectSlice";
 import { getProjects, type Project } from "@/app/services/projectService";
+import { ProjectsSkeleton } from "./skeletons/ProjectsSkeleton";
 import { SectionWrapper, SectionHeader, CalloutBanner } from "./common";
 import {
   FolderGit2,
@@ -20,9 +22,15 @@ import {
   Cloud,
 } from "lucide-react";
 
-export function ProjectsSection() {
+interface ProjectsSectionProps {
+  isPage?: boolean;
+  className?: string;
+}
+
+export function ProjectsSection({ isPage = false, className = "" }: ProjectsSectionProps) {
   const dispatch = useAppDispatch();
   const projects = useAppSelector(selectProjects);
+  const loading = useAppSelector(selectProjectsLoading);
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
 
   useEffect(() => {
@@ -72,15 +80,25 @@ export function ProjectsSection() {
 
   const getCategoryIcon = (category?: string) => {
     const cat = (category || "").toLowerCase();
-    if (cat.includes("web") || cat.includes("software")) return Code2;
-    if (cat.includes("mobile") || cat.includes("android")) return Smartphone;
+    if (cat.includes("mobile") || cat.includes("app")) return Smartphone;
     if (cat.includes("ai") || cat.includes("data") || cat.includes("ml")) return Brain;
     if (cat.includes("cloud") || cat.includes("devops")) return Cloud;
     return FolderGit2;
   };
 
+  if (loading || activeProjects.length === 0) {
+    return <ProjectsSkeleton />;
+  }
+
   return (
-    <SectionWrapper id="projects" variant="background" border="bottom" ariaLabel="Featured Projects">
+    <SectionWrapper
+      id="projects"
+      variant="background"
+      border={isPage ? "none" : "bottom"}
+      py={isPage ? "pt-20 pb-16 md:pt-24 md:pb-20" : "py-16 md:py-20"}
+      className={className}
+      ariaLabel="Featured Projects"
+    >
       {/* Header */}
       <SectionHeader
         icon={FolderGit2}
@@ -108,15 +126,15 @@ export function ProjectsSection() {
                   key={category}
                   onClick={() => setSelectedCategory(category)}
                   className={`inline-flex items-center gap-2 rounded-xl px-4 py-2 text-xs sm:text-sm font-semibold transition-all duration-200 cursor-pointer ${isActive
-                      ? "bg-brand text-white shadow-sm shadow-brand/20"
-                      : "text-foreground-muted hover:text-foreground hover:bg-surface-hover"
+                    ? "bg-brand text-white shadow-sm shadow-brand/20"
+                    : "text-foreground-muted hover:text-foreground hover:bg-surface-hover"
                     }`}
                 >
                   <span>{category}</span>
                   <span
                     className={`rounded-full px-1.5 py-0.5 text-[10px] font-mono ${isActive
-                        ? "bg-white/20 text-white font-bold"
-                        : "bg-border text-foreground-subtle"
+                      ? "bg-white/20 text-white font-bold"
+                      : "bg-border text-foreground-subtle"
                       }`}
                   >
                     {count}
@@ -265,7 +283,7 @@ export function ProjectsSection() {
                   </div>
 
                   <Link
-                    href="#contact"
+                    href="/contact"
                     className="text-xs font-semibold text-foreground-subtle hover:text-brand transition-colors"
                   >
                     <span>Inquire →</span>
@@ -284,7 +302,7 @@ export function ProjectsSection() {
         title="Have a product you're ready to build?"
         description="We deliver robust MVPs in weeks and scale production architectures to high throughput with senior-led engineering squads."
         buttonText="Discuss Your Project"
-        buttonHref="#contact"
+        buttonHref="/contact"
       />
     </SectionWrapper>
   );

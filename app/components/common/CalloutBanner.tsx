@@ -17,12 +17,12 @@ export function CalloutBanner({
   title,
   description,
   buttonText = "Discuss Your Project",
-  buttonHref = "#contact",
+  buttonHref = "/contact",
   className = "",
 }: CalloutBannerProps) {
   return (
     <div
-      className={`mt-16 rounded-2xl border border-card-border bg-card p-8 sm:p-10 shadow-xs ${className}`}
+      className={`mt-12 sm:mt-16 rounded-2xl border border-card-border bg-card p-6 sm:p-10 shadow-xs ${className}`}
     >
       <div className="flex flex-col md:flex-row items-center justify-between gap-6">
         <div className="space-y-1.5 text-center md:text-left">
@@ -40,10 +40,10 @@ export function CalloutBanner({
 
         <Link
           href={buttonHref}
-          className="inline-flex shrink-0 items-center gap-2 rounded-xl bg-brand px-6 py-3.5 text-sm font-semibold text-white shadow-md shadow-brand/20 transition-all hover:bg-brand-hover hover:shadow-brand/35 active:scale-95 cursor-pointer"
+          className="w-full sm:w-auto inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-brand px-6 py-3.5 text-sm font-semibold text-white shadow-md shadow-brand/20 transition-all hover:bg-brand-hover hover:shadow-brand/35 active:scale-95 cursor-pointer text-center"
         >
           <span>{buttonText}</span>
-          <ArrowRight className="h-4 w-4" />
+          <ArrowRight className="h-4 w-4 shrink-0" />
         </Link>
       </div>
     </div>

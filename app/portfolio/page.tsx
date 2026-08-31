@@ -16,9 +16,7 @@ export default function PortfolioPage() {
   return (
     <main className="min-h-screen bg-background text-foreground transition-colors duration-200">
       <Navbar />
-      <div className="pt-6">
-        <ProjectsSection />
-      </div>
+      <ProjectsSection isPage={true} />
       <TechStackSection />
       <StatsStrip />
       <ContactSection />

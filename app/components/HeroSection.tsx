@@ -8,9 +8,11 @@ import {
   setBannerLoading,
   setBannerError,
   selectBanners,
+  selectBannerLoading,
 } from "@/lib/store/features/banner/bannerSlice";
 import { getBanners } from "@/app/services/bannerService";
 import { useCarousel } from "@/lib/hooks/useCarousel";
+import { HeroSkeleton } from "./skeletons/HeroSkeleton";
 import {
   ArrowRight,
   ChevronLeft,
@@ -22,6 +24,7 @@ import {
 export function HeroSection() {
   const dispatch = useAppDispatch();
   const banners = useAppSelector(selectBanners);
+  const loading = useAppSelector(selectBannerLoading);
 
   useEffect(() => {
     let isMounted = true;
@@ -53,6 +56,10 @@ export function HeroSection() {
 
   const { activeIndex, isSlider, nextSlide, prevSlide, goToSlide, hoverHandlers } =
     useCarousel({ totalItems: banners.length, intervalMs: 4500 });
+
+  if (loading || banners.length === 0) {
+    return <HeroSkeleton />;
+  }
 
   const renderTitle = (title: string) => {
     if (!title) return null;
@@ -106,16 +113,16 @@ export function HeroSection() {
           style={{ transform: `translateX(-${activeIndex * 100}%)` }}
         >
           {banners.map((banner, idx) => (
-            <div key={banner._id || idx} className="w-full shrink-0 px-6 sm:px-16 md:px-24">
+            <div key={banner._id || idx} className="w-full shrink-0 px-3.5 sm:px-16 md:px-24">
               <div className="mx-auto max-w-4xl text-center">
                 {banner.badge && (
-                  <div className="inline-flex items-center gap-2 rounded-full border border-border bg-surface px-3.5 py-1.5 text-xs font-medium text-foreground shadow-xs">
-                    <span className="h-2 w-2 rounded-full bg-brand animate-pulse" />
+                  <div className="inline-flex max-w-[94vw] items-center justify-center flex-wrap sm:flex-nowrap gap-1.5 sm:gap-2 rounded-full border border-border bg-surface px-3 py-1 sm:px-3.5 sm:py-1.5 text-[11px] sm:text-xs font-medium text-foreground shadow-xs leading-normal">
+                    <span className="h-2 w-2 shrink-0 rounded-full bg-brand animate-pulse" />
                     <span>{banner.badge}</span>
                     {isSlider && (
                       <>
                         <span className="text-border">|</span>
-                        <span className="text-brand font-mono text-[11px]">
+                        <span className="text-brand font-mono text-[10px] sm:text-[11px] shrink-0">
                           {idx + 1} / {banners.length}
                         </span>
                       </>
@@ -123,28 +130,28 @@ export function HeroSection() {
                   </div>
                 )}
 
-                <h1 className="mt-6 text-4xl font-extrabold tracking-tight text-foreground sm:text-5xl md:text-6xl leading-[1.15]">
+                <h1 className="mt-5 sm:mt-6 text-3xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-foreground leading-[1.15]">
                   {renderTitle(banner.title)}
                 </h1>
 
                 {banner.subTitle && (
-                  <p className="mt-3 text-base sm:text-lg font-medium text-foreground-muted">
+                  <p className="mt-2.5 sm:mt-3 text-sm sm:text-lg font-medium text-foreground-muted">
                     {banner.subTitle}
                   </p>
                 )}
 
                 {banner.description && (
-                  <p className="mt-5 text-base sm:text-lg text-foreground-muted leading-relaxed max-w-2xl mx-auto">
+                  <p className="mt-4 sm:mt-5 text-xs sm:text-base md:text-lg text-foreground-muted leading-relaxed max-w-2xl mx-auto">
                     {banner.description}
                   </p>
                 )}
 
                 {banner.features && banner.features.length > 0 && (
-                  <div className="mt-6 flex flex-wrap items-center justify-center gap-2 sm:gap-2.5">
+                  <div className="mt-5 sm:mt-6 flex flex-wrap items-center justify-center gap-1.5 sm:gap-2.5">
                     {banner.features.map((feature, fIdx) => (
                       <span
                         key={fIdx}
-                        className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-surface px-3 py-1.5 text-xs font-medium text-foreground-muted"
+                        className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-surface px-2.5 py-1 sm:px-3 sm:py-1.5 text-[11px] sm:text-xs font-medium text-foreground-muted"
                       >
                         <CheckCircle2 className="h-3.5 w-3.5 text-brand shrink-0" />
                         <span>{feature}</span>
@@ -153,23 +160,23 @@ export function HeroSection() {
                   </div>
                 )}
 
-                <div className="mt-8 flex flex-wrap items-center justify-center gap-3.5 sm:gap-4">
+                <div className="mt-7 sm:mt-8 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 w-full max-w-sm sm:max-w-none mx-auto">
                   {banner.primaryBtnText && (
                     <Link
-                      href={banner.primaryBtnLink || "#contact"}
-                      className="inline-flex items-center gap-2 rounded-xl bg-brand px-6 py-3.5 text-sm font-semibold text-white shadow-md shadow-brand/20 transition-all hover:bg-brand-hover hover:shadow-brand/35 active:scale-95 cursor-pointer"
+                      href={banner.primaryBtnLink || "/contact"}
+                      className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl bg-brand px-6 py-3.5 text-sm font-semibold text-white shadow-md shadow-brand/20 transition-all hover:bg-brand-hover hover:shadow-brand/35 active:scale-95 cursor-pointer text-center"
                     >
                       <span>{banner.primaryBtnText}</span>
-                      <ArrowRight className="h-4 w-4" />
+                      <ArrowRight className="h-4 w-4 shrink-0" />
                     </Link>
                   )}
 
                   {banner.secondaryBtnText && (
                     <Link
-                      href={banner.secondaryBtnLink || "#services"}
-                      className="inline-flex items-center gap-2 rounded-xl border border-border bg-surface px-6 py-3.5 text-sm font-semibold text-foreground transition-all hover:border-brand/40 hover:bg-surface-hover active:scale-95 cursor-pointer"
+                      href={banner.secondaryBtnLink || "/services"}
+                      className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl border border-border bg-surface px-6 py-3.5 text-sm font-semibold text-foreground transition-all hover:border-brand/40 hover:bg-surface-hover active:scale-95 cursor-pointer text-center"
                     >
-                      <Code2 className="h-4 w-4 text-brand" />
+                      <Code2 className="h-4 w-4 text-brand shrink-0" />
                       <span>{banner.secondaryBtnText}</span>
                     </Link>
                   )}
@@ -187,9 +194,8 @@ export function HeroSection() {
               key={dotIdx}
               onClick={() => goToSlide(dotIdx)}
               aria-label={`Go to slide ${dotIdx + 1}`}
-              className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
-                dotIdx === activeIndex ? "w-8 bg-brand" : "w-2 bg-border hover:bg-foreground-muted/50"
-              }`}
+              className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${dotIdx === activeIndex ? "w-8 bg-brand" : "w-2 bg-border hover:bg-foreground-muted/50"
+                }`}
             />
           ))}
         </div>

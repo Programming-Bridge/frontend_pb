@@ -15,9 +15,7 @@ export default function ContactPage() {
   return (
     <main className="min-h-screen bg-background text-foreground transition-colors duration-200">
       <Navbar />
-      <div className="pt-6">
-        <ContactSection />
-      </div>
+      <ContactSection isPage={true} />
       <TechStackSection />
       <StatsStrip />
       <Footer />

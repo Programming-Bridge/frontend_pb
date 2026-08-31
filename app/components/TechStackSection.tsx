@@ -11,6 +11,7 @@ import {
   enrichedMobileStack,
   type TechStackItem,
 } from "@/app/data/techStackData";
+import { TechStackSkeleton } from "./skeletons/TechStackSkeleton";
 import { SectionWrapper, SectionHeader } from "./common";
 import { Cpu, Smartphone, Brain, Code2, Layers } from "lucide-react";
 
@@ -20,15 +21,13 @@ type StackDomain = "all" | "software" | "mobile" | "ai-ml";
 
 export function TechStackSection() {
   const [activeDomain, setActiveDomain] = useState<StackDomain>("all");
-  const [techList, setTechList] = useState<TechStackItem[]>([
-    ...enrichedTechStack,
-    ...enrichedAiMlStack,
-    ...enrichedMobileStack,
-  ]);
+  const [techList, setTechList] = useState<TechStackItem[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     let isMounted = true;
     async function loadTechStack() {
+      setLoading(true);
       try {
         const data = await getTechnologies();
         if (isMounted && data && data.length > 0) {
@@ -36,6 +35,8 @@ export function TechStackSection() {
         }
       } catch (err) {
         console.warn("Could not fetch technologies from API, using fallback:", err);
+      } finally {
+        if (isMounted) setLoading(false);
       }
     }
     loadTechStack();
@@ -109,6 +110,10 @@ export function TechStackSection() {
     { id: "ai-ml", label: "AI & Data", icon: Brain, count: aiMlItems.length },
   ];
 
+  if (loading || techList.length === 0) {
+    return <TechStackSkeleton />;
+  }
+
   return (
     <SectionWrapper id="tech-stack" variant="background" border="bottom" ariaLabel="Technology Stack">
       {/* Header */}
@@ -132,18 +137,16 @@ export function TechStackSection() {
               <button
                 key={tab.id}
                 onClick={() => setActiveDomain(tab.id as StackDomain)}
-                className={`inline-flex items-center gap-2 rounded-xl px-3.5 py-2 text-xs sm:text-sm font-semibold transition-all duration-200 cursor-pointer ${
-                  isActive
+                className={`inline-flex items-center gap-2 rounded-xl px-3.5 py-2 text-xs sm:text-sm font-semibold transition-all duration-200 cursor-pointer ${isActive
                     ? "bg-brand text-white shadow-sm shadow-brand/20"
                     : "text-foreground-muted hover:text-foreground hover:bg-surface-hover"
-                }`}
+                  }`}
               >
                 <Icon className="h-4 w-4" />
                 <span>{tab.label}</span>
                 <span
-                  className={`rounded-full px-1.5 py-0.5 text-[10px] font-mono ${
-                    isActive ? "bg-white/20 text-white font-bold" : "bg-border text-foreground-subtle"
-                  }`}
+                  className={`rounded-full px-1.5 py-0.5 text-[10px] font-mono ${isActive ? "bg-white/20 text-white font-bold" : "bg-border text-foreground-subtle"
+                    }`}
                 >
                   {tab.count}
                 </span>
@@ -179,9 +182,8 @@ export function TechStackSection() {
                           src={item.svgUrl}
                           alt={item.name}
                           loading="lazy"
-                          className={`h-5 w-5 object-contain transition-transform duration-200 group-hover:scale-105 ${
-                            item.invertInDark ? "dark:invert" : ""
-                          }`}
+                          className={`h-5 w-5 object-contain transition-transform duration-200 group-hover:scale-105 ${item.invertInDark ? "dark:invert" : ""
+                            }`}
                         />
                       </div>
                       <div className="flex flex-col text-left truncate">

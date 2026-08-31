@@ -27,21 +27,19 @@ export function StatsStrip() {
   return (
     <section className="w-full py-10 sm:py-14 bg-background transition-colors duration-200">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="rounded-2xl sm:rounded-3xl border border-border bg-card p-6 sm:p-8 shadow-sm">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center divide-y md:divide-y-0 md:divide-x divide-border/70">
+        <div className="rounded-2xl sm:rounded-3xl border border-border bg-card p-4 sm:p-8 shadow-sm">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6 text-center">
             {stats.map((stat, idx) => (
               <div
                 key={idx}
-                className={`flex flex-col items-center justify-center ${
-                  idx > 0 ? "pt-4 md:pt-0 md:px-4" : "md:px-4"
-                }`}
+                className="flex flex-col items-center justify-center p-3 sm:p-4 rounded-xl bg-surface/50 md:bg-transparent md:border-r md:last:border-r-0 border-border/60"
               >
                 <span
                   className={`text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight ${stat.valueColor}`}
                 >
                   {stat.value}
                 </span>
-                <span className="mt-1.5 text-xs sm:text-sm font-medium text-foreground-muted">
+                <span className="mt-1.5 text-xs sm:text-sm font-medium text-foreground-muted leading-tight">
                   {stat.label}
                 </span>
               </div>

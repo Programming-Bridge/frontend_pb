@@ -80,11 +80,16 @@
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 5rem;
+  overflow-x: hidden;
+  max-width: 100vw;
 }
 
 body {
   background-color: var(--background);
   color: var(--foreground);
+  overflow-x: hidden;
+  max-width: 100vw;
+  width: 100%;
 }
 
 /* Infinite Marquee Animations */
@@ -121,4 +126,136 @@ body {
 .animate-marquee-left:hover,
 .animate-marquee-right:hover {
   animation-play-state: paused;
+}
+
+/* Mobile Drawer & Fade Transitions */
+@keyframes drawerFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes drawerSlideRight {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0%);
+  }
+}
+
+@keyframes drawerAccordion {
+  from {
+    opacity: 0;
+    max-height: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    max-height: 400px;
+    transform: translateY(0);
+  }
+}
+
+.drawer-overlay {
+  animation: drawerFadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.drawer-panel {
+  animation: drawerSlideRight 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.drawer-accordion {
+  animation: drawerAccordion 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Skeleton Loading Shimmer Effect */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.animate-shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--surface) 0%,
+    var(--card-hover) 50%,
+    var(--surface) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.8s ease-in-out infinite;
+}
+
+.dark .animate-shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(24, 34, 38, 0.7) 0%,
+    rgba(34, 48, 54, 0.95) 50%,
+    rgba(24, 34, 38, 0.7) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.8s ease-in-out infinite;
+}
+
+.skeleton-box {
+  position: relative;
+  overflow: hidden;
+  border-radius: 0.75rem;
+  background-color: var(--surface);
+}
+
+.dark .skeleton-box {
+  background-color: #141c20;
+}
+
+/* Branded PB Loader Animations */
+@keyframes pbPulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 25px rgba(0, 196, 102, 0.2), 0 0 50px rgba(56, 189, 248, 0.15);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 45px rgba(0, 196, 102, 0.45), 0 0 80px rgba(56, 189, 248, 0.3);
+    transform: scale(1.04);
+  }
+}
+
+@keyframes pbRadarSpin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pbScanline {
+  0% {
+    transform: translateX(-100%);
+  }
+  50% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+.animate-pb-pulse {
+  animation: pbPulseGlow 2.4s ease-in-out infinite;
+}
+
+.animate-pb-spin {
+  animation: pbRadarSpin 8s linear infinite;
+}
+
+.animate-pb-scan {
+  animation: pbScanline 2.2s ease-in-out infinite;
 }

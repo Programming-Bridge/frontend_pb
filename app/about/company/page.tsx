@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { Navbar } from "@/app/components/Navbar";
 import { Footer } from "@/app/components/Footer";
 import { TechStackSection } from "@/app/components/TechStackSection";
@@ -107,7 +108,13 @@ export default function CompanyPage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-3xl text-center">
             <div className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3.5 py-1.5 text-xs font-semibold text-foreground shadow-xs">
-              <Code2 className="h-3.5 w-3.5 text-brand" />
+              <Image
+                src="/logo.png"
+                alt="Programming Bridge Logo"
+                width={18}
+                height={18}
+                className="h-4.5 w-4.5 rounded-sm object-cover"
+              />
               <span>About Programming Bridge</span>
               <span className="text-border">|</span>
               <span className="font-mono text-[11px] text-brand">Engineering Studio</span>
@@ -121,17 +128,17 @@ export default function CompanyPage() {
               Programming Bridge is a full-stack digital engineering studio. We partner with forward-thinking founders, technology leaders, and enterprises to build production-grade web applications, mobile platforms, and distributed cloud systems.
             </p>
 
-            <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+            <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3 w-full max-w-md mx-auto sm:max-w-none">
               <Link
-                href="#contact"
-                className="inline-flex items-center gap-2 rounded-xl bg-brand px-6 py-3.5 text-sm font-semibold text-white shadow-md shadow-brand/20 transition-all hover:bg-brand-hover hover:shadow-brand/35 active:scale-95 cursor-pointer"
+                href="/contact"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl bg-brand px-6 py-3.5 text-sm font-semibold text-white shadow-md shadow-brand/20 transition-all hover:bg-brand-hover hover:shadow-brand/35 active:scale-95 cursor-pointer text-center"
               >
                 <span>Schedule Technical Consultation</span>
-                <ArrowRight className="h-4 w-4" />
+                <ArrowRight className="h-4 w-4 shrink-0" />
               </Link>
               <Link
                 href="/portfolio"
-                className="inline-flex items-center gap-2 rounded-xl border border-border bg-card px-6 py-3.5 text-sm font-semibold text-foreground transition-all hover:bg-surface active:scale-95 cursor-pointer"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl border border-border bg-card px-6 py-3.5 text-sm font-semibold text-foreground transition-all hover:bg-surface active:scale-95 cursor-pointer text-center"
               >
                 <span>Explore Shipped Work</span>
               </Link>

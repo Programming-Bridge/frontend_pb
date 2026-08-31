@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "./components/ThemeProvider";
 import { StoreProvider } from "./StoreProvider";
+import { AppPreloader } from "./components/AppPreloader";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,11 +23,37 @@ export const metadata: Metadata = {
     "Cloud Architecture",
   ],
   authors: [{ name: "Programming Bridge" }],
+  icons: {
+    icon: [
+      { url: "/icon.png", sizes: "any" },
+      { url: "/logo.png", type: "image/png" },
+    ],
+    apple: [
+      { url: "/apple-icon.png", sizes: "180x180", type: "image/png" },
+    ],
+    shortcut: ["/icon.png"],
+  },
   openGraph: {
     title: "Programming Bridge | Full-Stack Digital Engineering Studio",
     description:
       "Bespoke web applications, mobile platforms, and distributed cloud systems.",
     type: "website",
+    siteName: "Programming Bridge",
+    images: [
+      {
+        url: "/logo.png",
+        width: 800,
+        height: 800,
+        alt: "Programming Bridge Logo",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Programming Bridge | Full-Stack Digital Engineering Studio",
+    description:
+      "Bespoke web applications, mobile platforms, and distributed cloud systems.",
+    images: ["/logo.png"],
   },
 };
 
@@ -48,6 +75,7 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange={false}
           >
+            <AppPreloader />
             {children}
           </ThemeProvider>
         </StoreProvider>

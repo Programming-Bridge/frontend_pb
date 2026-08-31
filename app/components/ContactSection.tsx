@@ -45,7 +45,12 @@ const initialFormState: InquiryPayload = {
   message: "",
 };
 
-export function ContactSection() {
+interface ContactSectionProps {
+  isPage?: boolean;
+  className?: string;
+}
+
+export function ContactSection({ isPage = false, className = "" }: ContactSectionProps) {
   const [formData, setFormData] = useState<InquiryPayload>(initialFormState);
   const [loading, setLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
@@ -80,7 +85,14 @@ export function ContactSection() {
   };
 
   return (
-    <SectionWrapper id="contact" variant="surface" border="top" ariaLabel="Contact and Consultation">
+    <SectionWrapper
+      id="contact"
+      variant="surface"
+      border={isPage ? "none" : "top"}
+      py={isPage ? "pt-20 pb-16 md:pt-24 md:pb-20" : "py-16 md:py-20"}
+      className={className}
+      ariaLabel="Contact and Consultation"
+    >
       {/* Header */}
       <SectionHeader
         badge="Contact"

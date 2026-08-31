@@ -2,12 +2,14 @@
 
 import { useEffect, useState, useMemo } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Navbar } from "@/app/components/Navbar";
 import { Footer } from "@/app/components/Footer";
 import { TechStackSection } from "@/app/components/TechStackSection";
 import { StatsStrip } from "@/app/components/StatsStrip";
 import { ContactSection } from "@/app/components/ContactSection";
 import { SectionWrapper, SectionHeader, CalloutBanner } from "@/app/components/common";
+import { CareersSkeleton } from "@/app/components/skeletons/CareersSkeleton";
 import { JobApplyModal } from "@/app/components/JobApplyModal";
 import { getCareers, type Career } from "@/app/services/careerService";
 import {
@@ -105,7 +107,13 @@ export default function CareersPage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-3xl text-center">
             <div className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3.5 py-1.5 text-xs font-semibold text-foreground shadow-xs">
-              <Briefcase className="h-3.5 w-3.5 text-brand" />
+              <Image
+                src="/logo.png"
+                alt="Programming Bridge Logo"
+                width={18}
+                height={18}
+                className="h-4.5 w-4.5 rounded-sm object-cover"
+              />
               <span>Careers at Programming Bridge</span>
               <span className="text-border">|</span>
               <span className="font-mono text-[11px] text-brand">We&apos;re Hiring</span>
@@ -221,9 +229,7 @@ export default function CareersPage() {
         {/* Roles List */}
         <div className="mt-14 space-y-6 max-w-4xl mx-auto">
           {loading ? (
-            <div className="text-center py-12 text-sm text-foreground-muted">
-              Loading active positions from backend...
-            </div>
+            <CareersSkeleton />
           ) : filteredCareers.length === 0 ? (
             <div className="text-center py-12 text-sm text-foreground-muted">
               No positions open in this department right now. Check back soon!

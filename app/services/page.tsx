@@ -15,9 +15,7 @@ export default function ServicesPage() {
   return (
     <main className="min-h-screen bg-background text-foreground transition-colors duration-200">
       <Navbar />
-      <div className="pt-6">
-        <ServicesSection />
-      </div>
+      <ServicesSection isPage={true} />
       <TechStackSection />
       <StatsStrip />
       <Footer />

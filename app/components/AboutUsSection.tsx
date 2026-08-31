@@ -61,9 +61,21 @@ const keyStrengths = [
   "Rapid MVP execution paired with long-term architectural stability",
 ];
 
-export function AboutUsSection() {
+interface AboutUsSectionProps {
+  isPage?: boolean;
+  className?: string;
+}
+
+export function AboutUsSection({ isPage = false, className = "" }: AboutUsSectionProps) {
   return (
-    <SectionWrapper id="about-us" variant="surface" border="both" ariaLabel="About Us">
+    <SectionWrapper
+      id="about-us"
+      variant="surface"
+      border={isPage ? "none" : "both"}
+      py={isPage ? "pt-20 pb-16 md:pt-24 md:pb-20" : "py-16 md:py-20"}
+      className={className}
+      ariaLabel="About Us"
+    >
       {/* Header */}
       <SectionHeader
         badge="About Us"
@@ -106,20 +118,20 @@ export function AboutUsSection() {
       </div>
 
       {/* Stats Bar */}
-      <div className="mt-12 sm:mt-16 rounded-2xl border border-card-border bg-card p-6 sm:p-8 shadow-xs">
-        <div className="grid grid-cols-2 gap-6 md:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-border/60">
+      <div className="mt-12 sm:mt-16 rounded-2xl border border-card-border bg-card p-4 sm:p-8 shadow-xs">
+        <div className="grid grid-cols-2 gap-3 sm:gap-6 md:grid-cols-4">
           {stats.map((stat, idx) => (
             <div
               key={idx}
-              className={`flex flex-col items-center text-center ${idx > 0 ? "pt-4 md:pt-0 md:px-4" : "md:px-4"}`}
+              className="flex flex-col items-center text-center p-3 sm:p-4 rounded-xl bg-surface/50 md:bg-transparent md:border-r md:last:border-r-0 border-border/60"
             >
-              <span className="text-3xl sm:text-4xl font-extrabold tracking-tight text-foreground">
+              <span className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-foreground">
                 {stat.value}
               </span>
               <span className="mt-1 text-xs sm:text-sm font-bold text-foreground">
                 {stat.label}
               </span>
-              <span className="text-[11px] text-foreground-subtle">
+              <span className="text-[11px] text-foreground-subtle mt-0.5 leading-tight">
                 {stat.subtext}
               </span>
             </div>
@@ -128,8 +140,8 @@ export function AboutUsSection() {
       </div>
 
       {/* Bottom Feature Box */}
-      <div className="mt-12 sm:mt-16 rounded-2xl border border-border bg-gradient-to-r from-surface via-card to-surface p-8 sm:p-10 shadow-xs">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+      <div className="mt-12 sm:mt-16 rounded-2xl border border-border bg-gradient-to-r from-surface via-card to-surface p-6 sm:p-10 shadow-xs">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-center">
           <div className="lg:col-span-7 space-y-4">
             <div className="inline-flex items-center gap-2 text-brand font-semibold text-xs sm:text-sm">
               <Rocket className="h-4 w-4" />
@@ -156,11 +168,11 @@ export function AboutUsSection() {
               </p>
             </div>
             <Link
-              href="#contact"
-              className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-xl bg-brand px-6 py-3.5 text-sm font-semibold text-white shadow-md shadow-brand/20 transition-all hover:bg-brand-hover hover:shadow-brand/35 active:scale-95 cursor-pointer"
+              href="/contact"
+              className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-xl bg-brand px-6 py-3.5 text-sm font-semibold text-white shadow-md shadow-brand/20 transition-all hover:bg-brand-hover hover:shadow-brand/35 active:scale-95 cursor-pointer text-center"
             >
               <span>Discuss Your Project</span>
-              <ArrowRight className="h-4 w-4" />
+              <ArrowRight className="h-4 w-4 shrink-0" />
             </Link>
           </div>
         </div>

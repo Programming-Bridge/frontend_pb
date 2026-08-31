@@ -1,7 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { Code2, ArrowUp, Mail, Globe, CheckCircle2 } from "lucide-react";
+import Image from "next/image";
+import logoImg from "@/public/logo.png";
+import { ArrowUp, Mail, Globe, CheckCircle2 } from "lucide-react";
 
 export function Footer() {
   const scrollToTop = () => {
@@ -14,14 +16,29 @@ export function Footer() {
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-5">
           {/* Brand Column */}
           <div className="lg:col-span-2 space-y-4">
-            <div className="flex items-center gap-2.5">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand text-white shadow-md shadow-brand/20">
-                <Code2 className="h-5 w-5" />
+            <Link
+              href="/"
+              className="group inline-flex items-center gap-3 font-bold tracking-tight text-foreground transition-colors hover:text-brand"
+              aria-label="Programming Bridge Home"
+            >
+              <div className="relative flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl shadow-xs ring-1 ring-border/50 transition-all group-hover:shadow-md group-hover:ring-brand/40">
+                <Image
+                  src={logoImg}
+                  alt="Programming Bridge"
+                  width={44}
+                  height={44}
+                  className="h-full w-full object-cover transition-transform duration-200 group-hover:scale-105"
+                />
               </div>
-              <span className="text-xl font-extrabold tracking-tight text-foreground">
-                Programming<span className="text-brand">Bridge</span>
-              </span>
-            </div>
+              <div className="flex flex-col justify-center">
+                <span className="text-base font-extrabold leading-none text-foreground transition-colors group-hover:text-brand">
+                  Programming
+                </span>
+                <span className="text-xs font-bold leading-none text-brand mt-0.5">
+                  Bridge
+                </span>
+              </div>
+            </Link>
             <p className="text-sm text-foreground-muted max-w-sm leading-relaxed">
               Full-stack digital engineering studio building bespoke web applications,
               mobile platforms, and distributed cloud systems.
@@ -106,7 +123,7 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  href="#contact"
+                  href="/contact"
                   className="hover:text-brand transition-colors"
                 >
                   Contact & Inquiries

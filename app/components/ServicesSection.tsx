@@ -4,31 +4,66 @@ import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import {
   setServiceCards,
+  setServiceCardsLoading,
   setServiceCardsError,
   selectServiceCards,
+  selectServiceCardsLoading,
 } from "@/lib/store/features/services/serviceCardSlice";
 import { getServiceCards } from "@/app/services/serviceCardService";
 import { ServiceCard } from "./ServiceCard";
+import { ServicesSkeleton } from "./skeletons/ServicesSkeleton";
 import { SectionWrapper, SectionHeader, CalloutBanner } from "./common";
 import { useCarousel } from "@/lib/hooks/useCarousel";
 import { Layers, ChevronLeft, ChevronRight, Code2 } from "lucide-react";
 
-export function ServicesSection() {
+interface ServicesSectionProps {
+  isPage?: boolean;
+  className?: string;
+}
+
+export function ServicesSection({ isPage = false, className = "" }: ServicesSectionProps) {
   const dispatch = useAppDispatch();
   const serviceCards = useAppSelector(selectServiceCards);
+  const loading = useAppSelector(selectServiceCardsLoading);
   const activeCards = serviceCards.filter((card) => card.isActive !== false);
 
   useEffect(() => {
+    let isMounted = true;
+    dispatch(setServiceCardsLoading(true));
     getServiceCards()
-      .then((data) => data?.length && dispatch(setServiceCards(data.filter((c) => c.isActive !== false))))
-      .catch((err) => dispatch(setServiceCardsError(err.message)));
+      .then((data) => {
+        if (isMounted && data?.length) {
+          dispatch(setServiceCards(data.filter((c) => c.isActive !== false)));
+        }
+      })
+      .catch((err) => {
+        if (isMounted) dispatch(setServiceCardsError(err.message));
+      })
+      .finally(() => {
+        if (isMounted) dispatch(setServiceCardsLoading(false));
+      });
+
+    return () => {
+      isMounted = false;
+    };
   }, [dispatch]);
 
   const { activeIndex, cardsPerView, maxSlideIndex, isSlider, nextSlide, prevSlide, goToSlide, hoverHandlers } =
     useCarousel({ totalItems: activeCards.length, responsive: true, intervalMs: 4000 });
 
+  if (loading || activeCards.length === 0) {
+    return <ServicesSkeleton />;
+  }
+
   return (
-    <SectionWrapper id="services" variant="surface" border="both" ariaLabel="Services">
+    <SectionWrapper
+      id="services"
+      variant="surface"
+      border={isPage ? "none" : "both"}
+      py={isPage ? "pt-20 pb-16 md:pt-24 md:pb-20" : "py-16 md:py-20"}
+      className={className}
+      ariaLabel="Services"
+    >
       <SectionHeader
         icon={Layers}
         badge="Core Capabilities"
@@ -85,9 +120,8 @@ export function ServicesSection() {
                 key={idx}
                 onClick={() => goToSlide(idx)}
                 aria-label={`Slide ${idx + 1}`}
-                className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
-                  idx === activeIndex ? "w-8 bg-brand" : "w-2 bg-border hover:bg-foreground-muted/50"
-                }`}
+                className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${idx === activeIndex ? "w-8 bg-brand" : "w-2 bg-border hover:bg-foreground-muted/50"
+                  }`}
               />
             ))}
           </div>
@@ -100,7 +134,7 @@ export function ServicesSection() {
         title="Need a tailored engineering team for your roadmap?"
         description="We provide dedicated senior engineers, technical leads, and architects ready to integrate directly into your sprint cycle."
         buttonText="Consult Our Team"
-        buttonHref="#contact"
+        buttonHref="/contact"
       />
     </SectionWrapper>
   );

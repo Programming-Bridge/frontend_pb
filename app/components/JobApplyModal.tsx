@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import Image from "next/image";
 import {
   X,
   Send,
@@ -163,16 +164,26 @@ export function JobApplyModal({
         {success ? (
           /* Success Screen */
           <div className="py-8 text-center space-y-5">
-            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-brand/10 text-brand ring-8 ring-brand/5">
-              <CheckCircle2 className="h-9 w-9" />
+            <div className="relative mx-auto flex h-20 w-20 items-center justify-center overflow-hidden rounded-2xl bg-brand/10 ring-8 ring-brand/5 shadow-lg">
+              <Image
+                src="/logo.png"
+                alt="Programming Bridge"
+                width={80}
+                height={80}
+                className="h-full w-full object-cover"
+              />
             </div>
 
             <div className="space-y-2">
+              <div className="inline-flex items-center gap-1.5 rounded-full bg-brand-tint px-3 py-1 text-xs font-semibold text-brand">
+                <CheckCircle2 className="h-3.5 w-3.5" />
+                <span>Application Submitted</span>
+              </div>
               <h2 className="text-2xl font-extrabold text-foreground tracking-tight">
                 Application Received!
               </h2>
               <p className="text-sm text-foreground-muted max-w-md mx-auto leading-relaxed">
-                Thank you for applying for the <span className="font-semibold text-brand">{roleApplied}</span> role. Your resume and application have been forwarded to our official recruitment inbox.
+                Thank you for applying to join <strong className="text-foreground">Programming Bridge</strong> for the <span className="font-semibold text-brand">{roleApplied}</span> role. Your resume has been forwarded to our engineering hiring team.
               </p>
             </div>
 
@@ -202,9 +213,20 @@ export function JobApplyModal({
           <div>
             {/* Header */}
             <div className="space-y-2 pr-6">
-              <div className="inline-flex items-center gap-2 rounded-full border border-brand/25 bg-brand-tint px-3 py-1 text-xs font-semibold text-brand">
-                <Sparkles className="h-3.5 w-3.5" />
-                <span>Career Application</span>
+              <div className="flex items-center gap-2">
+                <div className="relative h-8 w-8 overflow-hidden rounded-lg shadow-sm ring-1 ring-border/50">
+                  <Image
+                    src="/logo.png"
+                    alt="Programming Bridge"
+                    width={32}
+                    height={32}
+                    className="h-full w-full object-cover"
+                  />
+                </div>
+                <div className="inline-flex items-center gap-1.5 rounded-full border border-brand/25 bg-brand-tint px-2.5 py-0.5 text-xs font-semibold text-brand">
+                  <Sparkles className="h-3 w-3" />
+                  <span>Programming Bridge Careers</span>
+                </div>
               </div>
               <h2 className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">
                 Apply for Engineering Role
