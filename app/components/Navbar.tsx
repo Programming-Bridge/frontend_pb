@@ -4,6 +4,7 @@ import { useEffect, useState, useRef } from "react";
 import { createPortal } from "react-dom";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import logoImg from "@/public/logo.png";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import {
@@ -13,15 +14,35 @@ import {
   selectNavItems,
   selectNavbarLoading,
 } from "@/lib/store/features/navbar/navbarSlice";
+import {
+  selectIsAuthenticated,
+  selectAuthUser,
+  setCredentials,
+  logoutUser,
+} from "@/lib/store/features/auth/authSlice";
 import { getNavbar, type NavItem } from "@/app/services/navbarService";
+import { getToken, getUser, logout as authLogout } from "@/app/services/authService";
 import { ThemeToggle } from "./ThemeToggle";
 import { NavbarSkeleton } from "./skeletons/NavbarSkeleton";
-import { ChevronDown, Menu, X, ArrowRight, Layers, Sparkles } from "lucide-react";
+import {
+  ChevronDown,
+  Menu,
+  X,
+  ArrowRight,
+  Layers,
+  LayoutDashboard,
+  LogOut,
+  ShieldCheck,
+  User as UserIcon,
+} from "lucide-react";
 
 export function Navbar() {
+  const router = useRouter();
   const dispatch = useAppDispatch();
   const navItems = useAppSelector(selectNavItems);
   const isLoading = useAppSelector(selectNavbarLoading);
+  const isAuthenticated = useAppSelector(selectIsAuthenticated);
+  const currentUser = useAppSelector(selectAuthUser);
 
   const [mounted, setMounted] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -46,9 +67,22 @@ export function Navbar() {
     }, 150);
   };
 
+  // Sync auth state on mount
   useEffect(() => {
     setMounted(true);
-  }, []);
+    const token = getToken();
+    const user = getUser();
+    if (token && user) {
+      dispatch(setCredentials({ token, user }));
+    }
+  }, [dispatch]);
+
+  const handleLogout = () => {
+    authLogout();
+    dispatch(logoutUser());
+    setMobileMenuOpen(false);
+    router.push("/login");
+  };
 
   useEffect(() => {
     let isMounted = true;
@@ -202,19 +236,52 @@ export function Navbar() {
                 );
               })
             )}
+
+            {/* If authenticated, show dynamic Dashboard link */}
+            {isAuthenticated && (
+              <Link
+                href="/dashboard"
+                className="flex items-center gap-1.5 rounded-lg bg-brand/10 border border-brand/20 px-3 py-1.5 text-xs font-bold text-brand hover:bg-brand hover:text-white transition-all shadow-xs ml-1"
+              >
+                <LayoutDashboard className="h-3.5 w-3.5" />
+                <span>Dashboard</span>
+                <span className="flex h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              </Link>
+            )}
           </nav>
 
-          {/* Right Side Actions: ThemeToggle + CTA */}
+          {/* Right Side Actions: ThemeToggle + CTA / Admin Status */}
           <div className="flex items-center gap-2.5 sm:gap-3">
             <ThemeToggle />
 
-            <Link
-              href="/contact"
-              className="hidden items-center gap-1.5 rounded-lg bg-brand px-3.5 py-2 text-xs font-semibold text-white shadow-sm shadow-brand/20 transition-all hover:bg-brand-hover hover:shadow-brand/35 active:scale-95 sm:inline-flex"
-            >
-              <span>Get in Touch</span>
-              <ArrowRight className="h-3.5 w-3.5" />
-            </Link>
+            {/* Authenticated Admin Controls vs Guest CTA */}
+            {isAuthenticated ? (
+              <div className="hidden sm:flex items-center gap-2">
+                <Link
+                  href="/dashboard"
+                  className="flex items-center gap-1.5 rounded-lg border border-border bg-surface px-3 py-1.5 text-xs font-semibold text-foreground hover:bg-surface-hover transition-colors"
+                >
+                  <ShieldCheck className="h-3.5 w-3.5 text-brand" />
+                  <span className="max-w-[100px] truncate">{currentUser?.name || "Admin"}</span>
+                </Link>
+                <button
+                  onClick={handleLogout}
+                  title="Log out"
+                  className="flex h-8 w-8 items-center justify-center rounded-lg border border-red-500/20 bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white transition-colors cursor-pointer"
+                  aria-label="Logout"
+                >
+                  <LogOut className="h-3.5 w-3.5" />
+                </button>
+              </div>
+            ) : (
+              <Link
+                href="/contact"
+                className="hidden items-center gap-1.5 rounded-lg bg-brand px-3.5 py-2 text-xs font-semibold text-white shadow-sm shadow-brand/20 transition-all hover:bg-brand-hover hover:shadow-brand/35 active:scale-95 sm:inline-flex"
+              >
+                <span>Get in Touch</span>
+                <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
+            )}
 
             {/* Mobile Menu Button */}
             <button
@@ -280,6 +347,21 @@ export function Navbar() {
 
               {/* Scrollable Nav List Body */}
               <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-4 space-y-2 bg-white dark:bg-[#0B0F12]">
+                {/* If Authenticated: Display Admin Dashboard Button at Top of Mobile Menu */}
+                {isAuthenticated && (
+                  <Link
+                    href="/dashboard"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center justify-between rounded-2xl border border-brand/30 bg-brand/10 px-4 py-3 text-sm font-bold text-brand shadow-sm hover:bg-brand hover:text-white transition-all mb-3"
+                  >
+                    <span className="flex items-center gap-2.5">
+                      <LayoutDashboard className="h-4 w-4" />
+                      <span>Admin Dashboard</span>
+                    </span>
+                    <span className="flex h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+                  </Link>
+                )}
+
                 <nav className="flex flex-col gap-2">
                   {navItems.map((item, idx) => {
                     const label = getItemLabel(item);
@@ -366,14 +448,24 @@ export function Navbar() {
                   <ThemeToggle />
                 </div>
 
-                <Link
-                  href="/contact"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="flex w-full items-center justify-center gap-2 rounded-xl bg-brand px-4 py-3.5 text-sm font-bold text-white shadow-lg shadow-brand/25 hover:bg-brand-hover active:scale-95 transition-all text-center cursor-pointer"
-                >
-                  <span>Get in Touch</span>
-                  <ArrowRight className="h-4 w-4 shrink-0" />
-                </Link>
+                {isAuthenticated ? (
+                  <button
+                    onClick={handleLogout}
+                    className="flex w-full items-center justify-center gap-2 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm font-bold text-red-500 hover:bg-red-500 hover:text-white transition-all cursor-pointer"
+                  >
+                    <LogOut className="h-4 w-4 shrink-0" />
+                    <span>Log Out ({currentUser?.name || "Admin"})</span>
+                  </button>
+                ) : (
+                  <Link
+                    href="/contact"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex w-full items-center justify-center gap-2 rounded-xl bg-brand px-4 py-3.5 text-sm font-bold text-white shadow-lg shadow-brand/25 hover:bg-brand-hover active:scale-95 transition-all text-center cursor-pointer"
+                  >
+                    <span>Get in Touch</span>
+                    <ArrowRight className="h-4 w-4 shrink-0" />
+                  </Link>
+                )}
               </div>
             </div>
           </div>,

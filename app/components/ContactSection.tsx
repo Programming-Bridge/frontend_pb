@@ -140,7 +140,7 @@ export function ContactSection({ isPage = false, className = "" }: ContactSectio
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <a
-              href="mailto:contact@programmingbridge.com"
+              href="mailto:official@programmingbridge.org"
               className="group flex flex-col rounded-xl border border-card-border bg-card p-4 transition-all hover:border-brand/40 hover:shadow-xs"
             >
               <div className="flex items-center gap-2 text-brand">
@@ -148,7 +148,7 @@ export function ContactSection({ isPage = false, className = "" }: ContactSectio
                 <span className="text-xs font-bold uppercase tracking-wider">Email</span>
               </div>
               <span className="mt-2 text-xs font-semibold text-foreground group-hover:text-brand transition-colors truncate">
-                contact@programmingbridge.com
+                official@programmingbridge.org
               </span>
               <span className="text-[11px] text-foreground-subtle mt-0.5">Avg response: &lt; 2 hours</span>
             </a>

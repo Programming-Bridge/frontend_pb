@@ -8,6 +8,7 @@ import { AppPreloader } from "./components/AppPreloader";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://www.programmingbridge.org"),
   title: "Programming Bridge | Full-Stack Digital Engineering Studio",
   description:
     "We design, build, and scale production-grade web applications, native mobile apps, and cloud infrastructures for startups and enterprise teams.",

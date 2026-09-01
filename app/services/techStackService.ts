@@ -79,3 +79,41 @@ export const createTechnology = async (
     throw new Error(message);
   }
 };
+
+export const updateTechnology = async (
+  id: string,
+  payload: Partial<TechnologyPayload>
+): Promise<TechStackItem> => {
+  try {
+    const response = await apiClient.put<any>(`/tech-stack/${id}`, payload);
+    return (response as any)?.data || response;
+  } catch (error) {
+    const message =
+      error instanceof Error ? error.message : "Failed to update technology";
+    throw new Error(message);
+  }
+};
+
+export const deleteTechnology = async (
+  id: string
+): Promise<{ success: boolean; message: string }> => {
+  try {
+    const response = await apiClient.delete<any>(`/tech-stack/${id}`);
+    return response as any;
+  } catch (error) {
+    const message =
+      error instanceof Error ? error.message : "Failed to delete technology";
+    throw new Error(message);
+  }
+};
+
+export const seedTechnologies = async (): Promise<{ success: boolean; message: string; count?: number }> => {
+  try {
+    const response = await apiClient.post<any>("/tech-stack/seed");
+    return response as any;
+  } catch (error) {
+    const message =
+      error instanceof Error ? error.message : "Failed to seed technologies";
+    throw new Error(message);
+  }
+};

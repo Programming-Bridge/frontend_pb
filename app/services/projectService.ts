@@ -50,3 +50,33 @@ export const getProjects = async (): Promise<Project[]> => {
     throw error;
   }
 };
+
+export const createProject = async (data: FormData | Partial<Project>): Promise<Project> => {
+  try {
+    const response = await apiClient.post<any>("/projects/add", data);
+    return (response as any)?.data || response;
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Failed to create project";
+    throw new Error(message);
+  }
+};
+
+export const updateProject = async (id: string, data: FormData | Partial<Project>): Promise<Project> => {
+  try {
+    const response = await apiClient.put<any>(`/projects/${id}`, data);
+    return (response as any)?.data || response;
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Failed to update project";
+    throw new Error(message);
+  }
+};
+
+export const deleteProject = async (id: string): Promise<{ success: boolean; message: string }> => {
+  try {
+    const response = await apiClient.delete<any>(`/projects/${id}`);
+    return response as any;
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Failed to delete project";
+    throw new Error(message);
+  }
+};

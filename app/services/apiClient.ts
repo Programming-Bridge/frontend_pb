@@ -64,9 +64,19 @@ export const invalidateClientCache = (prefix?: string) => {
   }
 };
 
-// Request Interceptor
+// Request Interceptor: Attach JWT Bearer Token if available
 apiClient.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
+    if (typeof window !== "undefined") {
+      const token = localStorage.getItem("pb_token");
+      if (token && config.headers) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
+    }
+    // If sending FormData, delete Content-Type so browser sets boundary automatically
+    if (config.data instanceof FormData && config.headers) {
+      delete config.headers["Content-Type"];
+    }
     return config;
   },
   (error) => Promise.reject(error)
@@ -82,6 +92,13 @@ apiClient.interceptors.response.use(
     return response.data;
   },
   (error) => {
+    if (error.response?.status === 401 && typeof window !== "undefined") {
+      // If token expired or unauthorized
+      if (!window.location.pathname.startsWith("/login")) {
+        console.warn("Session expired or unauthorized request. Clearing auth credentials.");
+      }
+    }
+
     const message =
       error.response?.data?.message ||
       error.response?.data?.error ||
@@ -92,4 +109,15 @@ apiClient.interceptors.response.use(
   }
 );
 
+export const getMediaUrl = (url?: string): string => {
+  if (!url) return "";
+  if (url.startsWith("http://") || url.startsWith("https://")) return url;
+  const rawApi = (process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api").trim();
+  const backendBase = rawApi.replace(/\/api\/?$/, "").replace(/\/+$/, "");
+  const cleanPath = url.startsWith("/") ? url : `/${url}`;
+  return `${backendBase}${cleanPath}`;
+};
+
 export default apiClient;
+
+

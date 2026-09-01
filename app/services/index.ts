@@ -7,3 +7,5 @@ export * from "./inquiryService";
 export * from "./techStackService";
 export * from "./teamService";
 export * from "./careerService";
+export * from "./authService";
+

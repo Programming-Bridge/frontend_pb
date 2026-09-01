@@ -20,6 +20,7 @@ export interface Banner {
   features?: string[];
   order?: number;
   isActive?: boolean;
+  createdAt?: string;
 }
 
 export const getBanners = async (): Promise<Banner[]> => {
@@ -50,5 +51,35 @@ export const getBanners = async (): Promise<Banner[]> => {
   } catch (error) {
     console.warn("Could not fetch banners from API, fallback will be used:", error);
     throw error;
+  }
+};
+
+export const createBanner = async (data: FormData | Partial<Banner>): Promise<Banner> => {
+  try {
+    const response = await apiClient.post<any>("/banner", data);
+    return (response as any)?.data || response;
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Failed to create banner";
+    throw new Error(message);
+  }
+};
+
+export const updateBanner = async (id: string, data: FormData | Partial<Banner>): Promise<Banner> => {
+  try {
+    const response = await apiClient.put<any>(`/banner/${id}`, data);
+    return (response as any)?.data || response;
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Failed to update banner";
+    throw new Error(message);
+  }
+};
+
+export const deleteBanner = async (id: string): Promise<{ success: boolean; message: string }> => {
+  try {
+    const response = await apiClient.delete<any>(`/banner/${id}`);
+    return response as any;
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Failed to delete banner";
+    throw new Error(message);
   }
 };

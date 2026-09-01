@@ -40,6 +40,53 @@ export const getCareers = async (department?: string): Promise<Career[]> => {
   }
 };
 
+export const createCareer = async (data: Partial<Career>): Promise<Career> => {
+  try {
+    const response = await apiClient.post<any>("/careers", data);
+    return (response as any)?.data || response;
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Failed to create career";
+    throw new Error(message);
+  }
+};
+
+export const updateCareer = async (id: string, data: Partial<Career>): Promise<Career> => {
+  try {
+    const response = await apiClient.put<any>(`/careers/${id}`, data);
+    return (response as any)?.data || response;
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Failed to update career";
+    throw new Error(message);
+  }
+};
+
+export const deleteCareer = async (id: string): Promise<{ success: boolean; message: string }> => {
+  try {
+    const response = await apiClient.delete<any>(`/careers/${id}`);
+    return response as any;
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Failed to delete career";
+    throw new Error(message);
+  }
+};
+
+export interface JobApplication {
+  _id?: string;
+  id?: string;
+  fullName: string;
+  email: string;
+  phone?: string;
+  roleApplied: string;
+  experienceYears?: string;
+  portfolioUrl?: string;
+  githubUrl?: string;
+  linkedinUrl?: string;
+  resumeUrl?: string;
+  coverLetter?: string;
+  status?: "Pending" | "Reviewing" | "Shortlisted" | "Rejected" | "Hired";
+  createdAt?: string;
+}
+
 export interface JobApplicationData {
   fullName: string;
   email: string;
@@ -87,6 +134,49 @@ export const submitJobApplication = async (
   } catch (error) {
     const message =
       error instanceof Error ? error.message : "Failed to submit job application";
+    throw new Error(message);
+  }
+};
+
+export const getApplications = async (): Promise<JobApplication[]> => {
+  try {
+    const response = await cachedGet<any>("/applications");
+    if (response && Array.isArray((response as any).data)) {
+      return (response as any).data;
+    }
+    if (Array.isArray(response)) {
+      return response;
+    }
+    return [];
+  } catch (error) {
+    console.warn("Could not fetch applications:", error);
+    return [];
+  }
+};
+
+export const updateApplicationStatus = async (
+  id: string,
+  status: string
+): Promise<JobApplication> => {
+  try {
+    const response = await apiClient.put<any>(`/applications/${id}`, { status });
+    return (response as any)?.data || response;
+  } catch (error) {
+    const message =
+      error instanceof Error ? error.message : "Failed to update application status";
+    throw new Error(message);
+  }
+};
+
+export const deleteApplication = async (
+  id: string
+): Promise<{ success: boolean; message: string }> => {
+  try {
+    const response = await apiClient.delete<any>(`/applications/${id}`);
+    return response as any;
+  } catch (error) {
+    const message =
+      error instanceof Error ? error.message : "Failed to delete application";
     throw new Error(message);
   }
 };

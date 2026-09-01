@@ -45,7 +45,7 @@ export function Footer() {
             </p>
             <div className="flex items-center gap-3 pt-2">
               <a
-                href="https://github.com"
+                href="https://github.com/Programming-Bridge"
                 target="_blank"
                 rel="noreferrer"
                 aria-label="GitHub"
@@ -56,7 +56,7 @@ export function Footer() {
                 </svg>
               </a>
               <a
-                href="https://linkedin.com"
+                href="https://www.linkedin.com/company/139694030/"
                 target="_blank"
                 rel="noreferrer"
                 aria-label="LinkedIn"
@@ -67,14 +67,16 @@ export function Footer() {
                 </svg>
               </a>
               <a
-                href="mailto:contact@programmingbridge.com"
+                href="mailto:official@programmingbridge.org"
                 aria-label="Email"
                 className="flex h-9 w-9 items-center justify-center rounded-lg border border-border bg-card text-foreground-muted hover:border-brand hover:text-brand transition-colors"
               >
                 <Mail className="h-4 w-4" />
               </a>
               <a
-                href="https://programmingbridge.com"
+                href="https://www.programmingbridge.org"
+                target="_blank"
+                rel="noreferrer"
                 aria-label="Website"
                 className="flex h-9 w-9 items-center justify-center rounded-lg border border-border bg-card text-foreground-muted hover:border-brand hover:text-brand transition-colors"
               >

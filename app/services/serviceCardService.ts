@@ -38,3 +38,33 @@ export const getServiceCards = async (): Promise<ServiceCard[]> => {
     throw error;
   }
 };
+
+export const createServiceCard = async (data: Partial<ServiceCard>): Promise<ServiceCard> => {
+  try {
+    const response = await apiClient.post<any>("/services", data);
+    return (response as any)?.data || response;
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Failed to create service card";
+    throw new Error(message);
+  }
+};
+
+export const updateServiceCard = async (id: string, data: Partial<ServiceCard>): Promise<ServiceCard> => {
+  try {
+    const response = await apiClient.put<any>(`/services/${id}`, data);
+    return (response as any)?.data || response;
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Failed to update service card";
+    throw new Error(message);
+  }
+};
+
+export const deleteServiceCard = async (id: string): Promise<{ success: boolean; message: string }> => {
+  try {
+    const response = await apiClient.delete<any>(`/services/${id}`);
+    return response as any;
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Failed to delete service card";
+    throw new Error(message);
+  }
+};

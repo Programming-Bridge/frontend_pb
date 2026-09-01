@@ -2,6 +2,7 @@ import apiClient, { cachedGet } from "./apiClient";
 
 export interface TeamMember {
   _id?: string;
+  id?: string;
   name: string;
   role: string;
   department: string;
@@ -37,9 +38,9 @@ export const fallbackTeamMembers: TeamMember[] = [
     skills: ["Next.js 15", "TypeScript", "Node.js", "PostgreSQL", "System Architecture", "AWS"],
     experience: "7+ Years",
     socialLinks: {
-      github: "https://github.com",
-      linkedin: "https://linkedin.com",
-      email: "usama@programmingbridge.com",
+      github: "https://github.com/Programming-Bridge",
+      linkedin: "https://www.linkedin.com/company/139694030/",
+      email: "official@programmingbridge.org",
     },
     order: 1,
     featured: true,
@@ -53,8 +54,8 @@ export const fallbackTeamMembers: TeamMember[] = [
     skills: ["Kotlin", "Jetpack Compose", "Coroutines", "Flutter", "MVI Architecture", "Room DB"],
     experience: "6+ Years",
     socialLinks: {
-      github: "https://github.com",
-      linkedin: "https://linkedin.com",
+      github: "https://github.com/Programming-Bridge",
+      linkedin: "https://www.linkedin.com/company/139694030/",
     },
     order: 2,
     featured: true,
@@ -68,8 +69,8 @@ export const fallbackTeamMembers: TeamMember[] = [
     skills: ["PyTorch", "Python", "FastAPI", "OpenAI / RAG", "Vector DBs", "Docker MLOps"],
     experience: "8+ Years",
     socialLinks: {
-      github: "https://github.com",
-      linkedin: "https://linkedin.com",
+      github: "https://github.com/Programming-Bridge",
+      linkedin: "https://www.linkedin.com/company/139694030/",
     },
     order: 3,
     featured: true,
@@ -83,8 +84,8 @@ export const fallbackTeamMembers: TeamMember[] = [
     skills: ["Docker", "Kubernetes", "AWS", "Terraform", "CI/CD", "Zero-Trust Auth"],
     experience: "6+ Years",
     socialLinks: {
-      github: "https://github.com",
-      linkedin: "https://linkedin.com",
+      github: "https://github.com/Programming-Bridge",
+      linkedin: "https://www.linkedin.com/company/139694030/",
     },
     order: 4,
     featured: false,
@@ -117,6 +118,26 @@ export const createTeamMember = async (payload: Partial<TeamMember>): Promise<Te
     return (response as any)?.data || response;
   } catch (error) {
     const message = error instanceof Error ? error.message : "Failed to add team member";
+    throw new Error(message);
+  }
+};
+
+export const updateTeamMember = async (id: string, payload: Partial<TeamMember>): Promise<TeamMember> => {
+  try {
+    const response = await apiClient.put<any>(`/team/${id}`, payload);
+    return (response as any)?.data || response;
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Failed to update team member";
+    throw new Error(message);
+  }
+};
+
+export const deleteTeamMember = async (id: string): Promise<{ success: boolean; message: string }> => {
+  try {
+    const response = await apiClient.delete<any>(`/team/${id}`);
+    return response as any;
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Failed to delete team member";
     throw new Error(message);
   }
 };

@@ -5,10 +5,12 @@ import navbarReducer from "./features/navbar/navbarSlice";
 import bannerReducer from "./features/banner/bannerSlice";
 import serviceCardReducer from "./features/services/serviceCardSlice";
 import projectReducer from "./features/projects/projectSlice";
+import authReducer from "./features/auth/authSlice";
 
 export const makeStore = () => {
   return configureStore({
     reducer: {
+      auth: authReducer,
       counter: counterReducer,
       ui: uiReducer,
       navbar: navbarReducer,
@@ -19,6 +21,7 @@ export const makeStore = () => {
     devTools: process.env.NODE_ENV !== "production",
   });
 };
+
 
 
 // Infer the type of makeStore
