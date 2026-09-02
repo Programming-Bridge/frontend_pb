@@ -4,6 +4,7 @@ import "./globals.css";
 import { ThemeProvider } from "./components/ThemeProvider";
 import { StoreProvider } from "./StoreProvider";
 import { AppPreloader } from "./components/AppPreloader";
+import { Analytics } from "@vercel/analytics/react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -78,6 +79,7 @@ export default function RootLayout({
           >
             <AppPreloader />
             {children}
+            <Analytics />
           </ThemeProvider>
         </StoreProvider>
       </body>
