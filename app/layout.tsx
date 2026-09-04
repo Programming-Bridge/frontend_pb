@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "./components/ThemeProvider";
+import { ThemeSync } from "./components/ThemeSync";
 import { StoreProvider } from "./StoreProvider";
 import { AppPreloader } from "./components/AppPreloader";
 import { Analytics } from "@vercel/analytics/react";
@@ -66,6 +67,32 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var syncKey = 'pb_theme_auto_v1';
+                  var theme = localStorage.getItem('theme');
+                  if (localStorage.getItem(syncKey) !== 'active') {
+                    localStorage.setItem('theme', 'system');
+                    localStorage.setItem(syncKey, 'active');
+                    theme = 'system';
+                  }
+                  var mql = window.matchMedia('(prefers-color-scheme: dark)');
+                  var isDark = theme === 'dark' || ((!theme || theme === 'system') && mql.matches);
+                  if (isDark) {
+                    document.documentElement.classList.add('dark');
+                  } else {
+                    document.documentElement.classList.remove('dark');
+                  }
+                } catch (e) {}
+              })();
+            `,
+          }}
+        />
+      </head>
       <body
         suppressHydrationWarning
         className={`${inter.className} min-h-screen bg-background text-foreground antialiased transition-colors duration-200`}
@@ -73,10 +100,11 @@ export default function RootLayout({
         <StoreProvider>
           <ThemeProvider
             attribute="class"
-            defaultTheme="dark"
+            defaultTheme="system"
             enableSystem
             disableTransitionOnChange={false}
           >
+            <ThemeSync />
             <AppPreloader />
             {children}
             <Analytics />
