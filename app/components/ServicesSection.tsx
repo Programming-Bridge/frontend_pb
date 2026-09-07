@@ -82,14 +82,14 @@ export function ServicesSection({ isPage = false, className = "" }: ServicesSect
             <button
               onClick={prevSlide}
               aria-label="Previous"
-              className="absolute -left-3 sm:-left-5 lg:-left-6 top-1/2 -translate-y-1/2 z-30 flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full border border-border bg-surface/95 backdrop-blur-md text-foreground shadow-xl transition-all hover:border-brand hover:text-brand hover:scale-105 active:scale-95 cursor-pointer"
+              className="hidden lg:flex absolute -left-3 sm:-left-5 lg:-left-6 top-1/2 -translate-y-1/2 z-30 h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full border border-border bg-surface/95 backdrop-blur-md text-foreground shadow-xl transition-all hover:border-brand hover:text-brand hover:scale-105 active:scale-95 cursor-pointer"
             >
               <ChevronLeft className="h-5 w-5 sm:h-6 sm:w-6" />
             </button>
             <button
               onClick={nextSlide}
               aria-label="Next"
-              className="absolute -right-3 sm:-right-5 lg:-right-6 top-1/2 -translate-y-1/2 z-30 flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full border border-border bg-surface/95 backdrop-blur-md text-foreground shadow-xl transition-all hover:border-brand hover:text-brand hover:scale-105 active:scale-95 cursor-pointer"
+              className="hidden lg:flex absolute -right-3 sm:-right-5 lg:-right-6 top-1/2 -translate-y-1/2 z-30 h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full border border-border bg-surface/95 backdrop-blur-md text-foreground shadow-xl transition-all hover:border-brand hover:text-brand hover:scale-105 active:scale-95 cursor-pointer"
             >
               <ChevronRight className="h-5 w-5 sm:h-6 sm:w-6" />
             </button>

@@ -214,7 +214,7 @@ export function JobApplyModal({
             {/* Header */}
             <div className="space-y-2 pr-6">
               <div className="flex items-center gap-2">
-                <div className="relative h-8 w-8 overflow-hidden rounded-lg shadow-sm ring-1 ring-border/50">
+                <div className="relative h-8 w-8 shrink-0 aspect-square overflow-hidden rounded-lg shadow-sm ring-1 ring-border/50">
                   <Image
                     src="/logo.png"
                     alt="Programming Bridge"

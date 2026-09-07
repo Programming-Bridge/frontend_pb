@@ -36,14 +36,14 @@ export function StatCard({
         onClick ? "cursor-pointer active:scale-[0.98]" : ""
       }`}
     >
-      <div className="flex items-center justify-between">
-        <div className="flex h-9 w-9 sm:h-11 sm:w-11 items-center justify-center rounded-xl bg-surface border border-border group-hover:border-brand/30 group-hover:bg-brand/10 transition-colors">
-          <Icon className="h-4 w-4 sm:h-5 sm:w-5 text-foreground-muted group-hover:text-brand transition-colors" />
+      <div className="flex items-center justify-between gap-2">
+        <div className="flex h-9 w-9 sm:h-11 sm:w-11 shrink-0 aspect-square items-center justify-center rounded-xl bg-surface border border-border group-hover:border-brand/30 group-hover:bg-brand/10 transition-colors">
+          <Icon className="h-4 w-4 sm:h-5 sm:w-5 shrink-0 text-foreground-muted group-hover:text-brand transition-colors" />
         </div>
 
         {badge && (
           <span
-            className={`rounded-full border px-2 py-0.5 text-[9px] sm:text-[10px] font-bold uppercase tracking-wider ${badgeStyles[badgeColor]}`}
+            className={`shrink-0 whitespace-nowrap rounded-full border px-2 py-0.5 text-[9px] sm:text-[10px] font-bold uppercase tracking-wider ${badgeStyles[badgeColor]}`}
           >
             {badge}
           </span>

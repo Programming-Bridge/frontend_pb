@@ -29,9 +29,9 @@ export function ApplicationViewModal({
       <div className="relative w-full max-w-xl max-h-[90vh] overflow-y-auto rounded-2xl border border-border bg-card p-6 shadow-2xl">
         {/* Header */}
         <div className="flex items-center justify-between border-b border-border pb-4">
-          <div className="flex items-center gap-2.5">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand/15 text-brand">
-              <Award className="h-4 w-4" />
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 shrink-0 aspect-square items-center justify-center rounded-2xl bg-brand/15 text-brand">
+              <Award className="h-5 w-5" />
             </div>
             <div>
               <h3 className="text-base font-extrabold text-foreground">Candidate Application</h3>

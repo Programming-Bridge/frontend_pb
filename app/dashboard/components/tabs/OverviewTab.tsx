@@ -60,22 +60,22 @@ export function OverviewTab({
             </p>
           </div>
 
-          <div className="flex w-full sm:w-auto flex-row sm:flex-row items-center gap-2 sm:gap-2.5 shrink-0">
+          <div className="flex flex-wrap sm:flex-nowrap items-center gap-2 sm:gap-2.5 shrink-0">
             <button
               type="button"
               onClick={() => onOpenCreateModal("projects")}
-              className="flex-1 sm:flex-initial flex items-center justify-center gap-2 rounded-xl bg-brand px-4 py-2.5 text-xs font-bold text-black shadow-lg shadow-brand/20 hover:bg-brand-hover hover:text-white transition-all cursor-pointer"
+              className="inline-flex items-center justify-center whitespace-nowrap gap-2 rounded-xl bg-brand px-4 py-2.5 text-xs font-bold text-black shadow-lg shadow-brand/20 hover:bg-brand-hover hover:text-white transition-all cursor-pointer shrink-0"
             >
-              <Plus className="h-4 w-4" />
-              <span>Add Project</span>
+              <Plus className="h-4 w-4 shrink-0" />
+              <span className="whitespace-nowrap">Add Project</span>
             </button>
             <button
               type="button"
               onClick={() => onOpenCreateModal("careers")}
-              className="flex-1 sm:flex-initial flex items-center justify-center gap-2 rounded-xl border border-border bg-surface px-4 py-2.5 text-xs font-bold text-foreground hover:bg-surface-hover hover:border-brand/40 transition-all cursor-pointer"
+              className="inline-flex items-center justify-center whitespace-nowrap gap-2 rounded-xl border border-border bg-surface px-4 py-2.5 text-xs font-bold text-foreground hover:bg-surface-hover hover:border-brand/40 transition-all cursor-pointer shrink-0"
             >
-              <Plus className="h-4 w-4" />
-              <span>Post Job</span>
+              <Plus className="h-4 w-4 shrink-0" />
+              <span className="whitespace-nowrap">Post Job</span>
             </button>
           </div>
         </div>
@@ -133,7 +133,7 @@ export function OverviewTab({
           value={stats.applicationsCount}
           icon={UserCheck}
           subtitle={`${stats.pendingApplicationsCount} pending review`}
-          badge={stats.pendingApplicationsCount > 0 ? "New Candidates" : "Pipeline"}
+          badge={stats.pendingApplicationsCount > 0 ? "Candidates" : "Pipeline"}
           badgeColor="amber"
           onClick={() => onNavigateTab("careers")}
         />
@@ -142,7 +142,7 @@ export function OverviewTab({
           value={stats.inquiriesCount}
           icon={MessageSquare}
           subtitle={`${stats.unreadInquiriesCount} new messages`}
-          badge={stats.unreadInquiriesCount > 0 ? "Action Required" : "Leads"}
+          badge={stats.unreadInquiriesCount > 0 ? "Action" : "Leads"}
           badgeColor="brand"
           onClick={() => onNavigateTab("inquiries")}
         />
@@ -163,7 +163,7 @@ export function OverviewTab({
         <div className="rounded-2xl border border-border bg-card p-5 space-y-4">
           <div className="flex items-center justify-between border-b border-border pb-3">
             <div className="flex items-center gap-2">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand/15 text-brand">
+              <div className="flex h-8 w-8 shrink-0 aspect-square items-center justify-center rounded-lg bg-brand/15 text-brand">
                 <MessageSquare className="h-4 w-4" />
               </div>
               <h3 className="text-sm font-bold text-foreground">Recent Client Inquiries</h3>
@@ -193,11 +193,11 @@ export function OverviewTab({
                   className="flex items-center justify-between py-3 hover:bg-surface-hover/50 px-2 rounded-xl transition-colors cursor-pointer"
                 >
                   <div className="flex flex-col min-w-0 pr-3">
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 min-w-0">
                       <span className="text-xs font-bold text-foreground truncate">
                         {inq.name}
                       </span>
-                      <span className="rounded-md bg-surface border border-border px-1.5 py-0.5 text-[9px] font-semibold text-foreground-muted">
+                      <span className="shrink-0 whitespace-nowrap rounded-md bg-surface border border-border px-1.5 py-0.5 text-[9px] font-semibold text-foreground-muted max-w-[130px] truncate">
                         {inq.projectType || "General"}
                       </span>
                     </div>
@@ -206,7 +206,7 @@ export function OverviewTab({
                     </span>
                   </div>
 
-                  <span className="shrink-0 rounded-full bg-brand/10 border border-brand/20 px-2 py-0.5 text-[10px] font-bold text-brand">
+                  <span className="shrink-0 whitespace-nowrap rounded-full bg-brand/10 border border-brand/20 px-2.5 py-0.5 text-[10px] font-bold text-brand">
                     {inq.status || "New"}
                   </span>
                 </div>
@@ -219,7 +219,7 @@ export function OverviewTab({
         <div className="rounded-2xl border border-border bg-card p-5 space-y-4">
           <div className="flex items-center justify-between border-b border-border pb-3">
             <div className="flex items-center gap-2">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-500/15 text-amber-500">
+              <div className="flex h-8 w-8 shrink-0 aspect-square items-center justify-center rounded-lg bg-amber-500/15 text-amber-500">
                 <FileText className="h-4 w-4" />
               </div>
               <h3 className="text-sm font-bold text-foreground">Recent Job Applications</h3>
@@ -249,11 +249,11 @@ export function OverviewTab({
                   className="flex items-center justify-between py-3 hover:bg-surface-hover/50 px-2 rounded-xl transition-colors cursor-pointer"
                 >
                   <div className="flex flex-col min-w-0 pr-3">
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 min-w-0">
                       <span className="text-xs font-bold text-foreground truncate">
                         {app.fullName}
                       </span>
-                      <span className="text-[10px] font-semibold text-foreground-subtle">
+                      <span className="shrink-0 whitespace-nowrap text-[10px] font-semibold text-foreground-subtle">
                         {app.experienceYears || "Applicant"}
                       </span>
                     </div>
@@ -262,7 +262,7 @@ export function OverviewTab({
                     </span>
                   </div>
 
-                  <span className="shrink-0 rounded-full bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 text-[10px] font-bold text-amber-600 dark:text-amber-400">
+                  <span className="shrink-0 whitespace-nowrap rounded-full bg-amber-500/10 border border-amber-500/20 px-2.5 py-0.5 text-[10px] font-bold text-amber-600 dark:text-amber-400">
                     {app.status || "Pending"}
                   </span>
                 </div>

@@ -46,10 +46,10 @@ export function ServicesTab({
         <button
           type="button"
           onClick={onOpenCreate}
-          className="w-full sm:w-auto flex items-center justify-center gap-2 rounded-xl bg-brand px-4 py-2.5 text-xs font-bold text-black shadow-lg shadow-brand/20 hover:bg-brand-hover hover:text-white transition-all cursor-pointer shrink-0"
+          className="w-full sm:w-auto inline-flex items-center justify-center whitespace-nowrap gap-2 rounded-xl bg-brand px-4 py-2.5 text-xs font-bold text-black shadow-lg shadow-brand/20 hover:bg-brand-hover hover:text-white transition-all cursor-pointer shrink-0"
         >
-          <Plus className="h-4 w-4" />
-          <span>Add Service</span>
+          <Plus className="h-4 w-4 shrink-0" />
+          <span className="whitespace-nowrap">Add Service</span>
         </button>
       </div>
 
