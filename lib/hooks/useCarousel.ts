@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 
 interface UseCarouselOptions {
   totalItems: number;
@@ -14,6 +14,8 @@ export function useCarousel({
   const [currentSlide, setCurrentSlide] = useState(0);
   const [cardsPerView, setCardsPerView] = useState(responsive ? 3 : 1);
   const [isPaused, setIsPaused] = useState(false);
+  const touchStartX = useRef<number | null>(null);
+  const touchEndX = useRef<number | null>(null);
 
   // Handle responsive items per view
   useEffect(() => {
@@ -59,9 +61,41 @@ export function useCarousel({
     setCurrentSlide(index);
   }, []);
 
+  const onTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.targetTouches[0].clientX;
+    touchEndX.current = null;
+  };
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    touchEndX.current = e.targetTouches[0].clientX;
+  };
+
+  const onTouchEnd = () => {
+    setIsPaused(false);
+    if (!touchStartX.current || !touchEndX.current) return;
+    const distance = touchStartX.current - touchEndX.current;
+    const minSwipeDistance = 50;
+
+    if (distance > minSwipeDistance) {
+      nextSlide();
+    } else if (distance < -minSwipeDistance) {
+      prevSlide();
+    }
+    touchStartX.current = null;
+    touchEndX.current = null;
+  };
+
   const hoverHandlers = {
-    onMouseEnter: () => setIsPaused(true),
+    onMouseEnter: () => {
+      // Only pause on non-touch devices where hover is supported
+      if (typeof window !== "undefined" && window.matchMedia("(hover: hover)").matches) {
+        setIsPaused(true);
+      }
+    },
     onMouseLeave: () => setIsPaused(false),
+    onTouchStart,
+    onTouchMove,
+    onTouchEnd,
   };
 
   return {
@@ -78,3 +112,4 @@ export function useCarousel({
 }
 
 export default useCarousel;
+

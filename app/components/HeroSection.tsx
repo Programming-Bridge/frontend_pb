@@ -93,14 +93,14 @@ export function HeroSection() {
           <button
             onClick={prevSlide}
             aria-label="Previous slide"
-            className="absolute left-2 sm:left-4 md:left-6 top-1/2 -translate-y-1/2 z-30 flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full border border-border bg-surface/95 backdrop-blur-md text-foreground shadow-xl transition-all hover:border-brand hover:bg-surface hover:text-brand hover:scale-105 active:scale-95 cursor-pointer"
+            className="hidden lg:flex absolute left-2 sm:left-4 md:left-6 top-1/2 -translate-y-1/2 z-30 h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full border border-border bg-surface/95 backdrop-blur-md text-foreground shadow-xl transition-all hover:border-brand hover:bg-surface hover:text-brand hover:scale-105 active:scale-95 cursor-pointer"
           >
             <ChevronLeft className="h-5 w-5 sm:h-6 sm:w-6" />
           </button>
           <button
             onClick={nextSlide}
             aria-label="Next slide"
-            className="absolute right-2 sm:right-4 md:right-6 top-1/2 -translate-y-1/2 z-30 flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full border border-border bg-surface/95 backdrop-blur-md text-foreground shadow-xl transition-all hover:border-brand hover:bg-surface hover:text-brand hover:scale-105 active:scale-95 cursor-pointer"
+            className="hidden lg:flex absolute right-2 sm:right-4 md:right-6 top-1/2 -translate-y-1/2 z-30 h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full border border-border bg-surface/95 backdrop-blur-md text-foreground shadow-xl transition-all hover:border-brand hover:bg-surface hover:text-brand hover:scale-105 active:scale-95 cursor-pointer"
           >
             <ChevronRight className="h-5 w-5 sm:h-6 sm:w-6" />
           </button>

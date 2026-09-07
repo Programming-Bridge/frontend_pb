@@ -85,42 +85,42 @@ export function CareersTab({
           <button
             type="button"
             onClick={onOpenCreateCareer}
-            className="flex items-center gap-2 rounded-xl bg-brand px-4 py-2.5 text-xs font-bold text-black shadow-lg shadow-brand/20 hover:bg-brand-hover hover:text-white transition-all cursor-pointer shrink-0"
+            className="inline-flex shrink-0 items-center whitespace-nowrap justify-center gap-2 rounded-xl bg-brand px-4 py-2.5 text-xs font-bold text-black shadow-lg shadow-brand/20 hover:bg-brand-hover hover:text-white transition-all cursor-pointer"
           >
-            <Plus className="h-4 w-4" />
-            <span>Post Job Vacancy</span>
+            <Plus className="h-4 w-4 shrink-0" />
+            <span className="whitespace-nowrap">Post Job Vacancy</span>
           </button>
         )}
       </div>
 
       {/* Sub-Tabs Nav Buttons */}
-      <div className="flex items-center gap-2 border-b border-border pb-3">
+      <div className="flex items-center gap-2.5 overflow-x-auto pb-3 pt-0.5 max-w-full border-b border-border">
         <button
           type="button"
           onClick={() => setSubTab("jobs")}
-          className={`flex items-center gap-2 rounded-xl px-4 py-2 text-xs font-bold transition-all cursor-pointer ${
+          className={`inline-flex shrink-0 items-center whitespace-nowrap gap-2 rounded-xl px-4 py-2.5 text-xs font-bold transition-all cursor-pointer ${
             subTab === "jobs"
               ? "bg-brand text-black shadow-sm"
               : "border border-border bg-surface text-foreground-muted hover:border-brand/40 hover:text-foreground"
           }`}
         >
-          <Briefcase className="h-3.5 w-3.5" />
-          <span>Job Openings ({careers.length})</span>
+          <Briefcase className="h-4 w-4 shrink-0" />
+          <span className="whitespace-nowrap">Job Openings ({careers.length})</span>
         </button>
 
         <button
           type="button"
           onClick={() => setSubTab("applications")}
-          className={`flex items-center gap-2 rounded-xl px-4 py-2 text-xs font-bold transition-all cursor-pointer ${
+          className={`inline-flex shrink-0 items-center whitespace-nowrap gap-2 rounded-xl px-4 py-2.5 text-xs font-bold transition-all cursor-pointer ${
             subTab === "applications"
               ? "bg-amber-500 text-black shadow-sm"
               : "border border-border bg-surface text-foreground-muted hover:border-amber-500/40 hover:text-foreground"
           }`}
         >
-          <UserCheck className="h-3.5 w-3.5" />
-          <span>Candidate Applications ({applications.length})</span>
+          <UserCheck className="h-4 w-4 shrink-0" />
+          <span className="whitespace-nowrap">Candidate Applications ({applications.length})</span>
           {pendingCount > 0 && (
-            <span className="rounded-full bg-black/20 px-1.5 py-0.2 text-[10px] font-extrabold text-black">
+            <span className="shrink-0 whitespace-nowrap rounded-full bg-black/20 px-2 py-0.5 text-[10px] font-extrabold text-black">
               {pendingCount} new
             </span>
           )}

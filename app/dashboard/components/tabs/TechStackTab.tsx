@@ -59,20 +59,20 @@ export function TechStackTab({
             type="button"
             onClick={onSeedDefaults}
             disabled={isSeeding}
-            className="flex-1 sm:flex-initial flex items-center justify-center gap-1.5 rounded-xl border border-border bg-surface px-3 py-2.5 text-xs font-bold text-foreground hover:border-brand/40 hover:text-brand transition-all disabled:opacity-50 cursor-pointer"
+            className="flex-1 sm:flex-initial inline-flex items-center justify-center whitespace-nowrap gap-1.5 rounded-xl border border-border bg-surface px-3 py-2.5 text-xs font-bold text-foreground hover:border-brand/40 hover:text-brand transition-all disabled:opacity-50 cursor-pointer shrink-0"
             title="Seed default technology catalog"
           >
-            <Database className="h-3.5 w-3.5" />
-            <span>{isSeeding ? "Seeding..." : "Seed Default"}</span>
+            <Database className="h-3.5 w-3.5 shrink-0" />
+            <span className="whitespace-nowrap">{isSeeding ? "Seeding..." : "Seed Default"}</span>
           </button>
 
           <button
             type="button"
             onClick={onOpenCreate}
-            className="flex-1 sm:flex-initial flex items-center justify-center gap-2 rounded-xl bg-brand px-4 py-2.5 text-xs font-bold text-black shadow-lg shadow-brand/20 hover:bg-brand-hover hover:text-white transition-all cursor-pointer"
+            className="flex-1 sm:flex-initial inline-flex items-center justify-center whitespace-nowrap gap-2 rounded-xl bg-brand px-4 py-2.5 text-xs font-bold text-black shadow-lg shadow-brand/20 hover:bg-brand-hover hover:text-white transition-all cursor-pointer shrink-0"
           >
-            <Plus className="h-4 w-4" />
-            <span>Add Tech</span>
+            <Plus className="h-4 w-4 shrink-0" />
+            <span className="whitespace-nowrap">Add Tech</span>
           </button>
         </div>
       </div>

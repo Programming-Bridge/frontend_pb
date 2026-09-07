@@ -34,6 +34,12 @@ import {
   LogOut,
   ShieldCheck,
   User as UserIcon,
+  Home,
+  FolderGit2,
+  Mail,
+  Info,
+  Briefcase,
+  Sparkles,
 } from "lucide-react";
 
 export function Navbar() {
@@ -49,6 +55,52 @@ export function Navbar() {
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [mobileExpanded, setMobileExpanded] = useState<string | null>(null);
   const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const formatRole = (role?: string) => {
+    if (!role) return "Admin";
+    const r = role.toLowerCase();
+    if (r === "superadmin" || r === "super_admin") return "Super Admin";
+    if (r === "admin") return "Admin";
+    if (r === "editor") return "Editor";
+    return role.charAt(0).toUpperCase() + role.slice(1);
+  };
+
+  const getNavItemIcon = (label: string, href: string) => {
+    const normLabel = (label || "").toLowerCase();
+    const normHref = (href || "").toLowerCase();
+
+    if (normLabel.includes("home") || normHref === "/") return Home;
+    if (
+      normLabel.includes("portfolio") ||
+      normLabel.includes("port") ||
+      normLabel.includes("project") ||
+      normHref.includes("project") ||
+      normHref.includes("portfolio")
+    )
+      return FolderGit2;
+    if (normLabel.includes("service") || normHref.includes("service")) return Layers;
+    if (
+      normLabel.includes("about") ||
+      normLabel.includes("company") ||
+      normLabel.includes("team") ||
+      normHref.includes("about")
+    )
+      return Info;
+    if (
+      normLabel.includes("contact") ||
+      normLabel.includes("touch") ||
+      normHref.includes("contact")
+    )
+      return Mail;
+    if (
+      normLabel.includes("career") ||
+      normLabel.includes("job") ||
+      normHref.includes("career")
+    )
+      return Briefcase;
+
+    return Sparkles;
+  };
 
   const handleDropdownEnter = (id: string) => {
     if (closeTimeoutRef.current) {
@@ -262,7 +314,7 @@ export function Navbar() {
                   className="flex items-center gap-1.5 rounded-lg border border-border bg-surface px-3 py-1.5 text-xs font-semibold text-foreground hover:bg-surface-hover transition-colors"
                 >
                   <ShieldCheck className="h-3.5 w-3.5 text-brand" />
-                  <span className="max-w-[100px] truncate">{currentUser?.name || "Admin"}</span>
+                  <span className="max-w-[100px] truncate">{formatRole(currentUser?.role)}</span>
                 </Link>
                 <button
                   onClick={handleLogout}
@@ -369,6 +421,7 @@ export function Navbar() {
                     const hasDropdown = item.hasDropDown && item.dropDown && item.dropDown.length > 0;
                     const itemId = item._id || item.id || `mobile-nav-${idx}`;
                     const isExpanded = mobileExpanded === String(itemId);
+                    const ItemIcon = getNavItemIcon(label, href);
 
                     return (
                       <div key={itemId} className="flex flex-col">
@@ -382,8 +435,8 @@ export function Navbar() {
                                 }`}
                               aria-expanded={isExpanded}
                             >
-                              <span className="flex items-center gap-2">
-                                <Layers className="h-4 w-4 text-brand" />
+                              <span className="flex items-center gap-2.5">
+                                <ItemIcon className="h-4 w-4 text-brand shrink-0" />
                                 <span>{label}</span>
                               </span>
                               <ChevronDown
@@ -431,7 +484,10 @@ export function Navbar() {
                             onClick={() => setMobileMenuOpen(false)}
                             className="flex items-center justify-between rounded-2xl border border-border bg-surface px-4 py-3.5 text-sm font-bold text-foreground hover:bg-surface-hover hover:text-brand hover:border-brand/40 transition-colors"
                           >
-                            <span>{label}</span>
+                            <span className="flex items-center gap-2.5">
+                              <ItemIcon className="h-4 w-4 text-brand shrink-0" />
+                              <span>{label}</span>
+                            </span>
                             <ArrowRight className="h-4 w-4 text-foreground-muted" />
                           </Link>
                         )}
@@ -454,7 +510,7 @@ export function Navbar() {
                     className="flex w-full items-center justify-center gap-2 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm font-bold text-red-500 hover:bg-red-500 hover:text-white transition-all cursor-pointer"
                   >
                     <LogOut className="h-4 w-4 shrink-0" />
-                    <span>Log Out ({currentUser?.name || "Admin"})</span>
+                    <span>Log Out ({formatRole(currentUser?.role)})</span>
                   </button>
                 ) : (
                   <Link
@@ -478,3 +534,4 @@ export function Navbar() {
 }
 
 export default Navbar;
+

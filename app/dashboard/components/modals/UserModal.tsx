@@ -93,7 +93,7 @@ export function UserModal({
         {/* Header */}
         <div className="flex items-center justify-between border-b border-border pb-4">
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-brand/15 text-brand">
+            <div className="flex h-10 w-10 shrink-0 aspect-square items-center justify-center rounded-2xl bg-brand/15 text-brand">
               <UserPlus className="h-5 w-5" />
             </div>
             <div>
