@@ -259,3 +259,16 @@ body {
 .animate-pb-scan {
   animation: pbScanline 2.2s ease-in-out infinite;
 }
+
+/* Tawk.to Chat Widget - Dynamic Dark/Light Mode Adapter */
+.dark iframe[src*="tawk.to"],
+.dark iframe[title*="chat widget"],
+.dark iframe[title*="chat window"],
+.dark iframe[title*="chat"],
+.dark iframe[title*="chat panel"],
+.dark div[class*="widget-visible"] iframe,
+.dark div[id*="tawk"] iframe,
+.dark div[style*="2147483647"] iframe {
+  filter: invert(0.92) hue-rotate(180deg) brightness(0.95) contrast(1.05) !important;
+  transition: filter 0.25s ease;
+}

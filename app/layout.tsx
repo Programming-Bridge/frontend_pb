@@ -5,6 +5,7 @@ import { ThemeProvider } from "./components/ThemeProvider";
 import { ThemeSync } from "./components/ThemeSync";
 import { StoreProvider } from "./StoreProvider";
 import { AppPreloader } from "./components/AppPreloader";
+import { TawkTo } from "./components/TawkTo";
 import { Analytics } from "@vercel/analytics/react";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -108,6 +109,7 @@ export default function RootLayout({
             <AppPreloader />
             {children}
             <Analytics />
+            <TawkTo />
           </ThemeProvider>
         </StoreProvider>
       </body>
