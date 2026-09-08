@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -20,8 +21,16 @@ import {
 export default function NotFound() {
   const router = useRouter();
 
+  useEffect(() => {
+    document.title = "404 - Page Not Found | Programming Bridge";
+  }, []);
+
   return (
     <div className="relative flex min-h-[100dvh] flex-col items-center justify-center overflow-hidden bg-background px-4 py-12 sm:px-6 lg:px-8 text-foreground selection:bg-brand selection:text-white">
+      <head>
+        <title>404 - Page Not Found | Programming Bridge</title>
+        <meta name="robots" content="noindex, nofollow" />
+      </head>
       {/* Background Ambient Glows */}
       <div className="pointer-events-none absolute -top-32 left-1/2 -z-10 h-[550px] w-[650px] -translate-x-1/2 rounded-full bg-brand/20 blur-[130px] dark:bg-brand/25" />
       <div className="pointer-events-none absolute -bottom-32 right-1/4 -z-10 h-[450px] w-[550px] rounded-full bg-cyan-500/15 blur-[140px] dark:bg-cyan-500/20" />

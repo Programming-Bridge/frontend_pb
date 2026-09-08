@@ -11,6 +11,7 @@ import {
   selectProjectsLoading,
 } from "@/lib/store/features/projects/projectSlice";
 import { getProjects, type Project } from "@/app/services/projectService";
+import { defaultProjects } from "@/app/data/projectsData";
 import { ProjectsSkeleton } from "./skeletons/ProjectsSkeleton";
 import { SectionWrapper, SectionHeader, CalloutBanner } from "./common";
 import {
@@ -20,12 +21,42 @@ import {
   Smartphone,
   Brain,
   Cloud,
+  Layers,
+  ShieldCheck,
+  ArrowRight,
 } from "lucide-react";
 
 interface ProjectsSectionProps {
   isPage?: boolean;
   className?: string;
 }
+
+const isLegitimateLiveUrl = (url?: string): boolean => {
+  if (!url) return false;
+  const clean = url.trim().toLowerCase();
+  if (clean === "" || clean === "#" || clean.includes("example.com")) return false;
+  return clean.startsWith("http://") || clean.startsWith("https://") || clean.startsWith("/");
+};
+
+const isLegitimateGitUrl = (url?: string): boolean => {
+  if (!url) return false;
+  const clean = url.trim().toLowerCase();
+  if (clean === "" || clean === "#") return false;
+  if (
+    clean === "https://github.com" ||
+    clean === "https://github.com/" ||
+    clean === "http://github.com" ||
+    clean === "http://github.com/"
+  ) {
+    return false;
+  }
+  return (
+    clean.startsWith("https://github.com/") ||
+    clean.startsWith("http://github.com/") ||
+    clean.startsWith("https://gitlab.com/") ||
+    clean.startsWith("https://bitbucket.org/")
+  );
+};
 
 export function ProjectsSection({ isPage = false, className = "" }: ProjectsSectionProps) {
   const dispatch = useAppDispatch();
@@ -40,17 +71,24 @@ export function ProjectsSection({ isPage = false, className = "" }: ProjectsSect
       dispatch(setProjectsLoading(true));
       try {
         const data = await getProjects();
-        if (isMounted && data?.length) {
-          const active = data.filter((p) => p.isActive !== false);
-          if (active.length > 0) {
-            dispatch(setProjects(active));
-            dispatch(setProjectsError(null));
+        if (isMounted) {
+          if (data && data.length > 0) {
+            const active = data.filter((p) => p.isActive !== false);
+            if (active.length > 0) {
+              dispatch(setProjects(active));
+            } else {
+              dispatch(setProjects(defaultProjects));
+            }
+          } else {
+            dispatch(setProjects(defaultProjects));
           }
+          dispatch(setProjectsError(null));
         }
       } catch (err) {
         if (isMounted) {
           const message = err instanceof Error ? err.message : "Failed to load projects";
           dispatch(setProjectsError(message));
+          dispatch(setProjects(defaultProjects));
         }
       } finally {
         if (isMounted) dispatch(setProjectsLoading(false));
@@ -63,30 +101,34 @@ export function ProjectsSection({ isPage = false, className = "" }: ProjectsSect
     };
   }, [dispatch]);
 
-  const activeProjects = useMemo(() => projects.filter((p) => p.isActive !== false), [projects]);
+  const rawActiveProjects = useMemo(() => {
+    const list = projects.filter((p) => p.isActive !== false);
+    return list.length > 0 ? list : defaultProjects;
+  }, [projects]);
 
   const categories = useMemo(() => {
     const set = new Set<string>(["All"]);
-    activeProjects.forEach((p) => {
+    rawActiveProjects.forEach((p) => {
       if (p.category) set.add(p.category);
     });
     return Array.from(set);
-  }, [activeProjects]);
+  }, [rawActiveProjects]);
 
   const filteredProjects = useMemo(() => {
-    if (selectedCategory === "All") return activeProjects;
-    return activeProjects.filter((p) => p.category === selectedCategory);
-  }, [activeProjects, selectedCategory]);
+    if (selectedCategory === "All") return rawActiveProjects;
+    return rawActiveProjects.filter((p) => p.category === selectedCategory);
+  }, [rawActiveProjects, selectedCategory]);
 
   const getCategoryIcon = (category?: string) => {
     const cat = (category || "").toLowerCase();
-    if (cat.includes("mobile") || cat.includes("app")) return Smartphone;
+    if (cat.includes("mobile") || cat.includes("app") || cat.includes("android")) return Smartphone;
     if (cat.includes("ai") || cat.includes("data") || cat.includes("ml")) return Brain;
-    if (cat.includes("cloud") || cat.includes("devops")) return Cloud;
+    if (cat.includes("cloud") || cat.includes("devops") || cat.includes("api")) return Cloud;
+    if (cat.includes("cms") || cat.includes("wordpress")) return Layers;
     return FolderGit2;
   };
 
-  if (loading || activeProjects.length === 0) {
+  if (loading && rawActiveProjects.length === 0) {
     return <ProjectsSkeleton />;
   }
 
@@ -101,15 +143,16 @@ export function ProjectsSection({ isPage = false, className = "" }: ProjectsSect
     >
       {/* Header */}
       <SectionHeader
+        as={isPage ? "h1" : "h2"}
         icon={FolderGit2}
         badge="Portfolio"
-        subBadge={`${activeProjects.length} Projects`}
+        subBadge={`${rawActiveProjects.length} Projects`}
         title={
           <>
             Featured Work & <span className="text-brand">Case Studies</span>
           </>
         }
-        description="A selection of web applications, mobile platforms, and cloud systems engineered for our clients."
+        description="A curated selection of high-concurrency web platforms, native mobile applications, and distributed cloud systems engineered for our global clients."
       >
         {/* Filter Pills */}
         {categories.length > 1 && (
@@ -118,24 +161,26 @@ export function ProjectsSection({ isPage = false, className = "" }: ProjectsSect
               const isActive = selectedCategory === category;
               const count =
                 category === "All"
-                  ? activeProjects.length
-                  : activeProjects.filter((p) => p.category === category).length;
+                  ? rawActiveProjects.length
+                  : rawActiveProjects.filter((p) => p.category === category).length;
 
               return (
                 <button
                   key={category}
                   onClick={() => setSelectedCategory(category)}
-                  className={`inline-flex items-center gap-2 rounded-xl px-4 py-2 text-xs sm:text-sm font-semibold transition-all duration-200 cursor-pointer ${isActive
-                    ? "bg-brand text-white shadow-sm shadow-brand/20"
-                    : "text-foreground-muted hover:text-foreground hover:bg-surface-hover"
-                    }`}
+                  className={`inline-flex items-center gap-2 rounded-xl px-4 py-2 text-xs sm:text-sm font-semibold transition-all duration-200 cursor-pointer ${
+                    isActive
+                      ? "bg-brand text-white shadow-sm shadow-brand/20"
+                      : "text-foreground-muted hover:text-foreground hover:bg-surface-hover"
+                  }`}
                 >
                   <span>{category}</span>
                   <span
-                    className={`rounded-full px-1.5 py-0.5 text-[10px] font-mono ${isActive
-                      ? "bg-white/20 text-white font-bold"
-                      : "bg-border text-foreground-subtle"
-                      }`}
+                    className={`rounded-full px-1.5 py-0.5 text-[10px] font-mono ${
+                      isActive
+                        ? "bg-white/20 text-white font-bold"
+                        : "bg-border text-foreground-subtle"
+                    }`}
                   >
                     {count}
                   </span>
@@ -151,8 +196,11 @@ export function ProjectsSection({ isPage = false, className = "" }: ProjectsSect
         {filteredProjects.map((project: Project, index: number) => {
           const CategoryIcon = getCategoryIcon(project.category);
           const projectImage = project.image || project.imageUrl || project.img;
-          const projectLiveUrl = project.liveLink || project.liveUrl;
-          const projectGitUrl = project.gitLink || project.githubUrl;
+          const rawLive = project.liveLink || project.liveUrl;
+          const rawGit = project.gitLink || project.githubUrl;
+
+          const legitimateLiveUrl = isLegitimateLiveUrl(rawLive) ? rawLive : null;
+          const legitimateGitUrl = isLegitimateGitUrl(rawGit) ? rawGit : null;
 
           return (
             <div
@@ -196,9 +244,9 @@ export function ProjectsSection({ isPage = false, className = "" }: ProjectsSect
 
                 {/* Hover Overlay */}
                 <div className="absolute inset-0 z-20 flex items-center justify-center gap-3.5 bg-black/60 backdrop-blur-xs opacity-0 transition-all duration-300 group-hover:opacity-100 p-4">
-                  {projectLiveUrl && (
+                  {legitimateLiveUrl && (
                     <a
-                      href={projectLiveUrl}
+                      href={legitimateLiveUrl}
                       target="_blank"
                       rel="noreferrer"
                       aria-label={`Live Demo for ${project.title}`}
@@ -208,16 +256,26 @@ export function ProjectsSection({ isPage = false, className = "" }: ProjectsSect
                     </a>
                   )}
 
-                  {projectGitUrl && (
+                  {legitimateGitUrl && (
                     <a
-                      href={projectGitUrl}
+                      href={legitimateGitUrl}
                       target="_blank"
                       rel="noreferrer"
-                      aria-label={`GitHub for ${project.title}`}
+                      aria-label={`GitHub Repository for ${project.title}`}
                       className="flex h-10 w-10 items-center justify-center rounded-full bg-surface/95 border border-border text-foreground shadow-lg backdrop-blur-md transition-all hover:scale-110 hover:border-brand hover:text-brand active:scale-95 cursor-pointer"
                     >
                       <FolderGit2 className="h-4 w-4" />
                     </a>
+                  )}
+
+                  {!legitimateLiveUrl && !legitimateGitUrl && (
+                    <Link
+                      href={`/contact?subject=${encodeURIComponent("Case Study: " + project.title)}`}
+                      className="inline-flex items-center gap-2 rounded-xl bg-surface/95 border border-border px-4 py-2 text-xs font-semibold text-foreground backdrop-blur-md transition-all hover:border-brand hover:text-brand hover:scale-105 active:scale-95 cursor-pointer"
+                    >
+                      <span>Request Case Study Brief</span>
+                      <ArrowRight className="h-3.5 w-3.5" />
+                    </Link>
                   )}
                 </div>
               </div>
@@ -257,9 +315,9 @@ export function ProjectsSection({ isPage = false, className = "" }: ProjectsSect
                 {/* Footer Row */}
                 <div className="mt-6 flex items-center justify-between pt-4 border-t border-border/60">
                   <div className="flex items-center gap-3">
-                    {projectLiveUrl && (
+                    {legitimateLiveUrl ? (
                       <a
-                        href={projectLiveUrl}
+                        href={legitimateLiveUrl}
                         target="_blank"
                         rel="noreferrer"
                         className="inline-flex items-center gap-1 text-xs font-semibold text-brand hover:text-brand-hover transition-colors"
@@ -267,11 +325,11 @@ export function ProjectsSection({ isPage = false, className = "" }: ProjectsSect
                         <span>Live Demo</span>
                         <ExternalLink className="h-3 w-3" />
                       </a>
-                    )}
+                    ) : null}
 
-                    {projectGitUrl && (
+                    {legitimateGitUrl ? (
                       <a
-                        href={projectGitUrl}
+                        href={legitimateGitUrl}
                         target="_blank"
                         rel="noreferrer"
                         className="inline-flex items-center gap-1 text-xs font-semibold text-foreground-muted hover:text-foreground transition-colors"
@@ -279,11 +337,18 @@ export function ProjectsSection({ isPage = false, className = "" }: ProjectsSect
                         <FolderGit2 className="h-3 w-3" />
                         <span>Code</span>
                       </a>
+                    ) : null}
+
+                    {!legitimateLiveUrl && !legitimateGitUrl && (
+                      <span className="inline-flex items-center gap-1 text-[11px] font-medium text-foreground-subtle">
+                        <ShieldCheck className="h-3.5 w-3.5 text-brand" />
+                        <span>Enterprise NDA</span>
+                      </span>
                     )}
                   </div>
 
                   <Link
-                    href="/contact"
+                    href={`/contact?subject=${encodeURIComponent("Inquiry: " + project.title)}`}
                     className="text-xs font-semibold text-foreground-subtle hover:text-brand transition-colors"
                   >
                     <span>Inquire →</span>

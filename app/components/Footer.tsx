@@ -93,34 +93,34 @@ export function Footer() {
             <ul className="space-y-2 text-sm text-foreground-muted">
               <li>
                 <Link
-                  href="#about-us"
+                  href="/about/company"
                   className="hover:text-brand transition-colors"
                 >
-                  About Us
+                  About Company
                 </Link>
               </li>
               <li>
                 <Link
-                  href="#services"
+                  href="/services"
                   className="hover:text-brand transition-colors"
                 >
-                  Services
+                  Engineering Services
                 </Link>
               </li>
               <li>
                 <Link
-                  href="#tech-stack"
-                  className="hover:text-brand transition-colors"
-                >
-                  Technology Stack
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="#projects"
+                  href="/portfolio"
                   className="hover:text-brand transition-colors"
                 >
                   Featured Projects
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/about/careers"
+                  className="hover:text-brand transition-colors"
+                >
+                  Careers & Hiring
                 </Link>
               </li>
               <li>

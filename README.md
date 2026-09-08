@@ -133,6 +133,22 @@ Open [http://localhost:3000](http://localhost:3000) in your browser to view the 
 This frontend consumes REST API endpoints from the **Programming Bridge Backend API**:
 - **Backend Repo:** [Programming-Bridge/backend_pb](https://github.com/Programming-Bridge/backend_pb)
 
+## 📈 Release History & Changelog
+
+### 🚀 v0.2.0 (March 2026) — Comprehensive QA & Core Architectural Release
+- **C-01 (Service Capabilities Expansion):** Added full-spectrum rich configurations across all 8 service capabilities (`web-development`, `mobile-app-development`, `android-development`, `api-cloud`, `wordpress-cms`, `ai-automation`, `ui-ux-design`, `custom-software`) with slug alias normalization.
+- **C-02 (Dynamic 404 Routing):** Integrated native Next.js `notFound()` routing for unmapped `/services/[slug]` URLs, enforcing proper HTTP 404 status codes.
+- **C-03 & M-10 (Portfolio Sanitization & UI Mockups):** Sanitized all portfolio cards, eliminating dummy `example.com` and bare `github.com` links. Added 7 production-grade software case studies with realistic repository targets, live demo previews, and NDA inquiry fallbacks.
+- **M-01 (Footer Navigation):** Configured root-aware absolute routes in `Footer.tsx` for seamless inner-page navigation.
+- **M-02 (About Section Interactive CTAs):** Replaced non-interactive spans with accessible Next.js `<Link>` components mapped to dedicated capability routes.
+- **M-03 & M-04 (SEO Infrastructure & Canonical Tags):** Added dynamic `robots.ts` and `sitemap.ts` generation alongside site-wide canonical URL tags in `layout.tsx`.
+- **M-05 (404 Page SEO & Noindex):** Added `<meta name="robots" content="noindex, nofollow" />` and explicit document title to `not-found.tsx`.
+- **M-06 & M-07 (Accessibility & Honeypot Bot Trap):** Implemented programmatic input labels, accessibility IDs, hidden honeypot fields, and timestamp submission thresholds in `ContactSection.tsx`.
+- **M-08 & M-09 (Semantic Single H1 Hierarchy):** Updated `SectionHeader.tsx` with dynamic `as` heading props (`h1`/`h2`) and resolved multi-H1 carousel rendering in `HeroSection.tsx`.
+
+### 📦 v0.1.0 (Initial Beta Release)
+- Initial release featuring Next.js 15, React 19, Redux Toolkit state slice integration, Tailwind CSS v4 styling, dynamic dark/light themes, and responsive carousel components.
+
 ---
 
 ## 📄 License & Ownership
