@@ -66,7 +66,7 @@ export function ContactSection({ isPage = false, className = "" }: ContactSectio
     // Bot / Spam Protection Check (M-07)
     if (honeypot.trim() !== "") {
       setSuccessMessage(
-        "Your inquiry has been received! Our engineering lead will review it and reply within 24 hours."
+        "Your inquiry has been received! Our engineering lead will review it and reply within 2 hours."
       );
       setFormData(initialFormState);
       return;
@@ -74,7 +74,7 @@ export function ContactSection({ isPage = false, className = "" }: ContactSectio
 
     if (Date.now() - formLoadedAt < 600) {
       setSuccessMessage(
-        "Your inquiry has been received! Our engineering lead will review it and reply within 24 hours."
+        "Your inquiry has been received! Our engineering lead will review it and reply within 2 hours."
       );
       return;
     }
@@ -90,7 +90,7 @@ export function ContactSection({ isPage = false, className = "" }: ContactSectio
       const res = await submitInquiry(formData);
       setSuccessMessage(
         res.message ||
-          "Your inquiry has been received! Our engineering lead will review it and reply within 24 hours."
+          "Your inquiry has been received! Our engineering lead will review it and reply within 2 hours."
       );
       setFormData(initialFormState);
     } catch (err) {
@@ -115,13 +115,13 @@ export function ContactSection({ isPage = false, className = "" }: ContactSectio
       <SectionHeader
         as={isPage ? "h1" : "h2"}
         badge="Contact"
-        subBadge="Get in Touch"
+        subBadge="< 2h Response SLA"
         title={
           <>
             Tell Us About Your <span className="text-brand">Project</span>
           </>
         }
-        description="Have an idea or existing system you need to build or scale? Share your requirements below. A technical lead will review your scope and get back to you within 24 hours."
+        description="Have an idea or existing system you need to build or scale? Share your requirements below. A technical lead will review your scope and get back to you within 2 hours."
       />
 
       {/* Form & Info Layout */}
@@ -140,8 +140,8 @@ export function ContactSection({ isPage = false, className = "" }: ContactSectio
                   <Clock className="h-4 w-4" />
                 </div>
                 <div>
-                  <h4 className="text-xs sm:text-sm font-semibold text-foreground">24-Hour Response</h4>
-                  <p className="text-xs text-foreground-muted">Technical feasibility feedback and initial timeline estimates.</p>
+                  <h4 className="text-xs sm:text-sm font-semibold text-foreground">&lt; 2-Hour Response SLA</h4>
+                  <p className="text-xs text-foreground-muted">Average response under 2 hours, with initial feasibility feedback.</p>
                 </div>
               </div>
 

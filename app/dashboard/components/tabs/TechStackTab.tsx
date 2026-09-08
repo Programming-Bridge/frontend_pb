@@ -153,6 +153,10 @@ export function TechStackTab({
                           <img
                             src={item.svgUrl}
                             alt={item.name}
+                            width={24}
+                            height={24}
+                            loading="lazy"
+                            decoding="async"
                             className={`h-full w-full object-contain ${
                               item.invertInDark ? "dark:invert" : ""
                             }`}

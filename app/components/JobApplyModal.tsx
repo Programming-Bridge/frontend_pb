@@ -55,6 +55,7 @@ export function JobApplyModal({
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
+  // Sync selected role
   useEffect(() => {
     if (selectedRole?.title) {
       setRoleApplied(selectedRole.title);
@@ -62,6 +63,27 @@ export function JobApplyModal({
       setRoleApplied(allRoles[0].title);
     }
   }, [selectedRole, allRoles, roleApplied]);
+
+  // Handle Escape key and body scroll lock for keyboard accessibility
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        handleResetAndClose();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.body.style.overflow = originalOverflow;
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
@@ -147,7 +169,13 @@ export function JobApplyModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 overflow-y-auto bg-black/75 backdrop-blur-sm transition-all duration-300">
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="job-apply-modal-title"
+      onClick={handleResetAndClose}
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 overflow-y-auto bg-black/75 backdrop-blur-sm transition-all duration-300 animate-fadeIn"
+    >
       <div
         className="relative w-full max-w-2xl rounded-3xl border border-card-border bg-card p-5 sm:p-8 shadow-2xl transition-all duration-300 max-h-[92vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
@@ -155,7 +183,7 @@ export function JobApplyModal({
         {/* Close Button */}
         <button
           onClick={handleResetAndClose}
-          className="absolute right-4 top-4 rounded-xl p-2 text-foreground-muted hover:bg-surface hover:text-foreground transition-colors cursor-pointer"
+          className="absolute right-4 top-4 rounded-xl p-2 text-foreground-muted hover:bg-surface hover:text-foreground transition-colors cursor-pointer focus-visible:ring-2 focus-visible:ring-brand focus-visible:outline-none"
           aria-label="Close modal"
         >
           <X className="h-5 w-5" />
@@ -228,7 +256,7 @@ export function JobApplyModal({
                   <span>Programming Bridge Careers</span>
                 </div>
               </div>
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">
+              <h2 id="job-apply-modal-title" className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">
                 Apply for Engineering Role
               </h2>
               <p className="text-xs sm:text-sm text-foreground-muted leading-relaxed">

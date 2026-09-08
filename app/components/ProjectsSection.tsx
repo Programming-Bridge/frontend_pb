@@ -213,7 +213,10 @@ export function ProjectsSection({ isPage = false, className = "" }: ProjectsSect
                   <img
                     src={projectImage}
                     alt={project.title}
+                    width={600}
+                    height={338}
                     loading="lazy"
+                    decoding="async"
                     className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
                 ) : (
