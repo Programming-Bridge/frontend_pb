@@ -20,12 +20,12 @@
   --border-subtle: #F1F5F9;
   --border-hover: #CBD5E1;
 
-  /* Brand Colors & Accents */
-  --brand: #00C466;
-  --brand-hover: #059669;
+  /* Brand Colors & Accents - WCAG AA compliant in light mode (>= 4.5:1 against white) */
+  --brand: #008A4B;
+  --brand-hover: #00733E;
   --brand-tint: #ECFDF5;
-  --brand-glow: rgba(0, 196, 102, 0.2);
-  --brand-cyan: #38BDF8;
+  --brand-glow: rgba(0, 138, 75, 0.2);
+  --brand-cyan: #0284C7;
 }
 
 .dark {

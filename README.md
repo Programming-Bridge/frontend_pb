@@ -133,21 +133,30 @@ Open [http://localhost:3000](http://localhost:3000) in your browser to view the 
 This frontend consumes REST API endpoints from the **Programming Bridge Backend API**:
 - **Backend Repo:** [Programming-Bridge/backend_pb](https://github.com/Programming-Bridge/backend_pb)
 
-## 📈 Release History & Changelog
+---
 
-### 🚀 v0.2.0 (March 2026) — Comprehensive QA & Core Architectural Release
-- **C-01 (Service Capabilities Expansion):** Added full-spectrum rich configurations across all 8 service capabilities (`web-development`, `mobile-app-development`, `android-development`, `api-cloud`, `wordpress-cms`, `ai-automation`, `ui-ux-design`, `custom-software`) with slug alias normalization.
-- **C-02 (Dynamic 404 Routing):** Integrated native Next.js `notFound()` routing for unmapped `/services/[slug]` URLs, enforcing proper HTTP 404 status codes.
-- **C-03 & M-10 (Portfolio Sanitization & UI Mockups):** Sanitized all portfolio cards, eliminating dummy `example.com` and bare `github.com` links. Added 7 production-grade software case studies with realistic repository targets, live demo previews, and NDA inquiry fallbacks.
-- **M-01 (Footer Navigation):** Configured root-aware absolute routes in `Footer.tsx` for seamless inner-page navigation.
-- **M-02 (About Section Interactive CTAs):** Replaced non-interactive spans with accessible Next.js `<Link>` components mapped to dedicated capability routes.
-- **M-03 & M-04 (SEO Infrastructure & Canonical Tags):** Added dynamic `robots.ts` and `sitemap.ts` generation alongside site-wide canonical URL tags in `layout.tsx`.
-- **M-05 (404 Page SEO & Noindex):** Added `<meta name="robots" content="noindex, nofollow" />` and explicit document title to `not-found.tsx`.
-- **M-06 & M-07 (Accessibility & Honeypot Bot Trap):** Implemented programmatic input labels, accessibility IDs, hidden honeypot fields, and timestamp submission thresholds in `ContactSection.tsx`.
-- **M-08 & M-09 (Semantic Single H1 Hierarchy):** Updated `SectionHeader.tsx` with dynamic `as` heading props (`h1`/`h2`) and resolved multi-H1 carousel rendering in `HeroSection.tsx`.
+## 📋 Changelog
 
-### 📦 v0.1.0 (Initial Beta Release)
-- Initial release featuring Next.js 15, React 19, Redux Toolkit state slice integration, Tailwind CSS v4 styling, dynamic dark/light themes, and responsive carousel components.
+### v0.3.0 — Detailed QA Fixes & Security Hardening (D-01 to D-10)
+- **D-01 (Light Mode Contrast)**: Refined `:root` brand color tokens (`#008A4B`) to achieve WCAG AA compliant >= 4.5:1 contrast against white text and backgrounds.
+- **D-02 (Security Headers & Clickjacking)**: Added `X-Frame-Options: SAMEORIGIN`, `X-Content-Type-Options: nosniff`, `Referrer-Policy`, and strict `Content-Security-Policy` in `next.config.ts`.
+- **D-03 (CDN Configurations)**: Configured all remote image patterns (`unsplash`, `cloudinary`, `github`, `jsdelivr`, `seaborn`) in Next.js config.
+- **D-04 (CLS Prevention)**: Added explicit `width`, `height`, and `decoding="async"` attributes to all `<img>` tags across projects, marquee, team, and tech stack tabs.
+- **D-05 (Careers Modal Accessibility)**: Added `Escape` key listener, backdrop dismissal, body scroll lock, and ARIA dialog roles to `JobApplyModal.tsx`.
+- **D-06 (Web Analytics Setup)**: Integrated Google Analytics 4 (GA4) measurement script with configurable `NEXT_PUBLIC_GA_MEASUREMENT_ID`.
+- **D-07 (Landscape Social Share Banner)**: Generated 1200x630 landscape OpenGraph/Twitter card (`opengraph-image.tsx` & `/og-image.png`).
+- **D-08 (Careers Page Bottom Section)**: Replaced client sales inquiry form with a dedicated Engineering Talent Open Application CTA section.
+- **D-09 (Navbar 6 Services Sync)**: Synchronized Services dropdown across MongoDB and frontend fallback to list all 6 core services.
+- **D-10 (Response Time Copy Harmonization)**: Unified response time SLAs to `< 2 hours` average response across all forms, metadata, and copy.
+
+### v0.2.0 — Comprehensive QA Fixes (C-01 to C-03 & M-01 to M-10)
+- **C-01 & C-02**: Implemented dynamic `/services/[slug]` routing for all 8 services with valid 404 handler for invalid routes.
+- **C-03 & M-10**: Sanitized portfolio links and replaced placeholder URLs with verified GitHub repo and live demo links.
+- **M-01 & M-02**: Fixed footer anchor navigation and made About section "Learn more" buttons fully interactive.
+- **M-03 & M-04**: Added dynamic `sitemap.xml`, `robots.txt`, and canonical URL metadata.
+- **M-05**: Added 404 title and `noindex, nofollow` metadata.
+- **M-06 & M-07**: Contact form accessibility (`htmlFor`/`id`) and honeypot + time-gate bot protection.
+- **M-08 & M-09**: Single `<h1>` tag enforcement in Hero carousel and dynamic `as` prop in SectionHeader.
 
 ---
 

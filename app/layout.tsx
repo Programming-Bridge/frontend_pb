@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 import { ThemeProvider } from "./components/ThemeProvider";
 import { ThemeSync } from "./components/ThemeSync";
@@ -9,6 +10,7 @@ import { TawkTo } from "./components/TawkTo";
 import { Analytics } from "@vercel/analytics/react";
 
 const inter = Inter({ subsets: ["latin"] });
+const gaMeasurementId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || "G-PBENGINEER1";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.programmingbridge.org"),
@@ -48,10 +50,10 @@ export const metadata: Metadata = {
     siteName: "Programming Bridge",
     images: [
       {
-        url: "/logo.png",
-        width: 800,
-        height: 800,
-        alt: "Programming Bridge Logo",
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Programming Bridge - Full-Stack Digital Engineering Studio",
       },
     ],
   },
@@ -60,7 +62,14 @@ export const metadata: Metadata = {
     title: "Programming Bridge | Full-Stack Digital Engineering Studio",
     description:
       "Bespoke web applications, mobile platforms, and distributed cloud systems.",
-    images: ["/logo.png"],
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Programming Bridge - Full-Stack Digital Engineering Studio",
+      },
+    ],
   },
 };
 
@@ -113,6 +122,30 @@ export default function RootLayout({
             {children}
             <Analytics />
             <TawkTo />
+
+            {/* Google Analytics GA4 */}
+            {gaMeasurementId && (
+              <>
+                <Script
+                  strategy="afterInteractive"
+                  src={`https://www.googletagmanager.com/gtag/js?id=${gaMeasurementId}`}
+                />
+                <Script
+                  id="google-analytics-init"
+                  strategy="afterInteractive"
+                  dangerouslySetInnerHTML={{
+                    __html: `
+                      window.dataLayer = window.dataLayer || [];
+                      function gtag(){dataLayer.push(arguments);}
+                      gtag('js', new Date());
+                      gtag('config', '${gaMeasurementId}', {
+                        page_path: window.location.pathname,
+                      });
+                    `,
+                  }}
+                />
+              </>
+            )}
           </ThemeProvider>
         </StoreProvider>
       </body>

@@ -8,7 +8,7 @@ import { Footer } from "../components/Footer";
 export const metadata: Metadata = {
   title: "Contact & Consultation | Programming Bridge",
   description:
-    "Get in touch with our senior software engineering team. Share your requirements for a free architectural review and proposal within 24 hours.",
+    "Get in touch with our senior software engineering team. Share your requirements for a free architectural review and proposal within 2 hours.",
 };
 
 export default function ContactPage() {

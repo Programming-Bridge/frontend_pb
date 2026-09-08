@@ -181,7 +181,10 @@ export function TechStackSection() {
                         <img
                           src={item.svgUrl}
                           alt={item.name}
+                          width={20}
+                          height={20}
                           loading="lazy"
+                          decoding="async"
                           className={`h-5 w-5 object-contain transition-transform duration-200 group-hover:scale-105 ${item.invertInDark ? "dark:invert" : ""
                             }`}
                         />

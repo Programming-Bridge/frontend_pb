@@ -7,7 +7,6 @@ import { Navbar } from "@/app/components/Navbar";
 import { Footer } from "@/app/components/Footer";
 import { TechStackSection } from "@/app/components/TechStackSection";
 import { StatsStrip } from "@/app/components/StatsStrip";
-import { ContactSection } from "@/app/components/ContactSection";
 import { SectionWrapper, SectionHeader, CalloutBanner } from "@/app/components/common";
 import { CareersSkeleton } from "@/app/components/skeletons/CareersSkeleton";
 import { JobApplyModal } from "@/app/components/JobApplyModal";
@@ -316,8 +315,59 @@ export default function CareersPage() {
       {/* Trust & Metrics Strip */}
       <StatsStrip />
 
-      {/* Direct Contact / Inquiry */}
-      <ContactSection />
+      {/* Talent & Open Application CTA Section (Replaces Client Project Inquiry Form) */}
+      <SectionWrapper variant="surface" border="top" ariaLabel="Open Engineering Application">
+        <div className="relative overflow-hidden rounded-3xl border border-card-border bg-card p-8 sm:p-12 shadow-xl max-w-5xl mx-auto text-center">
+          <div className="pointer-events-none absolute -top-24 left-1/2 -z-10 h-72 w-96 -translate-x-1/2 rounded-full bg-brand/10 blur-3xl" />
+
+          <div className="mx-auto max-w-2xl space-y-4">
+            <div className="inline-flex items-center gap-2 rounded-full border border-brand/25 bg-brand-tint px-3.5 py-1 text-xs font-bold text-brand">
+              <Sparkles className="h-3.5 w-3.5" />
+              <span>General &amp; Speculative Applications</span>
+            </div>
+
+            <h2 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-foreground">
+              Don&apos;t See Your Exact <span className="text-brand">Role</span>?
+            </h2>
+
+            <p className="text-sm sm:text-base text-foreground-muted leading-relaxed">
+              We are constantly seeking outstanding systems architects, full-stack builders, mobile developers, and AI engineers. Send us your resume and GitHub profile — we review all applications within 48 hours.
+            </p>
+
+            <div className="pt-4 flex flex-wrap items-center justify-center gap-4">
+              <button
+                onClick={() => handleOpenApplyModal({ title: "Open Engineering Application", department: "General Engineering", experience: "Mid-Senior / Lead" } as Career)}
+                className="inline-flex items-center gap-2 rounded-xl bg-brand px-6 py-3.5 text-sm font-semibold text-white shadow-md shadow-brand/20 transition-all hover:bg-brand-hover hover:shadow-brand/35 active:scale-95 cursor-pointer"
+              >
+                <span>Submit Open Application</span>
+                <ArrowRight className="h-4 w-4" />
+              </button>
+
+              <a
+                href="mailto:careers@programmingbridge.org?subject=Engineering%20Career%20Inquiry%20-%20Programming%20Bridge"
+                className="inline-flex items-center gap-2 rounded-xl border border-border bg-surface px-6 py-3.5 text-sm font-semibold text-foreground hover:bg-surface-hover hover:border-brand/40 transition-all cursor-pointer"
+              >
+                <span>Email Hiring Team</span>
+              </a>
+            </div>
+
+            <div className="pt-6 grid grid-cols-1 sm:grid-cols-3 gap-3 border-t border-border/60 text-xs text-foreground-subtle">
+              <div className="flex items-center justify-center gap-2">
+                <CheckCircle2 className="h-4 w-4 text-brand shrink-0" />
+                <span>Direct Review by Technical Leads</span>
+              </div>
+              <div className="flex items-center justify-center gap-2">
+                <CheckCircle2 className="h-4 w-4 text-brand shrink-0" />
+                <span>Zero Whiteboard Tricks</span>
+              </div>
+              <div className="flex items-center justify-center gap-2">
+                <CheckCircle2 className="h-4 w-4 text-brand shrink-0" />
+                <span>Fast Feedback SLA</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </SectionWrapper>
 
       {/* Interactive Apply Modal Screen */}
       <JobApplyModal
