@@ -130,9 +130,15 @@ export function HeroSection() {
                   </div>
                 )}
 
-                <h1 className="mt-5 sm:mt-6 text-3xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-foreground leading-[1.15]">
-                  {renderTitle(banner.title)}
-                </h1>
+                {idx === 0 ? (
+                  <h1 className="mt-5 sm:mt-6 text-3xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-foreground leading-[1.15]">
+                    {renderTitle(banner.title)}
+                  </h1>
+                ) : (
+                  <h2 className="mt-5 sm:mt-6 text-3xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-foreground leading-[1.15]">
+                    {renderTitle(banner.title)}
+                  </h2>
+                )}
 
                 {banner.subTitle && (
                   <p className="mt-2.5 sm:mt-3 text-sm sm:text-lg font-medium text-foreground-muted">

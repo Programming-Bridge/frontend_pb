@@ -9,6 +9,7 @@ interface SectionHeaderProps {
   description: string;
   className?: string;
   children?: React.ReactNode;
+  as?: "h1" | "h2" | "h3";
 }
 
 export function SectionHeader({
@@ -19,7 +20,10 @@ export function SectionHeader({
   description,
   className = "",
   children,
+  as = "h2",
 }: SectionHeaderProps) {
+  const HeadingTag = as;
+
   return (
     <div className={`mx-auto max-w-3xl text-center ${className}`}>
       {/* Pill Badge */}
@@ -39,9 +43,9 @@ export function SectionHeader({
       </div>
 
       {/* Main Title */}
-      <h2 className="mt-4 text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl md:text-5xl leading-tight">
+      <HeadingTag className="mt-4 text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl md:text-5xl leading-tight">
         {title}
-      </h2>
+      </HeadingTag>
 
       {/* Description */}
       <p className="mt-4 text-base sm:text-lg text-foreground-muted leading-relaxed max-w-2xl mx-auto">

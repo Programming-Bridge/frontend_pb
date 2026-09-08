@@ -1,29 +1,33 @@
 import { Metadata } from "next";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import { Navbar } from "@/app/components/Navbar";
 import { Footer } from "@/app/components/Footer";
 import { StatsStrip } from "@/app/components/StatsStrip";
 import { TechStackSection } from "@/app/components/TechStackSection";
 import { ServiceTechMarquee } from "@/app/components/ServiceTechMarquee";
 import { ContactSection } from "@/app/components/ContactSection";
-import { SectionWrapper, SectionHeader, CalloutBanner } from "@/app/components/common";
+import { SectionWrapper, SectionHeader } from "@/app/components/common";
 import {
   Code2,
   Smartphone,
   Sparkles,
   Layers,
-  CheckCircle2,
-  ArrowRight,
+  Cloud,
+  Palette,
+  Terminal,
   ShieldCheck,
-  Zap,
+  ArrowRight,
+  type LucideIcon,
 } from "lucide-react";
 
 interface ServiceConfig {
+  slug: string;
   title: string;
   subtitle: string;
   badge: string;
   description: string;
-  icon: typeof Code2;
+  icon: LucideIcon;
   deliverables: string[];
   technologies: string[];
   categoryFilter: string;
@@ -31,6 +35,7 @@ interface ServiceConfig {
 
 const serviceConfigs: Record<string, ServiceConfig> = {
   "web-development": {
+    slug: "web-development",
     title: "Custom Web & Cloud Engineering",
     subtitle: "High-Scale Modern Web Applications",
     badge: "Web & Cloud",
@@ -38,63 +43,183 @@ const serviceConfigs: Record<string, ServiceConfig> = {
       "We design and build bespoke web platforms, full-stack enterprise applications, and distributed cloud microservices engineered for velocity, sub-100ms response times, and extreme scalability.",
     icon: Code2,
     deliverables: [
-      "Server-Side Rendered (SSR) Next.js 15 & React 19 Apps",
+      "Server-Side Rendered (SSR) Next.js 15 & React 19 Architectures",
       "High-Throughput Node.js & Express REST/GraphQL APIs",
-      "Enterprise Database Schema & Query Optimization",
-      "Automated Zero-Downtime CI/CD Cloud Deployments",
+      "Enterprise Database Schema Design & SQL Query Optimization",
+      "Automated Zero-Downtime CI/CD Cloud Deployments on AWS & Vercel",
     ],
     technologies: ["Next.js", "React", "TypeScript", "Node.js", "Express", "PostgreSQL", "MongoDB", "Tailwind CSS"],
     categoryFilter: "Web",
   },
-  "app-mobile-development": {
-    title: "Native Android & Mobile App Engineering",
-    subtitle: "Fluid 120 FPS Cross-Platform & Native Apps",
+  "mobile-app-development": {
+    slug: "mobile-app-development",
+    title: "Cross-Platform Mobile App Engineering",
+    subtitle: "Fluid 120 FPS iOS & Android Solutions",
     badge: "Mobile Engineering",
     description:
-      "Engineering native Android applications (Kotlin & Jetpack Compose) and cross-platform mobile experiences (Flutter & React Native) optimized for fluid performance, reactive state, and offline persistence.",
+      "Engineering robust cross-platform mobile experiences using Flutter and React Native, tailored for seamless performance, native platform bridge integrations, offline persistence, and synchronized cloud backends.",
     icon: Smartphone,
     deliverables: [
-      "Native Android Apps with Jetpack Compose & Kotlin",
-      "Cross-Platform Flutter & React Native Solutions",
-      "Unidirectional MVI/MVVM Clean Architecture",
-      "Offline-First Local Room DB & Background Sync",
+      "Cross-Platform Flutter & React Native Production Apps",
+      "Unidirectional Reactive State Management (Bloc / Redux)",
+      "Offline-First SQLite / Hive Local Storage & Background Sync",
+      "Automated App Store & Google Play Fastlane Deployments",
     ],
-    technologies: ["Kotlin", "Jetpack Compose", "Java", "Flutter", "React Native", "Coroutines", "Room DB"],
+    technologies: ["Flutter", "Dart", "React Native", "TypeScript", "Firebase", "SQLite", "Fastlane"],
     categoryFilter: "Mobile",
   },
-  "wordpress-development": {
-    title: "Headless & Custom WordPress Architecture",
-    subtitle: "Enterprise CMS & High-Speed E-Commerce",
+  "android-development": {
+    slug: "android-development",
+    title: "Native Android App Engineering",
+    subtitle: "Modern Kotlin & Jetpack Compose Architectures",
+    badge: "Native Android",
+    description:
+      "Crafting high-performance native Android applications with Kotlin, declarative Jetpack Compose UI, unidirectional MVI architecture, and background task scheduling optimized for hardware efficiency.",
+    icon: Smartphone,
+    deliverables: [
+      "Native Android Apps with Declarative Jetpack Compose UI",
+      "Robust Kotlin Coroutines & Asynchronous Flow Concurrency",
+      "Enterprise MVI / MVVM Architecture with Hilt Dependency Injection",
+      "Encrypted Local Room DB Persistence & Hardware Sensor Integrations",
+    ],
+    technologies: ["Kotlin", "Jetpack Compose", "Coroutines", "Room DB", "Hilt", "Retrofit", "Material 3"],
+    categoryFilter: "Mobile",
+  },
+  "api-cloud": {
+    slug: "api-cloud",
+    title: "API Microservices & Cloud Infrastructure",
+    subtitle: "Distributed Systems & Resilient Backend Engineering",
+    badge: "Cloud & APIs",
+    description:
+      "Architecting distributed microservice ecosystems, resilient REST/GraphQL APIs, Kubernetes container orchestration, and automated infrastructure as code built to process millions of concurrent requests.",
+    icon: Cloud,
+    deliverables: [
+      "High-Throughput Node.js, Express & FastAPI Microservices",
+      "Docker Containerization & Kubernetes Multi-Region Orchestration",
+      "Redis Caching, Message Queues (RabbitMQ/Kafka) & Rate Limiting",
+      "Terraform Infrastructure as Code with Zero-Trust Security",
+    ],
+    technologies: ["AWS", "Docker", "Kubernetes", "Node.js", "FastAPI", "PostgreSQL", "Redis", "Terraform"],
+    categoryFilter: "Cloud",
+  },
+  "wordpress-cms": {
+    slug: "wordpress-cms",
+    title: "Headless & Enterprise WordPress Architecture",
+    subtitle: "Decoupled CMS & High-Speed E-Commerce",
     badge: "CMS & E-Commerce",
     description:
-      "Custom WordPress themes, bespoke plugin engineering, WooCommerce e-commerce scalability, and modern Headless WordPress integrations with Next.js frontends.",
+      "Next-generation headless WordPress systems with Next.js frontends, bespoke plugin development, high-volume WooCommerce scaling, and sub-second Core Web Vitals optimization.",
     icon: Layers,
     deliverables: [
-      "Headless WordPress with Next.js Decoupled Frontend",
-      "Custom Plugin & REST API Custom Endpoints",
-      "High-Volume WooCommerce Performance Tuning",
-      "Core Web Vitals & Sub-Second Page Load Optimization",
+      "Decoupled Headless WordPress with Next.js 15 Frontend",
+      "Bespoke Custom Plugin & WPGraphQL Custom Schema Extensions",
+      "High-Volume WooCommerce Performance Tuning & Checkout Optimization",
+      "Sub-Second Page Load Optimization & 95+ Google Lighthouse Scores",
     ],
-    technologies: ["WordPress", "PHP", "MySQL", "Next.js", "REST API", "WooCommerce", "Tailwind CSS"],
+    technologies: ["WordPress", "PHP", "MySQL", "Next.js", "GraphQL", "WooCommerce", "Tailwind CSS"],
     categoryFilter: "Web",
   },
   "ai-automation": {
-    title: "AI, Machine Learning & LLM Workflows",
+    slug: "ai-automation",
+    title: "AI, LLM Workflows & Machine Learning",
     subtitle: "Intelligent Autonomous Systems & Analytics",
     badge: "AI & Automation",
     description:
-      "Integrating cutting-edge foundation models, Retrieval-Augmented Generation (RAG) pipelines, computer vision systems, and autonomous agentic workflows directly into production applications.",
+      "Integrating cutting-edge foundation models, Retrieval-Augmented Generation (RAG) pipelines, vector database search, and autonomous multi-agent systems directly into production business workflows.",
     icon: Sparkles,
     deliverables: [
-      "Custom Retrieval-Augmented Generation (RAG) Pipelines",
-      "Frontier LLM Integration (OpenAI, Hugging Face, Claude)",
+      "Custom Enterprise Retrieval-Augmented Generation (RAG) Pipelines",
+      "Frontier LLM Integration (OpenAI GPT-4, Claude 3.5, Hugging Face)",
       "High-Performance Python FastAPI Inference Microservices",
-      "Computer Vision (OpenCV/YOLO) & Predictive ML Models",
+      "Vector Search (Qdrant/Pinecone) & Predictive ML Pipelines",
     ],
-    technologies: ["Python", "PyTorch", "OpenAI", "FastAPI", "TensorFlow", "Hugging Face", "Docker"],
+    technologies: ["Python", "PyTorch", "OpenAI", "FastAPI", "Qdrant", "LangChain", "Docker", "Hugging Face"],
     categoryFilter: "AI",
   },
+  "ui-ux-design": {
+    slug: "ui-ux-design",
+    title: "Product Strategy & UI/UX Design Systems",
+    subtitle: "Conversion-Focused Interfaces & Design Systems",
+    badge: "Product & UI/UX",
+    description:
+      "Designing accessible, conversion-driven product experiences and comprehensive multi-platform design systems in Figma, ensuring seamless design-to-code parity for engineering teams.",
+    icon: Palette,
+    deliverables: [
+      "End-to-End User Research, Wireframing & Interactive Prototypes",
+      "Scalable Multi-Brand Design Systems with Tokenized Components",
+      "WCAG 2.1 AA Accessibility Audits & Usability Testing",
+      "Production Design Specs & Pixel-Perfect Developer Handoff",
+    ],
+    technologies: ["Figma", "Design Systems", "Prototyping", "Design Tokens", "Tailwind CSS", "Storybook"],
+    categoryFilter: "Design",
+  },
+  "custom-software": {
+    slug: "custom-software",
+    title: "Custom Enterprise Software Engineering",
+    subtitle: "Tailored Architecture for Complex Domain Workflows",
+    badge: "Enterprise Software",
+    description:
+      "End-to-end custom software architecture engineered to streamline complex operational workflows, integrate legacy infrastructure, and scale enterprise operational velocity.",
+    icon: Terminal,
+    deliverables: [
+      "Domain-Driven Architecture (DDD) & Modular System Design",
+      "Legacy System Modernization & Microservice Decomposition",
+      "Comprehensive Automated Unit, Integration & E2E Test Suites",
+      "Full Intellectual Property Ownership & Technical Documentation",
+    ],
+    technologies: ["TypeScript", "Python", "Go", "Next.js", "Node.js", "PostgreSQL", "Docker", "Kubernetes"],
+    categoryFilter: "All",
+  },
 };
+
+// Aliases mapping alternative slugs to canonical service configurations
+const serviceAliases: Record<string, string> = {
+  "app-mobile-development": "mobile-app-development",
+  "mobile-development": "mobile-app-development",
+  "app-development": "mobile-app-development",
+  "native-android-development": "android-development",
+  "native-android": "android-development",
+  "android-apps": "android-development",
+  "cloud-engineering": "api-cloud",
+  "cloud-devops": "api-cloud",
+  "api-cloud-solutions": "api-cloud",
+  "cloud-solutions": "api-cloud",
+  "wordpress-development": "wordpress-cms",
+  "cms-development": "wordpress-cms",
+  "ai-engineering": "ai-automation",
+  "machine-learning": "ai-automation",
+  "ai-ml": "ai-automation",
+  "product-design": "ui-ux-design",
+  "ui-ux": "ui-ux-design",
+  "software-architecture": "custom-software",
+  "custom-software-development": "custom-software",
+};
+
+/**
+ * Resolves a service slug to its canonical configuration, or null if invalid.
+ */
+function getServiceConfig(rawSlug: string): ServiceConfig | null {
+  if (!rawSlug) return null;
+  const normalized = rawSlug.toLowerCase().trim();
+
+  if (serviceConfigs[normalized]) {
+    return serviceConfigs[normalized];
+  }
+
+  const aliasTarget = serviceAliases[normalized];
+  if (aliasTarget && serviceConfigs[aliasTarget]) {
+    return serviceConfigs[aliasTarget];
+  }
+
+  return null;
+}
+
+export async function generateStaticParams() {
+  const canonicalSlugs = Object.keys(serviceConfigs);
+  const aliasSlugs = Object.keys(serviceAliases);
+  const allSlugs = Array.from(new Set([...canonicalSlugs, ...aliasSlugs]));
+  return allSlugs.map((slug) => ({ slug }));
+}
 
 export async function generateMetadata({
   params,
@@ -102,11 +227,14 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const config = serviceConfigs[slug] || {
-    title: "Specialized Engineering Service",
-    subtitle: "Programming Bridge",
-    description: "Custom digital engineering and software architecture services.",
-  };
+  const config = getServiceConfig(slug);
+
+  if (!config) {
+    return {
+      title: "Service Not Found | Programming Bridge",
+      description: "The requested engineering service capability could not be found.",
+    };
+  }
 
   return {
     title: `${config.title} | Programming Bridge`,
@@ -120,22 +248,12 @@ export default async function ServiceDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const config = serviceConfigs[slug] || {
-    title: slug.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase()),
-    subtitle: "Specialized Engineering",
-    badge: "Custom Capability",
-    description:
-      "Enterprise digital engineering, scalable architecture, and full-stack software development tailored to your technical roadmap.",
-    icon: Code2,
-    deliverables: [
-      "Senior-Led Architectural Feasibility & Design",
-      "Modular, Clean TypeScript & Python Codebases",
-      "Full API & Unit Test Coverage with CI/CD",
-      "Complete IP Ownership & Deployment Handover",
-    ],
-    technologies: ["TypeScript", "Next.js", "Node.js", "Python", "PostgreSQL", "Docker"],
-    categoryFilter: "All",
-  };
+  const config = getServiceConfig(slug);
+
+  // If slug is not a valid service or alias, trigger HTTP 404 (Fixes C-02)
+  if (!config) {
+    notFound();
+  }
 
   const Icon = config.icon;
 

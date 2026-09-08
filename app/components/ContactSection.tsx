@@ -52,6 +52,8 @@ interface ContactSectionProps {
 
 export function ContactSection({ isPage = false, className = "" }: ContactSectionProps) {
   const [formData, setFormData] = useState<InquiryPayload>(initialFormState);
+  const [honeypot, setHoneypot] = useState<string>("");
+  const [formLoadedAt] = useState<number>(() => Date.now());
   const [loading, setLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -60,6 +62,22 @@ export function ContactSection({ isPage = false, className = "" }: ContactSectio
     e.preventDefault();
     setErrorMessage(null);
     setSuccessMessage(null);
+
+    // Bot / Spam Protection Check (M-07)
+    if (honeypot.trim() !== "") {
+      setSuccessMessage(
+        "Your inquiry has been received! Our engineering lead will review it and reply within 24 hours."
+      );
+      setFormData(initialFormState);
+      return;
+    }
+
+    if (Date.now() - formLoadedAt < 600) {
+      setSuccessMessage(
+        "Your inquiry has been received! Our engineering lead will review it and reply within 24 hours."
+      );
+      return;
+    }
 
     if (!formData.name.trim()) return setErrorMessage("Please enter your name.");
     if (!formData.email.trim() || !formData.email.includes("@"))
@@ -95,6 +113,7 @@ export function ContactSection({ isPage = false, className = "" }: ContactSectio
     >
       {/* Header */}
       <SectionHeader
+        as={isPage ? "h1" : "h2"}
         badge="Contact"
         subBadge="Get in Touch"
         title={
@@ -195,15 +214,38 @@ export function ContactSection({ isPage = false, className = "" }: ContactSectio
                   </div>
                 )}
 
+                {/* Honeypot Bot Trap (M-07) */}
+                <div
+                  className="hidden pointer-events-none opacity-0 h-0 w-0 overflow-hidden"
+                  aria-hidden="true"
+                  tabIndex={-1}
+                >
+                  <label htmlFor="contact-hp-verification">Leave this field blank</label>
+                  <input
+                    id="contact-hp-verification"
+                    type="text"
+                    name="_hp_security_check"
+                    value={honeypot}
+                    onChange={(e) => setHoneypot(e.target.value)}
+                    tabIndex={-1}
+                    autoComplete="off"
+                  />
+                </div>
+
                 {/* Name & Email */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-semibold text-foreground mb-1.5">
+                    <label
+                      htmlFor="contact-full-name"
+                      className="block text-xs font-semibold text-foreground mb-1.5"
+                    >
                       Full Name <span className="text-red-500">*</span>
                     </label>
                     <div className="relative">
                       <User className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-foreground-subtle" />
                       <input
+                        id="contact-full-name"
+                        name="name"
                         type="text"
                         required
                         placeholder="Your name"
@@ -215,12 +257,17 @@ export function ContactSection({ isPage = false, className = "" }: ContactSectio
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold text-foreground mb-1.5">
+                    <label
+                      htmlFor="contact-work-email"
+                      className="block text-xs font-semibold text-foreground mb-1.5"
+                    >
                       Work Email <span className="text-red-500">*</span>
                     </label>
                     <div className="relative">
                       <Mail className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-foreground-subtle" />
                       <input
+                        id="contact-work-email"
+                        name="email"
                         type="email"
                         required
                         placeholder="you@company.com"
@@ -235,10 +282,17 @@ export function ContactSection({ isPage = false, className = "" }: ContactSectio
                 {/* Phone & Company */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-semibold text-foreground mb-1.5">Phone / WhatsApp (Optional)</label>
+                    <label
+                      htmlFor="contact-phone-number"
+                      className="block text-xs font-semibold text-foreground mb-1.5"
+                    >
+                      Phone / WhatsApp (Optional)
+                    </label>
                     <div className="relative">
                       <Phone className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-foreground-subtle" />
                       <input
+                        id="contact-phone-number"
+                        name="phone"
                         type="tel"
                         placeholder="+1 (555) 000-0000"
                         value={formData.phone}
@@ -249,10 +303,17 @@ export function ContactSection({ isPage = false, className = "" }: ContactSectio
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold text-foreground mb-1.5">Company Name</label>
+                    <label
+                      htmlFor="contact-company-name"
+                      className="block text-xs font-semibold text-foreground mb-1.5"
+                    >
+                      Company Name
+                    </label>
                     <div className="relative">
                       <Building2 className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-foreground-subtle" />
                       <input
+                        id="contact-company-name"
+                        name="company"
                         type="text"
                         placeholder="Your company"
                         value={formData.company}
@@ -265,7 +326,9 @@ export function ContactSection({ isPage = false, className = "" }: ContactSectio
 
                 {/* Service Focus */}
                 <div>
-                  <label className="block text-xs font-semibold text-foreground mb-2">Primary Service Focus</label>
+                  <label className="block text-xs font-semibold text-foreground mb-2">
+                    Primary Service Focus
+                  </label>
                   <div className="flex flex-wrap gap-2">
                     {PROJECT_TYPES.map((type) => {
                       const isSelected = formData.projectType === type;
@@ -289,7 +352,9 @@ export function ContactSection({ isPage = false, className = "" }: ContactSectio
 
                 {/* Budget */}
                 <div>
-                  <label className="block text-xs font-semibold text-foreground mb-2">Estimated Budget Range</label>
+                  <label className="block text-xs font-semibold text-foreground mb-2">
+                    Estimated Budget Range
+                  </label>
                   <div className="flex flex-wrap gap-2">
                     {BUDGET_RANGES.map((budget) => {
                       const isSelected = formData.budgetRange === budget;
@@ -313,12 +378,17 @@ export function ContactSection({ isPage = false, className = "" }: ContactSectio
 
                 {/* Message */}
                 <div>
-                  <label className="block text-xs font-semibold text-foreground mb-1.5">
+                  <label
+                    htmlFor="contact-project-details"
+                    className="block text-xs font-semibold text-foreground mb-1.5"
+                  >
                     Project Details <span className="text-red-500">*</span>
                   </label>
                   <div className="relative">
                     <MessageSquare className="pointer-events-none absolute left-3.5 top-3 h-4 w-4 text-foreground-subtle" />
                     <textarea
+                      id="contact-project-details"
+                      name="message"
                       required
                       rows={4}
                       placeholder="Tell us about the project goals, tech stack, timeline, or key challenges..."

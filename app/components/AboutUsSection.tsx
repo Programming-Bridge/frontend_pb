@@ -27,6 +27,7 @@ const pillars = [
     color: "text-brand",
     bg: "bg-brand/10",
     border: "hover:border-brand/40",
+    link: "/services/api-cloud",
   },
   {
     icon: Code2,
@@ -35,6 +36,7 @@ const pillars = [
     color: "text-brand-cyan",
     bg: "bg-brand-cyan/10",
     border: "hover:border-brand-cyan/40",
+    link: "/services/web-development",
   },
   {
     icon: Brain,
@@ -43,6 +45,7 @@ const pillars = [
     color: "text-purple-500",
     bg: "bg-purple-500/10",
     border: "hover:border-purple-500/40",
+    link: "/services/ai-automation",
   },
   {
     icon: ShieldCheck,
@@ -51,6 +54,7 @@ const pillars = [
     color: "text-emerald-500",
     bg: "bg-emerald-500/10",
     border: "hover:border-emerald-500/40",
+    link: "/about/company",
   },
 ];
 
@@ -108,10 +112,14 @@ export function AboutUsSection({ isPage = false, className = "" }: AboutUsSectio
                   {pillar.description}
                 </p>
               </div>
-              <div className="mt-6 pt-4 border-t border-border/60 flex items-center gap-1 text-xs font-semibold text-brand">
+              <Link
+                href={pillar.link}
+                className="mt-6 pt-4 border-t border-border/60 flex items-center gap-1 text-xs font-semibold text-brand hover:text-brand-hover transition-colors group-hover:gap-1.5 cursor-pointer"
+                aria-label={`Learn more about ${pillar.title}`}
+              >
                 <span>Learn more</span>
                 <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
-              </div>
+              </Link>
             </div>
           );
         })}
