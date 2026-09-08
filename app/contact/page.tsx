@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 
 export default function ContactPage() {
   return (
-    <main className="min-h-screen bg-background text-foreground transition-colors duration-200">
+    <main id="main-content" className="min-h-screen bg-background text-foreground transition-colors duration-200">
       <Navbar />
       <ContactSection isPage={true} />
       <TechStackSection />

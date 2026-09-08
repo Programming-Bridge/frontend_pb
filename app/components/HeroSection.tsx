@@ -19,6 +19,8 @@ import {
   ChevronRight,
   CheckCircle2,
   Code2,
+  Play,
+  Pause,
 } from "lucide-react";
 
 export function HeroSection() {
@@ -54,7 +56,7 @@ export function HeroSection() {
     };
   }, [dispatch]);
 
-  const { activeIndex, isSlider, nextSlide, prevSlide, goToSlide, hoverHandlers } =
+  const { activeIndex, isSlider, isPaused, togglePause, nextSlide, prevSlide, goToSlide, hoverHandlers } =
     useCarousel({ totalItems: banners.length, intervalMs: 4500 });
 
   if (loading || banners.length === 0) {
@@ -194,16 +196,28 @@ export function HeroSection() {
       </div>
 
       {isSlider && (
-        <div className="mt-10 flex items-center justify-center gap-2">
-          {banners.map((_, dotIdx) => (
-            <button
-              key={dotIdx}
-              onClick={() => goToSlide(dotIdx)}
-              aria-label={`Go to slide ${dotIdx + 1}`}
-              className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${dotIdx === activeIndex ? "w-8 bg-brand" : "w-2 bg-border hover:bg-foreground-muted/50"
+        <div className="mt-10 flex items-center justify-center gap-3">
+          <div className="flex items-center gap-2">
+            {banners.map((_, dotIdx) => (
+              <button
+                key={dotIdx}
+                onClick={() => goToSlide(dotIdx)}
+                aria-label={`Go to slide ${dotIdx + 1}`}
+                className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
+                  dotIdx === activeIndex ? "w-8 bg-brand" : "w-2 bg-border hover:bg-foreground-muted/50"
                 }`}
-            />
-          ))}
+              />
+            ))}
+          </div>
+
+          <button
+            onClick={togglePause}
+            aria-label={isPaused ? "Play slide carousel" : "Pause slide carousel"}
+            title={isPaused ? "Play slides" : "Pause slides"}
+            className="flex h-6 w-6 items-center justify-center rounded-full border border-border bg-surface text-foreground-muted hover:border-brand/50 hover:text-brand transition-colors cursor-pointer ml-1"
+          >
+            {isPaused ? <Play className="h-3 w-3 fill-current ml-0.5" /> : <Pause className="h-3 w-3" />}
+          </button>
         </div>
       )}
     </section>

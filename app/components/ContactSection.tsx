@@ -41,7 +41,7 @@ const initialFormState: InquiryPayload = {
   phone: "",
   company: "",
   projectType: PROJECT_TYPES[0],
-  budgetRange: BUDGET_RANGES[1],
+  budgetRange: "",
   message: "",
 };
 
@@ -82,6 +82,15 @@ export function ContactSection({ isPage = false, className = "" }: ContactSectio
     if (!formData.name.trim()) return setErrorMessage("Please enter your name.");
     if (!formData.email.trim() || !formData.email.includes("@"))
       return setErrorMessage("Please provide a valid work email address.");
+    
+    // Validate phone number if provided (L-01)
+    if (formData.phone && formData.phone.trim().length > 0) {
+      const phoneDigits = formData.phone.replace(/\D/g, "");
+      if (phoneDigits.length < 7 || /[a-zA-Z]/.test(formData.phone)) {
+        return setErrorMessage("Please enter a valid phone number (digits and phone symbols only).");
+      }
+    }
+
     if (!formData.message.trim())
       return setErrorMessage("Please describe your project requirements.");
 
@@ -296,7 +305,12 @@ export function ContactSection({ isPage = false, className = "" }: ContactSectio
                         type="tel"
                         placeholder="+1 (555) 000-0000"
                         value={formData.phone}
-                        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            phone: e.target.value.replace(/[^\d+()-\s.]/g, ""),
+                          })
+                        }
                         className="w-full rounded-xl border border-border bg-surface px-3.5 py-2.5 pl-10 text-xs sm:text-sm text-foreground placeholder:text-foreground-subtle focus:border-brand focus:ring-2 focus:ring-brand/20 outline-none transition-all"
                       />
                     </div>

@@ -117,6 +117,14 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange={false}
           >
+            {/* Skip to Main Content Link (L-03 Accessibility) */}
+            <a
+              href="#main-content"
+              className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[999999] focus:inline-flex focus:items-center focus:gap-2 focus:rounded-xl focus:bg-brand focus:px-5 focus:py-3 focus:text-sm focus:font-bold focus:text-white focus:shadow-2xl focus:ring-4 focus:ring-brand/30 focus:outline-none transition-all"
+            >
+              Skip to main content
+            </a>
+
             <ThemeSync />
             <AppPreloader />
             {children}

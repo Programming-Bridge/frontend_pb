@@ -495,6 +495,18 @@ export function Navbar() {
                     );
                   })}
                 </nav>
+
+                {/* Mobile Menu Direct Get in Touch Action (L-08) */}
+                <div className="pt-3">
+                  <Link
+                    href="/contact"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex w-full items-center justify-center gap-2 rounded-2xl bg-brand px-4 py-3.5 text-sm font-bold text-white shadow-lg shadow-brand/25 hover:bg-brand-hover active:scale-[0.98] transition-all text-center cursor-pointer"
+                  >
+                    <span>Get in Touch</span>
+                    <ArrowRight className="h-4 w-4 shrink-0" />
+                  </Link>
+                </div>
               </div>
 
               {/* Sidebar Bottom Sticky Footer */}
@@ -507,19 +519,19 @@ export function Navbar() {
                 {isAuthenticated ? (
                   <button
                     onClick={handleLogout}
-                    className="flex w-full items-center justify-center gap-2 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm font-bold text-red-500 hover:bg-red-500 hover:text-white transition-all cursor-pointer"
+                    className="flex w-full items-center justify-center gap-2 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-2.5 text-xs font-bold text-red-500 hover:bg-red-500 hover:text-white transition-all cursor-pointer"
                   >
-                    <LogOut className="h-4 w-4 shrink-0" />
+                    <LogOut className="h-3.5 w-3.5 shrink-0" />
                     <span>Log Out ({formatRole(currentUser?.role)})</span>
                   </button>
                 ) : (
                   <Link
                     href="/contact"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="flex w-full items-center justify-center gap-2 rounded-xl bg-brand px-4 py-3.5 text-sm font-bold text-white shadow-lg shadow-brand/25 hover:bg-brand-hover active:scale-95 transition-all text-center cursor-pointer"
+                    className="flex w-full items-center justify-center gap-2 rounded-xl bg-brand px-4 py-3 text-xs font-bold text-white shadow-md shadow-brand/20 hover:bg-brand-hover active:scale-95 transition-all text-center cursor-pointer"
                   >
-                    <span>Get in Touch</span>
-                    <ArrowRight className="h-4 w-4 shrink-0" />
+                    <span>Consultation &amp; Inquiries</span>
+                    <ArrowRight className="h-3.5 w-3.5 shrink-0" />
                   </Link>
                 )}
               </div>

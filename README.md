@@ -137,6 +137,16 @@ This frontend consumes REST API endpoints from the **Programming Bridge Backend 
 
 ## 📋 Changelog
 
+### v0.3.1 — Accessibility & Interaction QA Fixes (L-01 to L-08)
+- **L-01 (Phone Number Validation & Sanitization)**: Restricted phone input fields in contact and job application forms to phone characters (`+`, digits, hyphens, spaces, parens) with regex validation on submit.
+- **L-02 (Default Budget Option)**: Changed initial budget select state to an unselected placeholder (`""`), prompting users to make a deliberate choice.
+- **L-03 (Skip to Content Accessibility Link)**: Added a keyboard-accessible `"Skip to main content"` shortcut link at the root layout targeting `<main id="main-content">` on all pages.
+- **L-04 (Hero Carousel Pause / Play Controls)**: Added an accessible Pause/Play toggle button to the hero carousel allowing users to pause auto-rotation.
+- **L-05 (Screen Reader Marquee Duplicate Prevention)**: Added `aria-hidden="true"` to duplicate items in the infinite scrolling tech stacks and service marquees so screen readers do not repeat entries.
+- **L-06 (Hero Slider Click Transition Race Fix)**: Implemented instantaneous timer reset on manual pagination/navigation clicks in `useCarousel` to eliminate missed slide transitions.
+- **L-07 (Chat Widget Layout Clearance)**: Added bottom-right safe area spacing in the footer to prevent the Tawk.to floating chat widget from overlapping text or buttons in light and dark modes.
+- **L-08 (Mobile Drawer CTA)**: Added a high-visibility `"Get in Touch"` primary action button inside the mobile drawer navigation.
+
 ### v0.3.0 — Detailed QA Fixes & Security Hardening (D-01 to D-10)
 - **D-01 (Light Mode Contrast)**: Refined `:root` brand color tokens (`#008A4B`) to achieve WCAG AA compliant >= 4.5:1 contrast against white text and backgrounds.
 - **D-02 (Security Headers & Clickjacking)**: Added `X-Frame-Options: SAMEORIGIN`, `X-Content-Type-Options: nosniff`, `Referrer-Policy`, and strict `Content-Security-Policy` in `next.config.ts`.

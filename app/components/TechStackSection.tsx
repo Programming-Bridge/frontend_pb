@@ -172,11 +172,14 @@ export function TechStackSection() {
                   className={`${track.direction} gap-3 sm:gap-4`}
                   style={{ animationDuration: `${durationSeconds}s` }}
                 >
-                  {track.items.map((item: TechStackItem, idx: number) => (
-                    <div
-                      key={`${track.id}-${item.id || item._id || idx}-${idx}`}
-                      className={`group inline-flex shrink-0 min-w-[170px] sm:min-w-[195px] items-center gap-3 rounded-xl border border-card-border bg-card/90 px-4 py-2.5 shadow-xs transition-all duration-200 ${track.glowHover} hover:bg-surface hover:shadow-xs`}
-                    >
+                  {track.items.map((item: TechStackItem, idx: number) => {
+                    const isDuplicate = idx >= uniqueCount;
+                    return (
+                      <div
+                        key={`${track.id}-${item.id || item._id || idx}-${idx}`}
+                        aria-hidden={isDuplicate ? "true" : undefined}
+                        className={`group inline-flex shrink-0 min-w-[170px] sm:min-w-[195px] items-center gap-3 rounded-xl border border-card-border bg-card/90 px-4 py-2.5 shadow-xs transition-all duration-200 ${track.glowHover} hover:bg-surface hover:shadow-xs`}
+                      >
                       <div className="flex h-7 w-7 sm:h-8 sm:w-8 shrink-0 items-center justify-center rounded-lg bg-surface p-1 border border-border/50">
                         <img
                           src={item.svgUrl}
@@ -198,7 +201,8 @@ export function TechStackSection() {
                         </span>
                       </div>
                     </div>
-                  ))}
+                  );
+                })}
                 </div>
               </div>
             );

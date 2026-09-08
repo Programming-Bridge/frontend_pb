@@ -170,16 +170,16 @@ export function Footer() {
           </div>
         </div>
 
-        {/* Bottom copyright & back to top */}
-        <div className="mt-12 flex flex-col sm:flex-row items-center justify-between border-t border-border pt-6 text-xs text-foreground-subtle gap-4">
-          <p>
+        {/* Bottom copyright & back to top with chat widget safe-area clearance (L-07) */}
+        <div className="mt-12 flex flex-col sm:flex-row items-center justify-between border-t border-border pt-6 pb-4 sm:pb-2 text-xs text-foreground-subtle gap-4 pr-4 sm:pr-20">
+          <p className="text-center sm:text-left">
             © {new Date().getFullYear()} Programming Bridge Agency. All rights
             reserved.
           </p>
 
           <button
             onClick={scrollToTop}
-            className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-card px-3 py-1.5 text-foreground-muted hover:border-brand hover:text-brand transition-all cursor-pointer"
+            className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-card px-3 py-1.5 text-foreground-muted hover:border-brand hover:text-brand transition-all cursor-pointer mr-0 sm:mr-4"
           >
             <span>Back to top</span>
             <ArrowUp className="h-3.5 w-3.5" />
