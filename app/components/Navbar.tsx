@@ -24,6 +24,7 @@ import { getNavbar, type NavItem } from "@/app/services/navbarService";
 import { getToken, getUser, logout as authLogout } from "@/app/services/authService";
 import { ThemeToggle } from "./ThemeToggle";
 import { NavbarSkeleton } from "./skeletons/NavbarSkeleton";
+import { openGlobalChatBot } from "./ChatBot";
 import {
   ChevronDown,
   Menu,
@@ -40,6 +41,8 @@ import {
   Info,
   Briefcase,
   Sparkles,
+  Bot,
+  MessageSquare,
 } from "lucide-react";
 
 export function Navbar() {
@@ -302,8 +305,21 @@ export function Navbar() {
             )}
           </nav>
 
-          {/* Right Side Actions: ThemeToggle + CTA / Admin Status */}
+          {/* Right Side Actions: ThemeToggle + ChatBot trigger + CTA / Admin Status */}
           <div className="flex items-center gap-2.5 sm:gap-3">
+            <button
+              onClick={openGlobalChatBot}
+              title="Chat with AI Assistant"
+              aria-label="Open Chatbot Assistant"
+              className="relative flex h-9 w-9 items-center justify-center rounded-xl border border-border bg-surface text-foreground transition-all hover:border-brand/40 hover:bg-surface-hover hover:text-brand cursor-pointer"
+            >
+              <Bot className="h-4 w-4" />
+              <span className="absolute -top-0.5 -right-0.5 flex h-2 w-2">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75"></span>
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500 ring-1 ring-card"></span>
+              </span>
+            </button>
+
             <ThemeToggle />
 
             {/* Authenticated Admin Controls vs Guest CTA */}
@@ -496,8 +512,22 @@ export function Navbar() {
                   })}
                 </nav>
 
-                {/* Mobile Menu Direct Get in Touch Action (L-08) */}
-                <div className="pt-3">
+                {/* Mobile Menu Direct Actions */}
+                <div className="pt-3 space-y-2">
+                  <button
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      openGlobalChatBot();
+                    }}
+                    className="flex w-full items-center justify-between rounded-2xl border border-brand/30 bg-brand/10 px-4 py-3 text-sm font-bold text-brand hover:bg-brand hover:text-black active:scale-[0.98] transition-all text-left cursor-pointer"
+                  >
+                    <span className="flex items-center gap-2.5">
+                      <Bot className="h-4 w-4 shrink-0" />
+                      <span>Chat with AI Assistant</span>
+                    </span>
+                    <Sparkles className="h-3.5 w-3.5" />
+                  </button>
+
                   <Link
                     href="/contact"
                     onClick={() => setMobileMenuOpen(false)}

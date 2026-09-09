@@ -3,7 +3,8 @@
 import Link from "next/link";
 import Image from "next/image";
 import logoImg from "@/public/logo.png";
-import { ArrowUp, Mail, Globe, CheckCircle2 } from "lucide-react";
+import { ArrowUp, Mail, Globe, CheckCircle2, Bot } from "lucide-react";
+import { openGlobalChatBot } from "./ChatBot";
 
 export function Footer() {
   const scrollToTop = () => {
@@ -130,6 +131,16 @@ export function Footer() {
                 >
                   Contact & Inquiries
                 </Link>
+              </li>
+              <li>
+                <button
+                  type="button"
+                  onClick={openGlobalChatBot}
+                  className="flex items-center gap-1.5 text-brand font-semibold hover:text-brand-hover transition-colors cursor-pointer"
+                >
+                  <Bot className="h-3.5 w-3.5" />
+                  <span>Chat with AI Bot</span>
+                </button>
               </li>
             </ul>
           </div>

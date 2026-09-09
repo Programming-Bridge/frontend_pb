@@ -93,6 +93,12 @@ const BOT_KNOWLEDGE: { keywords: string[]; reply: string; quickActions?: { label
   },
 ];
 
+export function openGlobalChatBot() {
+  if (typeof window !== "undefined") {
+    window.dispatchEvent(new CustomEvent("open-pb-chatbot"));
+  }
+}
+
 export function ChatBot() {
   const [isOpen, setIsOpen] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
@@ -111,6 +117,22 @@ export function ChatBot() {
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  // Listen for global open event from Navbar, Hero, or buttons
+  useEffect(() => {
+    const handleOpen = () => {
+      setIsOpen(true);
+      setIsMinimized(false);
+      setShowPromptBadge(false);
+    };
+
+    window.addEventListener("open-pb-chatbot", handleOpen);
+    (window as any).openChatBot = handleOpen;
+
+    return () => {
+      window.removeEventListener("open-pb-chatbot", handleOpen);
+    };
+  }, []);
 
   // Show prompt popup after 4 seconds if not opened yet
   useEffect(() => {
