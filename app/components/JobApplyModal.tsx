@@ -123,6 +123,14 @@ export function JobApplyModal({
       return;
     }
 
+    if (phone && phone.trim().length > 0) {
+      const phoneDigits = phone.replace(/\D/g, "");
+      if (phoneDigits.length < 7 || /[a-zA-Z]/.test(phone)) {
+        setError("Please enter a valid phone number (digits and phone symbols only).");
+        return;
+      }
+    }
+
     setLoading(true);
     try {
       const payload: JobApplicationData = {
@@ -343,7 +351,7 @@ export function JobApplyModal({
                     type="tel"
                     placeholder="+1 (555) 019-2834"
                     value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
+                    onChange={(e) => setPhone(e.target.value.replace(/[^\d+()-\s.]/g, ""))}
                     className="w-full rounded-xl border border-border bg-surface px-3.5 py-2.5 text-xs sm:text-sm text-foreground placeholder:text-foreground-subtle focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand transition-colors"
                   />
                 </div>

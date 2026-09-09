@@ -14,6 +14,7 @@ export function useCarousel({
   const [currentSlide, setCurrentSlide] = useState(0);
   const [cardsPerView, setCardsPerView] = useState(responsive ? 3 : 1);
   const [isPaused, setIsPaused] = useState(false);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
   const touchStartX = useRef<number | null>(null);
   const touchEndX = useRef<number | null>(null);
 
@@ -36,30 +37,49 @@ export function useCarousel({
   const isSlider = totalItems > cardsPerView;
   const activeIndex = Math.min(currentSlide, maxSlideIndex);
 
-  // Auto-play timer
-  useEffect(() => {
+  // Helper to restart timer cleanly
+  const resetTimer = useCallback(() => {
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
+    }
     if (!isSlider || isPaused || maxSlideIndex <= 0) return;
 
-    const timer = setInterval(() => {
+    timerRef.current = setInterval(() => {
       setCurrentSlide((prev) => (prev >= maxSlideIndex ? 0 : prev + 1));
     }, intervalMs);
-
-    return () => clearInterval(timer);
   }, [isSlider, isPaused, maxSlideIndex, intervalMs]);
+
+  // Auto-play timer effect
+  useEffect(() => {
+    resetTimer();
+    return () => {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+      }
+    };
+  }, [resetTimer]);
+
+  const togglePause = useCallback(() => {
+    setIsPaused((prev) => !prev);
+  }, []);
 
   const nextSlide = useCallback(() => {
     if (!isSlider || maxSlideIndex <= 0) return;
     setCurrentSlide((prev) => (prev >= maxSlideIndex ? 0 : prev + 1));
-  }, [isSlider, maxSlideIndex]);
+    resetTimer();
+  }, [isSlider, maxSlideIndex, resetTimer]);
 
   const prevSlide = useCallback(() => {
     if (!isSlider || maxSlideIndex <= 0) return;
     setCurrentSlide((prev) => (prev <= 0 ? maxSlideIndex : prev - 1));
-  }, [isSlider, maxSlideIndex]);
+    resetTimer();
+  }, [isSlider, maxSlideIndex, resetTimer]);
 
   const goToSlide = useCallback((index: number) => {
     setCurrentSlide(index);
-  }, []);
+    resetTimer();
+  }, [resetTimer]);
 
   const onTouchStart = (e: React.TouchEvent) => {
     touchStartX.current = e.targetTouches[0].clientX;
@@ -71,7 +91,6 @@ export function useCarousel({
   };
 
   const onTouchEnd = () => {
-    setIsPaused(false);
     if (!touchStartX.current || !touchEndX.current) return;
     const distance = touchStartX.current - touchEndX.current;
     const minSwipeDistance = 50;
@@ -92,7 +111,12 @@ export function useCarousel({
         setIsPaused(true);
       }
     },
-    onMouseLeave: () => setIsPaused(false),
+    onMouseLeave: () => {
+      if (!isPaused) {
+        setIsPaused(false);
+        resetTimer();
+      }
+    },
     onTouchStart,
     onTouchMove,
     onTouchEnd,
@@ -104,6 +128,9 @@ export function useCarousel({
     cardsPerView,
     maxSlideIndex,
     isSlider,
+    isPaused,
+    setIsPaused,
+    togglePause,
     nextSlide,
     prevSlide,
     goToSlide,

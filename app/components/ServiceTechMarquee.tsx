@@ -113,11 +113,14 @@ export function ServiceTechMarquee({ technologies }: ServiceTechMarqueeProps) {
             className="animate-marquee-left gap-3 sm:gap-4 flex"
             style={{ animationDuration: `${durationSeconds}s` }}
           >
-            {displayItems.map((item, idx) => (
-              <div
-                key={`${item.id}-${idx}`}
-                className="group inline-flex shrink-0 min-w-[170px] sm:min-w-[195px] items-center gap-3 rounded-xl border border-card-border bg-card px-4 py-2.5 shadow-xs transition-all duration-200 hover:border-brand/40 hover:bg-surface hover:shadow-xs"
-              >
+            {displayItems.map((item, idx) => {
+              const isDuplicate = idx >= matchedTechs.length;
+              return (
+                <div
+                  key={`${item.id}-${idx}`}
+                  aria-hidden={isDuplicate ? "true" : undefined}
+                  className="group inline-flex shrink-0 min-w-[170px] sm:min-w-[195px] items-center gap-3 rounded-xl border border-card-border bg-card px-4 py-2.5 shadow-xs transition-all duration-200 hover:border-brand/40 hover:bg-surface hover:shadow-xs"
+                >
                 <div className="flex h-7 w-7 sm:h-8 sm:w-8 shrink-0 items-center justify-center rounded-lg bg-surface p-1 border border-border/50">
                   <img
                     src={item.svgUrl}
@@ -140,7 +143,8 @@ export function ServiceTechMarquee({ technologies }: ServiceTechMarqueeProps) {
                   </span>
                 </div>
               </div>
-            ))}
+            );
+          })}
           </div>
         </div>
       </div>
