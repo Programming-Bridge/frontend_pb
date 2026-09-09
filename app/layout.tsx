@@ -7,6 +7,7 @@ import { ThemeSync } from "./components/ThemeSync";
 import { StoreProvider } from "./StoreProvider";
 import { AppPreloader } from "./components/AppPreloader";
 import { TawkTo } from "./components/TawkTo";
+import { ChatBot } from "./components/ChatBot";
 import { Analytics } from "@vercel/analytics/react";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -130,6 +131,7 @@ export default function RootLayout({
             {children}
             <Analytics />
             <TawkTo />
+            <ChatBot />
 
             {/* Google Analytics GA4 */}
             {gaMeasurementId && (

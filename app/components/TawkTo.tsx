@@ -1,14 +1,63 @@
 "use client";
 
-import Script from "next/script";
 import { useEffect } from "react";
 import { useTheme } from "next-themes";
 
+declare global {
+  interface Window {
+    Tawk_API?: Record<string, any>;
+    Tawk_LoadStart?: Date;
+  }
+}
+
 export function TawkTo() {
-  const propertyId = process.env.NEXT_PUBLIC_TAWK_PROPERTY_ID?.trim();
-  const widgetId = (process.env.NEXT_PUBLIC_TAWK_WIDGET_ID || "default").trim();
+  const propertyId =
+    process.env.NEXT_PUBLIC_TAWK_PROPERTY_ID?.trim() || "6a9eabc827a69434428b8879";
+  const widgetId =
+    process.env.NEXT_PUBLIC_TAWK_WIDGET_ID?.trim() || "1k1tsu280";
   const { resolvedTheme } = useTheme();
 
+  // 1. Direct Script Injection
+  useEffect(() => {
+    if (!propertyId || typeof window === "undefined") return;
+
+    window.Tawk_API = window.Tawk_API || {};
+    window.Tawk_LoadStart = new Date();
+
+    const scriptId = "tawk-to-script";
+    let scriptElement = document.getElementById(scriptId) as HTMLScriptElement | null;
+
+    if (!scriptElement) {
+      const embedUrl = propertyId.startsWith("http")
+        ? propertyId
+        : `https://embed.tawk.to/${propertyId}/${widgetId}`;
+
+      scriptElement = document.createElement("script");
+      scriptElement.id = scriptId;
+      scriptElement.async = true;
+      scriptElement.src = embedUrl;
+      scriptElement.charset = "UTF-8";
+      scriptElement.setAttribute("crossorigin", "*");
+
+      scriptElement.onload = () => {
+        // If Tawk missed the load event in SPA, trigger recovery
+        if (typeof window !== "undefined" && (window as any).$_Tawk && !(window as any).$_Tawk.init) {
+          try {
+            window.dispatchEvent(new Event("load"));
+          } catch (e) {}
+        }
+      };
+
+      const firstScript = document.getElementsByTagName("script")[0];
+      if (firstScript && firstScript.parentNode) {
+        firstScript.parentNode.insertBefore(scriptElement, firstScript);
+      } else {
+        document.head.appendChild(scriptElement);
+      }
+    }
+  }, [propertyId, widgetId]);
+
+  // 2. Dark / Light Mode Theme Filter Synchronizer
   useEffect(() => {
     const isDark =
       resolvedTheme === "dark" ||
@@ -16,7 +65,6 @@ export function TawkTo() {
         document.documentElement.classList.contains("dark"));
 
     const applyThemeFilter = () => {
-      // Target all iframes created by Tawk.to
       const allIframes = document.querySelectorAll<HTMLIFrameElement>("iframe");
       allIframes.forEach((iframe) => {
         const src = iframe.getAttribute("src") || "";
@@ -51,7 +99,6 @@ export function TawkTo() {
       });
     };
 
-    // Apply immediately and listen to DOM changes / load events
     applyThemeFilter();
     const timer = setInterval(applyThemeFilter, 500);
 
@@ -66,33 +113,8 @@ export function TawkTo() {
     };
   }, [resolvedTheme]);
 
-  if (!propertyId) {
-    return null;
-  }
-
-  const embedUrl = propertyId.startsWith("http")
-    ? propertyId
-    : `https://embed.tawk.to/${propertyId}/${widgetId}`;
-
-  return (
-    <Script
-      id="tawk-to-widget"
-      strategy="lazyOnload"
-      dangerouslySetInnerHTML={{
-        __html: `
-          var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
-          (function(){
-            var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
-            s1.async = true;
-            s1.src = '${embedUrl}';
-            s1.charset = 'UTF-8';
-            s1.setAttribute('crossorigin', '*');
-            s0.parentNode.insertBefore(s1, s0);
-          })();
-        `,
-      }}
-    />
-  );
+  return null;
 }
 
 export default TawkTo;
+
