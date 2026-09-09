@@ -137,6 +137,12 @@ This frontend consumes REST API endpoints from the **Programming Bridge Backend 
 
 ## 📋 Changelog
 
+### v0.3.2 — Interactive AI Chatbot & WhatsApp Support Integration
+- **Interactive Floating Chatbot Widget**: Created native `ChatBot.tsx` component with instant AI conversational assistant, quick action suggestion chips, and dynamic dark/light mode compatibility.
+- **WhatsApp Live Support Integration**: Integrated direct WhatsApp click-to-chat connect with dedicated agency technical lead (`+923155831940`).
+- **Affordable Startup Pricing Tiers**: Updated bot estimations and contact form budget ranges to affordable startup tiers ($300–$800 MVP, $1,000–$2,500 Full-Stack Platform, $3,000+ Enterprise).
+- **Tawk.to Script Loader Fix**: Optimized script injection lifecycle to prevent missing `window.onload` event in Next.js App Router SPAs.
+
 ### v0.3.1 — Accessibility & Interaction QA Fixes (L-01 to L-08)
 - **L-01 (Phone Number Validation & Sanitization)**: Restricted phone input fields in contact and job application forms to phone characters (`+`, digits, hyphens, spaces, parens) with regex validation on submit.
 - **L-02 (Default Budget Option)**: Changed initial budget select state to an unselected placeholder (`""`), prompting users to make a deliberate choice.
