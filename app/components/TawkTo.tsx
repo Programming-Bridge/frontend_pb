@@ -22,6 +22,13 @@ export function TawkTo() {
     if (!propertyId || typeof window === "undefined") return;
 
     window.Tawk_API = window.Tawk_API || {};
+    window.Tawk_API.onLoad = function () {
+      try {
+        if (typeof window.Tawk_API?.hideWidget === "function") {
+          window.Tawk_API.hideWidget();
+        }
+      } catch (e) {}
+    };
     window.Tawk_LoadStart = new Date();
 
     const scriptId = "tawk-to-script";

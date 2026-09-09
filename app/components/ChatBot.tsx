@@ -291,14 +291,18 @@ export function ChatBot() {
   };
 
   return (
-    <div className="fixed bottom-5 right-5 z-[9999] flex flex-col items-end font-sans">
+    <div
+      style={{ zIndex: 2147483647 }}
+      className="fixed bottom-5 right-5 pointer-events-none flex flex-col items-end font-sans select-none"
+    >
       {/* 1. Proactive Welcome Tooltip / Prompt Badge */}
       {!isOpen && showPromptBadge && (
-        <div className="relative mb-3 animate-bounce">
+        <div className="relative mb-3 animate-bounce pointer-events-auto">
           <div className="relative flex items-center gap-2.5 rounded-2xl border border-brand/30 bg-surface p-3.5 shadow-2xl backdrop-blur-md dark:bg-card">
             <button
+              type="button"
               onClick={() => setShowPromptBadge(false)}
-              className="absolute -top-2 -right-2 flex h-5 w-5 items-center justify-center rounded-full bg-border text-foreground-muted hover:bg-surface-hover hover:text-foreground"
+              className="absolute -top-2 -right-2 flex h-5 w-5 items-center justify-center rounded-full bg-border text-foreground-muted hover:bg-surface-hover hover:text-foreground cursor-pointer"
               aria-label="Dismiss message"
             >
               <X className="h-3 w-3" />
@@ -323,7 +327,7 @@ export function ChatBot() {
       {/* 2. Interactive Chat Window */}
       {isOpen && (
         <div
-          className={`relative mb-3 flex flex-col overflow-hidden rounded-3xl border border-border bg-card shadow-2xl backdrop-blur-xl transition-all duration-200 ${
+          className={`pointer-events-auto relative mb-3 flex flex-col overflow-hidden rounded-3xl border border-border bg-card shadow-2xl backdrop-blur-xl transition-all duration-200 ${
             isMinimized
               ? "h-16 w-80 sm:w-96"
               : "h-[540px] max-h-[82vh] w-[92vw] sm:w-[390px] shadow-brand/10"
@@ -518,13 +522,16 @@ export function ChatBot() {
 
       {/* 3. Floating Launcher Trigger Button */}
       <button
-        onClick={() => {
-          setIsOpen(!isOpen);
+        type="button"
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          setIsOpen((prev) => !prev);
           setIsMinimized(false);
           setShowPromptBadge(false);
         }}
         aria-label="Open Live Chat Assistant"
-        className="group relative flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-tr from-brand to-brand-cyan text-white shadow-xl shadow-brand/30 hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer"
+        className="pointer-events-auto group relative flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-tr from-brand to-brand-cyan text-white shadow-2xl shadow-brand/40 hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer"
       >
         {/* Glow Pulse Ring */}
         <span className="absolute -inset-0.5 rounded-2xl bg-gradient-to-tr from-brand to-brand-cyan opacity-40 blur-sm group-hover:opacity-75 transition-opacity"></span>
