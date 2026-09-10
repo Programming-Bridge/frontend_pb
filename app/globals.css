@@ -92,6 +92,17 @@ body {
   width: 100%;
 }
 
+/* Accessibility Focus Rings (WCAG 2.4.7) */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--brand) !important;
+  outline-offset: 2px !important;
+}
+
 /* Infinite Marquee Animations */
 @keyframes marquee-left {
   0% {

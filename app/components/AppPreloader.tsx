@@ -42,21 +42,16 @@ export function AppPreloader() {
     window.addEventListener("error", handleError, true);
     window.addEventListener("unhandledrejection", handleRejection, true);
 
-    // Smooth initial branding splash / data preloader
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 850);
+    // Unblock immediately for instant first paint (Finding 3)
+    setLoading(false);
 
     return () => {
-      clearTimeout(timer);
       window.removeEventListener("error", handleError, true);
       window.removeEventListener("unhandledrejection", handleRejection, true);
     };
   }, []);
 
-  if (!mounted || !loading) return null;
-
-  return <ProgrammingBridgeLoader fullScreen={true} />;
+  return null;
 }
 
 export default AppPreloader;

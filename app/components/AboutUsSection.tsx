@@ -139,7 +139,7 @@ export function AboutUsSection({ isPage = false, className = "" }: AboutUsSectio
               <span className="mt-1 text-xs sm:text-sm font-bold text-foreground">
                 {stat.label}
               </span>
-              <span className="text-[11px] text-foreground-subtle mt-0.5 leading-tight">
+              <span className="text-xs text-foreground-subtle mt-0.5 leading-tight">
                 {stat.subtext}
               </span>
             </div>

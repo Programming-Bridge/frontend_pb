@@ -33,6 +33,20 @@ const fallbackAll: TechStackItem[] = [
   ...enrichedMobileStack,
 ];
 
+export const sanitizeTechItem = (item: TechStackItem): TechStackItem => {
+  if (!item) return item;
+  let svgUrl = item.svgUrl;
+  if (svgUrl?.includes("openai") || item.id === "openai") {
+    svgUrl = "/icons/openai.svg";
+  } else if (svgUrl?.includes("xgboost") || item.id === "xgboost") {
+    svgUrl = "/icons/xgboost.svg";
+  }
+  return {
+    ...item,
+    svgUrl,
+  };
+};
+
 export const getTechnologies = async (
   domain?: "software" | "ai-ml" | "mobile" | "all"
 ): Promise<TechStackItem[]> => {
@@ -42,12 +56,12 @@ export const getTechnologies = async (
 
     // Case 1: Backend returns { success: true, count: N, data: TechStackItem[] }
     if (response && Array.isArray((response as any).data) && (response as any).data.length > 0) {
-      return (response as any).data;
+      return (response as any).data.map(sanitizeTechItem);
     }
 
     // Case 2: Backend returns direct array
     if (Array.isArray(response) && response.length > 0) {
-      return response;
+      return response.map(sanitizeTechItem);
     }
 
     // Fallback if empty database

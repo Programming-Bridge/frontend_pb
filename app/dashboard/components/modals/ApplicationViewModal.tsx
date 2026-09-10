@@ -106,7 +106,7 @@ export function ApplicationViewModal({
             <a
               href={application.portfolioUrl}
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
               className="flex items-center gap-1.5 rounded-lg border border-border bg-surface px-3 py-1.5 text-xs font-semibold text-foreground hover:text-brand hover:border-brand/40 transition-colors"
             >
               <span>Portfolio Website</span>
@@ -118,7 +118,7 @@ export function ApplicationViewModal({
             <a
               href={application.githubUrl}
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
               className="flex items-center gap-1.5 rounded-lg border border-border bg-surface px-3 py-1.5 text-xs font-semibold text-foreground hover:text-brand hover:border-brand/40 transition-colors"
             >
               <span>GitHub Profile</span>
@@ -130,7 +130,7 @@ export function ApplicationViewModal({
             <a
               href={application.linkedinUrl}
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
               className="flex items-center gap-1.5 rounded-lg border border-border bg-surface px-3 py-1.5 text-xs font-semibold text-foreground hover:text-brand hover:border-brand/40 transition-colors"
             >
               <span>LinkedIn Profile</span>
@@ -155,7 +155,7 @@ export function ApplicationViewModal({
             <a
               href={resumeHref}
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
               className="flex items-center gap-1.5 rounded-lg bg-brand px-3 py-1.5 text-xs font-bold text-black hover:bg-brand-hover hover:text-white transition-all shadow-xs"
             >
               <Download className="h-3.5 w-3.5" />

@@ -50,6 +50,10 @@ const nextConfig: NextConfig = {
         source: "/(.*)",
         headers: [
           {
+            key: "Strict-Transport-Security",
+            value: "max-age=63072000; includeSubDomains; preload",
+          },
+          {
             key: "X-Frame-Options",
             value: "SAMEORIGIN",
           },
@@ -71,9 +75,24 @@ const nextConfig: NextConfig = {
           },
           {
             key: "Content-Security-Policy",
-            value: "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline' https://va.vercel-scripts.com https://embed.tawk.to https://*.tawk.to https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https: http:; connect-src 'self' https: http: ws: wss:; frame-src 'self' https://tawk.to https://*.tawk.to; object-src 'none';",
+            value: "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline' https://va.vercel-scripts.com https://embed.tawk.to https://*.tawk.to https://tawk.to https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://embed.tawk.to https://*.tawk.to https://tawk.to https://cdn.jsdelivr.net; font-src 'self' https://fonts.gstatic.com https://embed.tawk.to https://*.tawk.to https://tawk.to data:; img-src 'self' data: blob: https: http:; media-src 'self' https://embed.tawk.to https://*.tawk.to https://tawk.to data: blob:; connect-src 'self' https: http: ws: wss: https://*.tawk.to wss://*.tawk.to https://embed.tawk.to; frame-src 'self' https://tawk.to https://*.tawk.to https://embed.tawk.to; object-src 'none';",
           },
         ],
+      },
+    ];
+  },
+  async redirects() {
+    return [
+      {
+        source: "/:path*",
+        has: [
+          {
+            type: "host",
+            value: "programmingbridge.org",
+          },
+        ],
+        destination: "https://www.programmingbridge.org/:path*",
+        permanent: true,
       },
     ];
   },

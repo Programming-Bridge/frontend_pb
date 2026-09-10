@@ -21,18 +21,8 @@ export const metadata: Metadata = {
   title: "Programming Bridge | Full-Stack Digital Engineering Studio",
   description:
     "We design, build, and scale production-grade web applications, native mobile apps, and cloud infrastructures for startups and enterprise teams.",
-  keywords: [
-    "Software Engineering",
-    "Web Development",
-    "Next.js",
-    "React 19",
-    "Node.js",
-    "Mobile Apps",
-    "Kotlin",
-    "AI Engineering",
-    "Cloud Architecture",
-  ],
   authors: [{ name: "Programming Bridge" }],
+  manifest: "/manifest.json",
   icons: {
     icon: [
       { url: "/icon.png", sizes: "any" },
@@ -74,6 +64,40 @@ export const metadata: Metadata = {
   },
 };
 
+const jsonLdOrgAndWebsite = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://www.programmingbridge.org/#organization",
+      "name": "Programming Bridge",
+      "url": "https://www.programmingbridge.org",
+      "logo": "https://www.programmingbridge.org/logo.png",
+      "sameAs": [
+        "https://github.com/Programming-Bridge",
+        "https://www.linkedin.com/company/139694030/"
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "Customer Support",
+        "email": "official@programmingbridge.org",
+        "telephone": "+92-315-5831940",
+        "availableLanguage": ["English", "Urdu"]
+      }
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://www.programmingbridge.org/#website",
+      "url": "https://www.programmingbridge.org",
+      "name": "Programming Bridge",
+      "description": "Full-Stack Digital Engineering Studio building bespoke web applications, mobile platforms, and distributed cloud systems.",
+      "publisher": {
+        "@id": "https://www.programmingbridge.org/#organization"
+      }
+    }
+  ]
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -82,6 +106,12 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(jsonLdOrgAndWebsite),
+          }}
+        />
         <script
           dangerouslySetInnerHTML={{
             __html: `

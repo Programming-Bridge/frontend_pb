@@ -313,7 +313,7 @@ export function CareersTab({
                           <a
                             href={resumeHref}
                             target="_blank"
-                            rel="noreferrer"
+                            rel="noopener noreferrer"
                             className="inline-flex items-center gap-1 rounded-lg bg-brand/10 border border-brand/20 px-2.5 py-1 text-[11px] font-bold text-brand"
                           >
                             <Download className="h-3 w-3" />
@@ -402,7 +402,7 @@ export function CareersTab({
                               <a
                                 href={resumeHref}
                                 target="_blank"
-                                rel="noreferrer"
+                                rel="noopener noreferrer"
                                 className="inline-flex items-center gap-1 rounded-lg bg-brand/10 border border-brand/20 px-2.5 py-1 text-[11px] font-bold text-brand hover:bg-brand hover:text-black transition-all"
                               >
                                 <Download className="h-3 w-3" />

@@ -162,7 +162,7 @@ export const aiMlDataStack: TechStackLogo[] = [
     id: "xgboost",
     name: "XGBoost",
     category: "Classical ML",
-    svgUrl: "https://raw.githubusercontent.com/dmlc/dmlc.github.io/master/img/logo-m/xgboost.png",
+    svgUrl: "/icons/xgboost.svg",
   },
   {
     id: "pytorch",
@@ -198,7 +198,7 @@ export const aiMlDataStack: TechStackLogo[] = [
     id: "openai",
     name: "OpenAI / LLMs",
     category: "NLP & GenAI",
-    svgUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/openai/openai-original.svg",
+    svgUrl: "/icons/openai.svg",
   },
   {
     id: "fastapi",
@@ -587,7 +587,7 @@ export const enrichedAiMlStack: TechStackItem[] = [
   {
     id: "xgboost",
     name: "XGBoost",
-    svgUrl: "https://raw.githubusercontent.com/dmlc/dmlc.github.io/master/img/logo-m/xgboost.png",
+    svgUrl: "/icons/xgboost.svg",
     domain: "ai-ml",
     category: "Classical ML",
     categoryLabel: "Gradient Boosting",
@@ -653,7 +653,7 @@ export const enrichedAiMlStack: TechStackItem[] = [
   {
     id: "openai",
     name: "OpenAI / LLMs",
-    svgUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/openai/openai-original.svg",
+    svgUrl: "/icons/openai.svg",
     domain: "ai-ml",
     category: "NLP & GenAI",
     categoryLabel: "Generative AI",

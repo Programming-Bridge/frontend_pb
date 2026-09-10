@@ -174,6 +174,9 @@ export function Navbar() {
 
   // Lock body scroll when mobile sidebar is open & close on Escape
   useEffect(() => {
+    if (typeof window !== "undefined") {
+      window.dispatchEvent(new CustomEvent("pb-mobile-drawer", { detail: { open: mobileMenuOpen } }));
+    }
     if (mobileMenuOpen) {
       document.body.style.overflow = "hidden";
       const handleKeyDown = (e: KeyboardEvent) => {

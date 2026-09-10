@@ -125,6 +125,7 @@ export function DashboardHeader({
         <Link
           href="/"
           target="_blank"
+          rel="noopener noreferrer"
           className="hidden md:inline-flex items-center gap-1.5 rounded-xl border border-border bg-surface px-3 py-1.5 text-xs font-semibold text-foreground-muted hover:border-brand/40 hover:text-brand transition-colors"
         >
           <span>Live Site</span>

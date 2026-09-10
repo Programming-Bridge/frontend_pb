@@ -1,0 +1,70 @@
+import type { Banner } from "@/app/services/bannerService";
+
+export const fallbackBanners: Banner[] = [
+  {
+    _id: "banner-1",
+    id: "banner-1",
+    pageType: "home",
+    badge: "Full-Stack Digital Engineering Studio",
+    title: "Engineering Scalable Web, Mobile & Cloud Systems",
+    subTitle: "High-Performance Digital Products Built for Growth",
+    description:
+      "We design, build, and deploy production-grade software architectures, intuitive cross-platform mobile apps, and robust cloud microservices tailored for startups and global enterprises.",
+    primaryBtnText: "Start Your Project",
+    primaryBtnLink: "/contact",
+    secondaryBtnText: "Explore Services",
+    secondaryBtnLink: "/services",
+    features: [
+      "Sub-100ms Latency SSR",
+      "Enterprise Cloud & APIs",
+      "Native iOS & Android",
+      "AI & Intelligent Automation",
+    ],
+    order: 1,
+    isActive: true,
+  },
+  {
+    _id: "banner-2",
+    id: "banner-2",
+    pageType: "home",
+    badge: "Native & Cross-Platform Mobile",
+    title: "High-Performance Mobile Apps Built for Scale",
+    subTitle: "Fluid 120 FPS iOS & Android Experiences",
+    description:
+      "We engineer fast, intuitive, and feature-rich iOS and Android applications tailored to elevate user engagement and power enterprise workflows.",
+    primaryBtnText: "Build Your App",
+    primaryBtnLink: "/contact",
+    secondaryBtnText: "View App Portfolio",
+    secondaryBtnLink: "/portfolio",
+    features: [
+      "Kotlin & Jetpack Compose",
+      "Flutter & React Native",
+      "Offline-First Sync",
+      "Biometric Security",
+    ],
+    order: 2,
+    isActive: true,
+  },
+  {
+    _id: "banner-3",
+    id: "banner-3",
+    pageType: "home",
+    badge: "Custom Web & Cloud Architecture",
+    title: "Custom Web Applications & High-Converting Platforms",
+    subTitle: "Next.js, Microservices & Zero-Downtime Infrastructure",
+    description:
+      "From bespoke SaaS platforms to headless e-commerce architectures, we deliver secure, accessible, and ultra-fast web experiences.",
+    primaryBtnText: "Start Web Project",
+    primaryBtnLink: "/contact",
+    secondaryBtnText: "View Web Projects",
+    secondaryBtnLink: "/portfolio",
+    features: [
+      "Next.js 15 & React 19",
+      "TypeScript & Tailwind CSS",
+      "High-Concurrency Backends",
+      "99.9% Uptime SLA",
+    ],
+    order: 3,
+    isActive: true,
+  },
+];

@@ -37,7 +37,7 @@ export function SectionHeader({
         {subBadge && (
           <>
             <span className="text-border">|</span>
-            <span className="font-mono text-[11px] text-brand">{subBadge}</span>
+            <span className="font-mono text-xs text-brand">{subBadge}</span>
           </>
         )}
       </div>

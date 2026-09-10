@@ -176,7 +176,7 @@ export function ProjectsSection({ isPage = false, className = "" }: ProjectsSect
                 >
                   <span>{category}</span>
                   <span
-                    className={`rounded-full px-1.5 py-0.5 text-[10px] font-mono ${
+                    className={`rounded-full px-1.5 py-0.5 text-xs font-mono ${
                       isActive
                         ? "bg-white/20 text-white font-bold"
                         : "bg-border text-foreground-subtle"
@@ -217,6 +217,11 @@ export function ProjectsSection({ isPage = false, className = "" }: ProjectsSect
                     height={338}
                     loading="lazy"
                     decoding="async"
+                    onError={(e) => {
+                      const target = e.currentTarget;
+                      target.onerror = null;
+                      target.src = "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=1200&auto=format&fit=crop&q=80";
+                    }}
                     className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
                 ) : (
@@ -235,11 +240,11 @@ export function ProjectsSection({ isPage = false, className = "" }: ProjectsSect
                 {/* Top Badge Overlay */}
                 <div className="absolute left-3.5 top-3.5 z-30 flex items-center gap-2 pointer-events-none">
                   {project.badge ? (
-                    <span className="rounded-full bg-surface/90 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-brand backdrop-blur-md border border-brand/20 shadow-xs">
+                    <span className="rounded-full bg-surface/90 px-2.5 py-1 text-xs font-bold uppercase tracking-wider text-brand backdrop-blur-md border border-brand/20 shadow-xs">
                       {project.badge}
                     </span>
                   ) : project.featured ? (
-                    <span className="rounded-full bg-brand px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-white shadow-xs">
+                    <span className="rounded-full bg-brand px-2.5 py-1 text-xs font-bold uppercase tracking-wider text-white shadow-xs">
                       Featured
                     </span>
                   ) : null}
@@ -251,7 +256,7 @@ export function ProjectsSection({ isPage = false, className = "" }: ProjectsSect
                     <a
                       href={legitimateLiveUrl}
                       target="_blank"
-                      rel="noreferrer"
+                      rel="noopener noreferrer"
                       aria-label={`Live Demo for ${project.title}`}
                       className="flex h-10 w-10 items-center justify-center rounded-full bg-brand text-white shadow-lg transition-all hover:scale-110 hover:bg-brand-hover active:scale-95 cursor-pointer"
                     >
@@ -263,7 +268,7 @@ export function ProjectsSection({ isPage = false, className = "" }: ProjectsSect
                     <a
                       href={legitimateGitUrl}
                       target="_blank"
-                      rel="noreferrer"
+                      rel="noopener noreferrer"
                       aria-label={`GitHub Repository for ${project.title}`}
                       className="flex h-10 w-10 items-center justify-center rounded-full bg-surface/95 border border-border text-foreground shadow-lg backdrop-blur-md transition-all hover:scale-110 hover:border-brand hover:text-brand active:scale-95 cursor-pointer"
                     >
@@ -297,7 +302,7 @@ export function ProjectsSection({ isPage = false, className = "" }: ProjectsSect
                     {project.title}
                   </h3>
 
-                  <p className="mt-2 text-xs sm:text-sm text-foreground-muted leading-relaxed line-clamp-3">
+                  <p className="mt-2 text-sm text-foreground-muted leading-relaxed line-clamp-3">
                     {project.shortDescription || project.description}
                   </p>
 
@@ -306,7 +311,7 @@ export function ProjectsSection({ isPage = false, className = "" }: ProjectsSect
                       {project.technologies.map((tech, tIdx) => (
                         <span
                           key={tIdx}
-                          className="inline-flex items-center rounded-md border border-border/80 bg-surface px-2 py-0.5 text-[10px] font-medium text-foreground-muted"
+                          className="inline-flex items-center rounded-md border border-border/80 bg-surface px-2 py-0.5 text-xs font-medium text-foreground-muted"
                         >
                           {tech}
                         </span>
@@ -322,7 +327,7 @@ export function ProjectsSection({ isPage = false, className = "" }: ProjectsSect
                       <a
                         href={legitimateLiveUrl}
                         target="_blank"
-                        rel="noreferrer"
+                        rel="noopener noreferrer"
                         className="inline-flex items-center gap-1 text-xs font-semibold text-brand hover:text-brand-hover transition-colors"
                       >
                         <span>Live Demo</span>
@@ -334,7 +339,7 @@ export function ProjectsSection({ isPage = false, className = "" }: ProjectsSect
                       <a
                         href={legitimateGitUrl}
                         target="_blank"
-                        rel="noreferrer"
+                        rel="noopener noreferrer"
                         className="inline-flex items-center gap-1 text-xs font-semibold text-foreground-muted hover:text-foreground transition-colors"
                       >
                         <FolderGit2 className="h-3 w-3" />
@@ -343,7 +348,7 @@ export function ProjectsSection({ isPage = false, className = "" }: ProjectsSect
                     ) : null}
 
                     {!legitimateLiveUrl && !legitimateGitUrl && (
-                      <span className="inline-flex items-center gap-1 text-[11px] font-medium text-foreground-subtle">
+                      <span className="inline-flex items-center gap-1 text-xs font-medium text-foreground-subtle">
                         <ShieldCheck className="h-3.5 w-3.5 text-brand" />
                         <span>Enterprise NDA</span>
                       </span>

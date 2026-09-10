@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import type { RootState } from "../../store";
 import type { Banner } from "@/app/services/bannerService";
+import { fallbackBanners } from "@/app/data/bannerData";
 
 export interface BannerState {
   banners: Banner[];
@@ -9,8 +10,8 @@ export interface BannerState {
 }
 
 const initialState: BannerState = {
-  banners: [],
-  loading: true,
+  banners: fallbackBanners,
+  loading: false,
   error: null,
 };
 
