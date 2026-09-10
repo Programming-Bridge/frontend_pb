@@ -110,10 +110,7 @@ export function TechStackSection() {
     { id: "ai-ml", label: "AI & Data", icon: Brain, count: aiMlItems.length },
   ];
 
-  if (loading || techList.length === 0) {
-    return <TechStackSkeleton />;
-  }
-
+  // Fallback data is rich and immediate, preventing 6s cold load skeleton flash
   return (
     <SectionWrapper id="tech-stack" variant="background" border="bottom" ariaLabel="Technology Stack">
       {/* Header */}
@@ -145,7 +142,7 @@ export function TechStackSection() {
                 <Icon className="h-4 w-4" />
                 <span>{tab.label}</span>
                 <span
-                  className={`rounded-full px-1.5 py-0.5 text-[10px] font-mono ${isActive ? "bg-white/20 text-white font-bold" : "bg-border text-foreground-subtle"
+                  className={`rounded-full px-1.5 py-0.5 text-xs font-mono ${isActive ? "bg-white/20 text-white font-bold" : "bg-border text-foreground-subtle"
                     }`}
                 >
                   {tab.count}
@@ -188,6 +185,12 @@ export function TechStackSection() {
                           height={20}
                           loading="lazy"
                           decoding="async"
+                          onError={(e) => {
+                            // Fallback to local default SVG / initial tile if CDN logo fails
+                            const target = e.currentTarget;
+                            target.onerror = null;
+                            target.src = "/icons/openai.svg";
+                          }}
                           className={`h-5 w-5 object-contain transition-transform duration-200 group-hover:scale-105 ${item.invertInDark ? "dark:invert" : ""
                             }`}
                         />
@@ -196,7 +199,7 @@ export function TechStackSection() {
                         <span className="text-xs sm:text-sm font-bold text-foreground group-hover:text-brand transition-colors truncate">
                           {item.name}
                         </span>
-                        <span className="text-[10px] font-medium text-foreground-subtle truncate">
+                        <span className="text-xs font-medium text-foreground-subtle truncate">
                           {item.badge || item.categoryLabel || item.category}
                         </span>
                       </div>

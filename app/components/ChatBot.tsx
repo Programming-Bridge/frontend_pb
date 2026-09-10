@@ -103,6 +103,7 @@ export function ChatBot() {
   const [isOpen, setIsOpen] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
   const [showPromptBadge, setShowPromptBadge] = useState(false);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [inputText, setInputText] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
@@ -126,21 +127,27 @@ export function ChatBot() {
       setShowPromptBadge(false);
     };
 
+    const handleDrawer = (e: any) => {
+      setIsDrawerOpen(Boolean(e.detail?.open));
+    };
+
     window.addEventListener("open-pb-chatbot", handleOpen);
+    window.addEventListener("pb-mobile-drawer", handleDrawer);
     (window as any).openChatBot = handleOpen;
 
     return () => {
       window.removeEventListener("open-pb-chatbot", handleOpen);
+      window.removeEventListener("pb-mobile-drawer", handleDrawer);
     };
   }, []);
 
-  // Show prompt popup after 4 seconds if not opened yet
+  // Show prompt popup after 20 seconds if not opened yet (Finding 9)
   useEffect(() => {
     const timer = setTimeout(() => {
       if (!isOpen) {
         setShowPromptBadge(true);
       }
-    }, 4000);
+    }, 20000);
 
     return () => clearTimeout(timer);
   }, [isOpen]);
@@ -166,7 +173,7 @@ export function ChatBot() {
     const text = encodeURIComponent(
       "Hello Programming Bridge Team! I would like to discuss a software engineering project."
     );
-    window.open(`https://wa.me/${phone}?text=${text}`, "_blank");
+    window.open(`https://wa.me/${phone}?text=${text}`, "_blank", "noopener,noreferrer");
   };
 
   const openTawkToLiveChat = () => {
@@ -292,8 +299,10 @@ export function ChatBot() {
 
   return (
     <div
-      style={{ zIndex: 2147483647 }}
-      className="fixed bottom-5 right-5 pointer-events-none flex flex-col items-end font-sans select-none"
+      style={{ zIndex: 40 }}
+      className={`fixed bottom-5 right-5 pointer-events-none flex flex-col items-end font-sans select-none transition-opacity duration-200 ${
+        isDrawerOpen ? "opacity-0 pointer-events-none hidden" : "opacity-100"
+      }`}
     >
       {/* 1. Proactive Welcome Tooltip / Prompt Badge */}
       {!isOpen && showPromptBadge && (
@@ -318,7 +327,7 @@ export function ChatBot() {
               }}
             >
               <p className="text-xs font-extrabold text-foreground">Need help with your project?</p>
-              <p className="text-[11px] text-foreground-muted">Chat with our AI & Live Support Lead 👋</p>
+              <p className="text-xs text-foreground-muted">Chat with our AI & Live Support Lead 👋</p>
             </div>
           </div>
         </div>
@@ -350,7 +359,7 @@ export function ChatBot() {
                   <span className="text-xs font-extrabold text-foreground tracking-tight">PB Engineering Bot</span>
                   <span className="rounded bg-brand/15 px-1 py-0.2 text-[9px] font-bold text-brand uppercase">AI 2.0</span>
                 </div>
-                <span className="text-[10px] text-foreground-muted">● Typically replies instantly</span>
+                <span className="text-xs text-foreground-muted">● Typically replies instantly</span>
               </div>
             </div>
 
@@ -383,7 +392,7 @@ export function ChatBot() {
           {!isMinimized && (
             <>
               {/* Quick Connect Top Bar (WhatsApp / Live Team) */}
-              <div className="flex items-center justify-between border-b border-border/60 bg-brand/5 px-4 py-2 text-[11px]">
+              <div className="flex items-center justify-between border-b border-border/60 bg-brand/5 px-4 py-2 text-xs">
                 <span className="font-semibold text-foreground-muted flex items-center gap-1">
                   <Sparkles className="h-3 w-3 text-brand" /> Need human assistance?
                 </span>
@@ -407,7 +416,7 @@ export function ChatBot() {
                   >
                     <div className="flex items-start gap-2 max-w-[88%]">
                       {msg.sender === "bot" && (
-                        <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-brand/20 text-brand text-[10px] mt-0.5">
+                        <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-brand/20 text-brand text-xs mt-0.5">
                           <Bot className="h-3.5 w-3.5" />
                         </div>
                       )}
@@ -419,7 +428,7 @@ export function ChatBot() {
                             : "border border-border bg-surface text-foreground rounded-tl-xs"
                         }`}
                       >
-                        <div className="whitespace-pre-line break-words text-[12px]">
+                        <div className="whitespace-pre-line break-words text-[13px]">
                           {msg.text.split("\n\n").map((paragraph, idx) => (
                             <p key={idx} className={idx > 0 ? "mt-2" : ""}>
                               {paragraph}
@@ -436,7 +445,7 @@ export function ChatBot() {
                                   key={qIdx}
                                   href={qa.href}
                                   onClick={() => setIsOpen(false)}
-                                  className="inline-flex items-center gap-1 rounded-xl border border-brand/30 bg-brand/10 px-2.5 py-1 text-[11px] font-bold text-brand hover:bg-brand hover:text-black transition-all"
+                                  className="inline-flex items-center gap-1 rounded-xl border border-brand/30 bg-brand/10 px-2.5 py-1 text-xs font-bold text-brand hover:bg-brand hover:text-black transition-all"
                                 >
                                   <span>{qa.label}</span>
                                   <ArrowRight className="h-2.5 w-2.5" />
@@ -445,7 +454,7 @@ export function ChatBot() {
                                 <button
                                   key={qIdx}
                                   onClick={() => handleAction(qa.action, qa.href)}
-                                  className="inline-flex items-center gap-1 rounded-xl border border-border bg-card px-2.5 py-1 text-[11px] font-bold text-foreground hover:border-brand hover:text-brand transition-all cursor-pointer"
+                                  className="inline-flex items-center gap-1 rounded-xl border border-border bg-card px-2.5 py-1 text-xs font-bold text-foreground hover:border-brand hover:text-brand transition-all cursor-pointer"
                                 >
                                   <span>{qa.label}</span>
                                 </button>
@@ -456,7 +465,7 @@ export function ChatBot() {
                       </div>
                     </div>
 
-                    <span className="mt-1 px-1 text-[9px] text-foreground-subtle">
+                    <span className="mt-1 px-1 text-[10px] text-foreground-subtle">
                       {msg.timestamp}
                     </span>
                   </div>
@@ -464,7 +473,7 @@ export function ChatBot() {
 
                 {isTyping && (
                   <div className="flex items-center gap-2 text-foreground-muted">
-                    <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-brand/20 text-brand text-[10px]">
+                    <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-brand/20 text-brand text-xs">
                       <Bot className="h-3.5 w-3.5" />
                     </div>
                     <div className="flex items-center gap-1 rounded-2xl border border-border bg-surface px-3 py-2">

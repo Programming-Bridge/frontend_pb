@@ -198,7 +198,7 @@ export function ProjectsTab({
                       <a
                         href={proj.liveUrl || proj.liveLink}
                         target="_blank"
-                        rel="noreferrer"
+                        rel="noopener noreferrer"
                         className="flex items-center gap-1 text-[11px] font-bold text-brand hover:underline"
                       >
                         <span>Live Demo</span>
@@ -209,7 +209,7 @@ export function ProjectsTab({
                       <a
                         href={proj.githubUrl || proj.gitLink}
                         target="_blank"
-                        rel="noreferrer"
+                        rel="noopener noreferrer"
                         className="flex items-center gap-1 text-[11px] font-bold text-foreground-muted hover:text-foreground"
                       >
                         <Code2 className="h-3 w-3" />

@@ -29,6 +29,37 @@ export const metadata: Metadata = {
     "Programming Bridge is a full-stack digital engineering studio. Discover our mission, architectural philosophy, client delivery lifecycle, and senior engineering squad standards.",
 };
 
+const aboutJsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "AboutPage",
+      "@id": "https://www.programmingbridge.org/about/company#webpage",
+      "url": "https://www.programmingbridge.org/about/company",
+      "name": "About Our Company | Programming Bridge",
+      "description":
+        "Programming Bridge is a full-stack digital engineering studio. Discover our mission, architectural philosophy, client delivery lifecycle, and senior engineering squad standards.",
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.programmingbridge.org"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "About",
+          "item": "https://www.programmingbridge.org/about/company"
+        }
+      ]
+    }
+  ]
+};
+
 export default function CompanyPage() {
   const pillars = [
     {
@@ -98,6 +129,12 @@ export default function CompanyPage() {
 
   return (
     <main id="main-content" className="min-h-screen bg-background text-foreground transition-colors duration-200">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(aboutJsonLd),
+        }}
+      />
       <Navbar />
 
       {/* Hero Header */}
@@ -117,7 +154,7 @@ export default function CompanyPage() {
               />
               <span>About Programming Bridge</span>
               <span className="text-border">|</span>
-              <span className="font-mono text-[11px] text-brand">Engineering Studio</span>
+              <span className="font-mono text-xs text-brand">Engineering Studio</span>
             </div>
 
             <h1 className="mt-5 text-3xl font-extrabold tracking-tight text-foreground sm:text-5xl md:text-6xl leading-[1.15]">

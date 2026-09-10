@@ -98,7 +98,7 @@ export function ServiceTechMarquee({ technologies }: ServiceTechMarqueeProps) {
   return (
     <div className="mt-14 w-full">
       <div className="text-center mb-6">
-        <span className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-brand">
+        <span className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-xs font-bold uppercase tracking-wider text-brand">
           <span className="h-1.5 w-1.5 rounded-full bg-brand animate-pulse" />
           <span>Core Technology Stack in Action</span>
         </span>
@@ -129,6 +129,11 @@ export function ServiceTechMarquee({ technologies }: ServiceTechMarqueeProps) {
                     height={20}
                     loading="lazy"
                     decoding="async"
+                    onError={(e) => {
+                      const target = e.currentTarget;
+                      target.onerror = null;
+                      target.src = "/icons/openai.svg";
+                    }}
                     className={`h-5 w-5 object-contain transition-transform duration-200 group-hover:scale-105 ${
                       item.invertInDark ? "dark:invert" : ""
                     }`}
@@ -138,7 +143,7 @@ export function ServiceTechMarquee({ technologies }: ServiceTechMarqueeProps) {
                   <span className="text-xs sm:text-sm font-bold text-foreground group-hover:text-brand transition-colors truncate">
                     {item.name}
                   </span>
-                  <span className="text-[10px] font-medium text-foreground-subtle truncate">
+                  <span className="text-xs font-medium text-foreground-subtle truncate">
                     {item.badge || item.categoryLabel || "Production"}
                   </span>
                 </div>

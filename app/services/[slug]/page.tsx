@@ -257,8 +257,55 @@ export default async function ServiceDetailPage({
 
   const Icon = config.icon;
 
+  const serviceJsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Service",
+        "name": config.title,
+        "serviceType": config.badge,
+        "description": config.description,
+        "provider": {
+          "@type": "Organization",
+          "name": "Programming Bridge",
+          "url": "https://www.programmingbridge.org",
+        },
+        "areaServed": "Global",
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://www.programmingbridge.org",
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Services",
+            "item": "https://www.programmingbridge.org/services",
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "name": config.title,
+            "item": `https://www.programmingbridge.org/services/${config.slug}`,
+          },
+        ],
+      },
+    ],
+  };
+
   return (
     <main id="main-content" className="min-h-screen bg-background text-foreground transition-colors duration-200">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(serviceJsonLd),
+        }}
+      />
       <Navbar />
 
       {/* Service Hero Header */}
@@ -271,7 +318,7 @@ export default async function ServiceDetailPage({
               <Icon className="h-3.5 w-3.5 text-brand" />
               <span>{config.badge}</span>
               <span className="text-border">|</span>
-              <span className="font-mono text-[11px] text-brand">Specialized Service</span>
+              <span className="font-mono text-xs text-brand">Specialized Service</span>
             </div>
 
             <h1 className="mt-5 text-3xl font-extrabold tracking-tight text-foreground sm:text-5xl md:text-6xl leading-[1.15]">

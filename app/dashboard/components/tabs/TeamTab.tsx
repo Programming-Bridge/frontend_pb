@@ -171,7 +171,7 @@ export function TeamTab({
                       <a
                         href={member.socialLinks.linkedin}
                         target="_blank"
-                        rel="noreferrer"
+                        rel="noopener noreferrer"
                         className="hover:text-brand transition-colors"
                         title="LinkedIn"
                       >
@@ -182,7 +182,7 @@ export function TeamTab({
                       <a
                         href={member.socialLinks.github}
                         target="_blank"
-                        rel="noreferrer"
+                        rel="noopener noreferrer"
                         className="hover:text-foreground transition-colors"
                         title="GitHub"
                       >

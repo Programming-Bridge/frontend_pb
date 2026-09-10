@@ -239,7 +239,7 @@ export default function TeamPage() {
                             <a
                               href={member.socialLinks.github}
                               target="_blank"
-                              rel="noreferrer"
+                              rel="noopener noreferrer"
                               aria-label="GitHub"
                               className="p-1.5 rounded-lg border border-border bg-surface hover:text-foreground transition-colors cursor-pointer"
                             >
@@ -252,7 +252,7 @@ export default function TeamPage() {
                             <a
                               href={member.socialLinks.linkedin}
                               target="_blank"
-                              rel="noreferrer"
+                              rel="noopener noreferrer"
                               aria-label="LinkedIn"
                               className="p-1.5 rounded-lg border border-border bg-surface hover:text-brand transition-colors cursor-pointer"
                             >

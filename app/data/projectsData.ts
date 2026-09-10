@@ -139,7 +139,7 @@ export const defaultProjects: Project[] = [
     shortDescription:
       "Real-time dispatch platform with genetic path-finding algorithms reducing last-mile fuel consumption by 24% for 1,200+ fleet vehicles.",
     technologies: ["TypeScript", "React", "Node.js", "PostGIS", "Redis", "Leaflet"],
-    image: "https://images.unsplash.com/photo-1508873696983-2df5293cb32f?w=1200&auto=format&fit=crop&q=80",
+    image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=1200&auto=format&fit=crop&q=80",
     liveUrl: "https://logistics.programmingbridge.com",
     liveLink: "https://logistics.programmingbridge.com",
     githubUrl: "https://github.com/Programming-Bridge/fleet-route-optimization-engine",

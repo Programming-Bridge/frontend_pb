@@ -178,7 +178,7 @@ export function ContactSection({ isPage = false, className = "" }: ContactSectio
               <span className="mt-2 text-xs font-semibold text-foreground group-hover:text-brand transition-colors truncate">
                 official@programmingbridge.org
               </span>
-              <span className="text-[11px] text-foreground-subtle mt-0.5">Avg response: &lt; 2 hours</span>
+              <span className="text-xs text-foreground-subtle mt-0.5">Avg response: &lt; 2 hours</span>
             </a>
 
             <div className="flex flex-col rounded-xl border border-card-border bg-card p-4">
@@ -187,7 +187,7 @@ export function ContactSection({ isPage = false, className = "" }: ContactSectio
                 <span className="text-xs font-bold uppercase tracking-wider">Availability</span>
               </div>
               <span className="mt-2 text-xs font-semibold text-foreground">Global Engagements</span>
-              <span className="text-[11px] text-foreground-subtle mt-0.5">Remote agile squads</span>
+              <span className="text-xs text-foreground-subtle mt-0.5">Remote agile squads</span>
             </div>
           </div>
         </div>
@@ -256,6 +256,7 @@ export function ContactSection({ isPage = false, className = "" }: ContactSectio
                         id="contact-full-name"
                         name="name"
                         type="text"
+                        autoComplete="name"
                         required
                         placeholder="Your name"
                         value={formData.name}
@@ -278,6 +279,7 @@ export function ContactSection({ isPage = false, className = "" }: ContactSectio
                         id="contact-work-email"
                         name="email"
                         type="email"
+                        autoComplete="email"
                         required
                         placeholder="you@company.com"
                         value={formData.email}
@@ -303,6 +305,7 @@ export function ContactSection({ isPage = false, className = "" }: ContactSectio
                         id="contact-phone-number"
                         name="phone"
                         type="tel"
+                        autoComplete="tel"
                         placeholder="+1 (555) 000-0000"
                         value={formData.phone}
                         onChange={(e) =>
@@ -329,6 +332,7 @@ export function ContactSection({ isPage = false, className = "" }: ContactSectio
                         id="contact-company-name"
                         name="company"
                         type="text"
+                        autoComplete="organization"
                         placeholder="Your company"
                         value={formData.company}
                         onChange={(e) => setFormData({ ...formData, company: e.target.value })}
@@ -351,9 +355,9 @@ export function ContactSection({ isPage = false, className = "" }: ContactSectio
                           key={type}
                           type="button"
                           onClick={() => setFormData({ ...formData, projectType: type })}
-                          className={`rounded-lg px-3 py-1.5 text-xs font-medium transition-all cursor-pointer ${
+                          className={`rounded-xl px-3.5 py-2 text-xs font-semibold transition-all cursor-pointer ${
                             isSelected
-                              ? "bg-brand text-white font-semibold"
+                              ? "bg-brand text-white shadow-xs"
                               : "border border-border bg-surface text-foreground-muted hover:border-brand/40 hover:text-foreground"
                           }`}
                         >
@@ -390,30 +394,27 @@ export function ContactSection({ isPage = false, className = "" }: ContactSectio
                   </div>
                 </div>
 
-                {/* Message */}
+                {/* Project Details Message */}
                 <div>
                   <label
                     htmlFor="contact-project-details"
                     className="block text-xs font-semibold text-foreground mb-1.5"
                   >
-                    Project Details <span className="text-red-500">*</span>
+                    Project Details & Goals <span className="text-red-500">*</span>
                   </label>
-                  <div className="relative">
-                    <MessageSquare className="pointer-events-none absolute left-3.5 top-3 h-4 w-4 text-foreground-subtle" />
-                    <textarea
-                      id="contact-project-details"
-                      name="message"
-                      required
-                      rows={4}
-                      placeholder="Tell us about the project goals, tech stack, timeline, or key challenges..."
-                      value={formData.message}
-                      onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                      className="w-full rounded-xl border border-border bg-surface px-3.5 py-2.5 pl-10 text-xs sm:text-sm text-foreground placeholder:text-foreground-subtle focus:border-brand focus:ring-2 focus:ring-brand/20 outline-none transition-all resize-none"
-                    />
-                  </div>
+                  <textarea
+                    id="contact-project-details"
+                    name="message"
+                    required
+                    rows={4}
+                    placeholder="Describe your project, timeline, target platforms, and key technical challenges..."
+                    value={formData.message}
+                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                    className="w-full rounded-xl border border-border bg-surface p-3.5 text-xs sm:text-sm text-foreground placeholder:text-foreground-subtle focus:border-brand focus:ring-2 focus:ring-brand/20 outline-none transition-all resize-none"
+                  />
                 </div>
 
-                {/* Submit */}
+                {/* Action Buttons */}
                 <div>
                   <button
                     type="submit"
@@ -432,7 +433,7 @@ export function ContactSection({ isPage = false, className = "" }: ContactSectio
                       </>
                     )}
                   </button>
-                  <p className="mt-2.5 text-center text-[11px] text-foreground-subtle">
+                  <p className="mt-2.5 text-center text-xs text-foreground-subtle">
                     Strictly confidential under mutual NDA. We never share your data.
                   </p>
                 </div>

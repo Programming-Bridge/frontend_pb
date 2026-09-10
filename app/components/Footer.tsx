@@ -48,7 +48,7 @@ export function Footer() {
               <a
                 href="https://github.com/Programming-Bridge"
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
                 aria-label="GitHub"
                 className="flex h-9 w-9 items-center justify-center rounded-lg border border-border bg-card text-foreground-muted hover:border-brand hover:text-brand transition-colors"
               >
@@ -59,7 +59,7 @@ export function Footer() {
               <a
                 href="https://www.linkedin.com/company/139694030/"
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
                 aria-label="LinkedIn"
                 className="flex h-9 w-9 items-center justify-center rounded-lg border border-border bg-card text-foreground-muted hover:border-brand hover:text-brand transition-colors"
               >
@@ -77,7 +77,7 @@ export function Footer() {
               <a
                 href="https://www.programmingbridge.org"
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
                 aria-label="Website"
                 className="flex h-9 w-9 items-center justify-center rounded-lg border border-border bg-card text-foreground-muted hover:border-brand hover:text-brand transition-colors"
               >

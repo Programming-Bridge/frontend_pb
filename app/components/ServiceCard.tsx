@@ -99,7 +99,7 @@ export function ServiceCard({ card, index = 0 }: ServiceCardProps) {
           </div>
 
           {card.badge && (
-            <span className="inline-flex items-center rounded-full border border-brand/25 bg-brand-tint px-2.5 py-1 text-[10px] font-bold tracking-wider uppercase text-brand shadow-xs">
+            <span className="inline-flex items-center rounded-full border border-brand/25 bg-brand-tint px-2.5 py-1 text-xs font-bold tracking-wider uppercase text-brand shadow-xs">
               {card.badge}
             </span>
           )}
@@ -121,7 +121,7 @@ export function ServiceCard({ card, index = 0 }: ServiceCardProps) {
             {card.tags.map((tag, tIdx) => (
               <span
                 key={tIdx}
-                className="inline-flex items-center rounded-md border border-border/80 bg-surface px-2.5 py-1 text-[11px] font-medium text-foreground-muted transition-colors group-hover:border-brand/20 group-hover:text-foreground"
+                className="inline-flex items-center rounded-md border border-border/80 bg-surface px-2.5 py-1 text-xs font-medium text-foreground-muted transition-colors group-hover:border-brand/20 group-hover:text-foreground"
               >
                 {tag}
               </span>

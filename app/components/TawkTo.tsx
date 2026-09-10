@@ -17,51 +17,79 @@ export function TawkTo() {
     process.env.NEXT_PUBLIC_TAWK_WIDGET_ID?.trim() || "1k1tsu280";
   const { resolvedTheme } = useTheme();
 
-  // 1. Direct Script Injection
+  // 1. Deferred Script Injection (Finding 3: recovered main thread for fast first paint)
   useEffect(() => {
     if (!propertyId || typeof window === "undefined") return;
 
-    window.Tawk_API = window.Tawk_API || {};
-    window.Tawk_API.onLoad = function () {
-      try {
-        if (typeof window.Tawk_API?.hideWidget === "function") {
-          window.Tawk_API.hideWidget();
-        }
-      } catch (e) {}
-    };
-    window.Tawk_LoadStart = new Date();
-
-    const scriptId = "tawk-to-script";
-    let scriptElement = document.getElementById(scriptId) as HTMLScriptElement | null;
-
-    if (!scriptElement) {
-      const embedUrl = propertyId.startsWith("http")
-        ? propertyId
-        : `https://embed.tawk.to/${propertyId}/${widgetId}`;
-
-      scriptElement = document.createElement("script");
-      scriptElement.id = scriptId;
-      scriptElement.async = true;
-      scriptElement.src = embedUrl;
-      scriptElement.charset = "UTF-8";
-      scriptElement.setAttribute("crossorigin", "*");
-
-      scriptElement.onload = () => {
-        // If Tawk missed the load event in SPA, trigger recovery
-        if (typeof window !== "undefined" && (window as any).$_Tawk && !(window as any).$_Tawk.init) {
-          try {
-            window.dispatchEvent(new Event("load"));
-          } catch (e) {}
-        }
+    const loadTawkScript = () => {
+      window.Tawk_API = window.Tawk_API || {};
+      window.Tawk_API.onLoad = function () {
+        try {
+          if (typeof window.Tawk_API?.hideWidget === "function") {
+            window.Tawk_API.hideWidget();
+          }
+        } catch (e) {}
       };
+      window.Tawk_LoadStart = new Date();
 
-      const firstScript = document.getElementsByTagName("script")[0];
-      if (firstScript && firstScript.parentNode) {
-        firstScript.parentNode.insertBefore(scriptElement, firstScript);
-      } else {
-        document.head.appendChild(scriptElement);
+      const scriptId = "tawk-to-script";
+      let scriptElement = document.getElementById(scriptId) as HTMLScriptElement | null;
+
+      if (!scriptElement) {
+        const embedUrl = propertyId.startsWith("http")
+          ? propertyId
+          : `https://embed.tawk.to/${propertyId}/${widgetId}`;
+
+        scriptElement = document.createElement("script");
+        scriptElement.id = scriptId;
+        scriptElement.async = true;
+        scriptElement.src = embedUrl;
+        scriptElement.charset = "UTF-8";
+        scriptElement.setAttribute("crossorigin", "*");
+
+        scriptElement.onload = () => {
+          if (typeof window !== "undefined" && (window as any).$_Tawk && !(window as any).$_Tawk.init) {
+            try {
+              window.dispatchEvent(new Event("load"));
+            } catch (e) {}
+          }
+        };
+
+        const firstScript = document.getElementsByTagName("script")[0];
+        if (firstScript && firstScript.parentNode) {
+          firstScript.parentNode.insertBefore(scriptElement, firstScript);
+        } else {
+          document.head.appendChild(scriptElement);
+        }
       }
+    };
+
+    let idleId: number | null = null;
+    let timerId: NodeJS.Timeout | null = null;
+
+    if ("requestIdleCallback" in window) {
+      idleId = (window as any).requestIdleCallback(loadTawkScript, { timeout: 3500 });
+    } else {
+      timerId = setTimeout(loadTawkScript, 2000);
     }
+
+    const onUserInteraction = () => {
+      loadTawkScript();
+      window.removeEventListener("scroll", onUserInteraction);
+      window.removeEventListener("pointerdown", onUserInteraction);
+    };
+
+    window.addEventListener("scroll", onUserInteraction, { once: true, passive: true });
+    window.addEventListener("pointerdown", onUserInteraction, { once: true, passive: true });
+
+    return () => {
+      if (idleId !== null && "cancelIdleCallback" in window) {
+        (window as any).cancelIdleCallback(idleId);
+      }
+      if (timerId) clearTimeout(timerId);
+      window.removeEventListener("scroll", onUserInteraction);
+      window.removeEventListener("pointerdown", onUserInteraction);
+    };
   }, [propertyId, widgetId]);
 
   // 2. Dark / Light Mode Theme Filter Synchronizer

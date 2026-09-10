@@ -109,6 +109,11 @@ export function HeroSection() {
         </>
       )}
 
+      {/* Stable SEO Brand Statement H1 (Finding 6) */}
+      <h1 className="sr-only">
+        Programming Bridge — Full-Stack Digital Engineering Studio & Software Development
+      </h1>
+
       <div className="w-full overflow-hidden">
         <div
           className="flex transition-transform duration-700 ease-in-out"
@@ -118,13 +123,13 @@ export function HeroSection() {
             <div key={banner._id || idx} className="w-full shrink-0 px-3.5 sm:px-16 md:px-24">
               <div className="mx-auto max-w-4xl text-center">
                 {banner.badge && (
-                  <div className="inline-flex max-w-[94vw] items-center justify-center flex-wrap sm:flex-nowrap gap-1.5 sm:gap-2 rounded-full border border-border bg-surface px-3 py-1 sm:px-3.5 sm:py-1.5 text-[11px] sm:text-xs font-medium text-foreground shadow-xs leading-normal">
+                  <div className="inline-flex max-w-[94vw] items-center justify-center flex-wrap sm:flex-nowrap gap-1.5 sm:gap-2 rounded-full border border-border bg-surface px-3 py-1 sm:px-3.5 sm:py-1.5 text-xs font-medium text-foreground shadow-xs leading-normal">
                     <span className="h-2 w-2 shrink-0 rounded-full bg-brand animate-pulse" />
                     <span>{banner.badge}</span>
                     {isSlider && (
                       <>
                         <span className="text-border">|</span>
-                        <span className="text-brand font-mono text-[10px] sm:text-[11px] shrink-0">
+                        <span className="text-brand font-mono text-xs shrink-0">
                           {idx + 1} / {banners.length}
                         </span>
                       </>
@@ -132,15 +137,9 @@ export function HeroSection() {
                   </div>
                 )}
 
-                {idx === 0 ? (
-                  <h1 className="mt-5 sm:mt-6 text-3xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-foreground leading-[1.15]">
-                    {renderTitle(banner.title)}
-                  </h1>
-                ) : (
-                  <h2 className="mt-5 sm:mt-6 text-3xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-foreground leading-[1.15]">
-                    {renderTitle(banner.title)}
-                  </h2>
-                )}
+                <h2 className="mt-5 sm:mt-6 text-3xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-foreground leading-[1.15]">
+                  {renderTitle(banner.title)}
+                </h2>
 
                 {banner.subTitle && (
                   <p className="mt-2.5 sm:mt-3 text-sm sm:text-lg font-medium text-foreground-muted">
@@ -149,7 +148,7 @@ export function HeroSection() {
                 )}
 
                 {banner.description && (
-                  <p className="mt-4 sm:mt-5 text-xs sm:text-base md:text-lg text-foreground-muted leading-relaxed max-w-2xl mx-auto">
+                  <p className="mt-4 sm:mt-5 text-sm sm:text-base md:text-lg text-foreground-muted leading-relaxed max-w-2xl mx-auto">
                     {banner.description}
                   </p>
                 )}
@@ -159,7 +158,7 @@ export function HeroSection() {
                     {banner.features.map((feature, fIdx) => (
                       <span
                         key={fIdx}
-                        className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-surface px-2.5 py-1 sm:px-3 sm:py-1.5 text-[11px] sm:text-xs font-medium text-foreground-muted"
+                        className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-surface px-2.5 py-1 sm:px-3 sm:py-1.5 text-xs font-medium text-foreground-muted"
                       >
                         <CheckCircle2 className="h-3.5 w-3.5 text-brand shrink-0" />
                         <span>{feature}</span>
@@ -196,17 +195,21 @@ export function HeroSection() {
       </div>
 
       {isSlider && (
-        <div className="mt-10 flex items-center justify-center gap-3">
-          <div className="flex items-center gap-2">
+        <div className="mt-10 flex items-center justify-center gap-2">
+          <div className="flex items-center gap-1">
             {banners.map((_, dotIdx) => (
               <button
                 key={dotIdx}
                 onClick={() => goToSlide(dotIdx)}
                 aria-label={`Go to slide ${dotIdx + 1}`}
-                className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
-                  dotIdx === activeIndex ? "w-8 bg-brand" : "w-2 bg-border hover:bg-foreground-muted/50"
-                }`}
-              />
+                className="relative flex h-8 min-w-8 items-center justify-center p-2 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand rounded-full"
+              >
+                <span
+                  className={`h-2 rounded-full transition-all duration-300 ${
+                    dotIdx === activeIndex ? "w-8 bg-brand" : "w-2 bg-border hover:bg-foreground-muted/50"
+                  }`}
+                />
+              </button>
             ))}
           </div>
 
@@ -214,9 +217,9 @@ export function HeroSection() {
             onClick={togglePause}
             aria-label={isPaused ? "Play slide carousel" : "Pause slide carousel"}
             title={isPaused ? "Play slides" : "Pause slides"}
-            className="flex h-6 w-6 items-center justify-center rounded-full border border-border bg-surface text-foreground-muted hover:border-brand/50 hover:text-brand transition-colors cursor-pointer ml-1"
+            className="flex h-8 w-8 items-center justify-center rounded-full border border-border bg-surface text-foreground-muted hover:border-brand/50 hover:text-brand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand transition-colors cursor-pointer ml-1"
           >
-            {isPaused ? <Play className="h-3 w-3 fill-current ml-0.5" /> : <Pause className="h-3 w-3" />}
+            {isPaused ? <Play className="h-3.5 w-3.5 fill-current ml-0.5" /> : <Pause className="h-3.5 w-3.5" />}
           </button>
         </div>
       )}
