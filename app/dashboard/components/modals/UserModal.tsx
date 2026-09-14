@@ -65,12 +65,12 @@ export function UserModal({
       setFormError("Please enter a valid email address.");
       return;
     }
-    if (!isEditing && (!password || password.length < 6)) {
-      setFormError("Password must be at least 6 characters long.");
+    if (!isEditing && (!password || password.length < 12)) {
+      setFormError("Password must be at least 12 characters long.");
       return;
     }
-    if (isEditing && password && password.length < 6) {
-      setFormError("New password must be at least 6 characters long.");
+    if (isEditing && password && password.length < 12) {
+      setFormError("New password must be at least 12 characters long.");
       return;
     }
 
@@ -179,7 +179,7 @@ export function UserModal({
                 required={!isEditing}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder={isEditing ? "Enter new password to reset" : "Minimum 6 characters"}
+                placeholder={isEditing ? "Enter new password to reset (min 12 chars)" : "Minimum 12 characters"}
                 className="h-10 w-full rounded-xl border border-border bg-surface pl-10 pr-3 text-xs text-foreground placeholder:text-foreground-subtle focus:border-brand focus:outline-none transition-all"
               />
             </div>

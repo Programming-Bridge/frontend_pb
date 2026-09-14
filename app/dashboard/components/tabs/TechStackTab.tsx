@@ -25,11 +25,18 @@ export function TechStackTab({
   isSeeding,
 }: TechStackTabProps) {
   const [selectedDomain, setSelectedDomain] = useState<"all" | "software" | "ai-ml" | "mobile">("all");
+  const [statusFilter, setStatusFilter] = useState<"all" | "active" | "inactive">("all");
+  const [showSeedModal, setShowSeedModal] = useState(false);
+  const [seedConfirmInput, setSeedConfirmInput] = useState("");
 
   const filteredTech = technologies.filter((t) => {
     const matchesDomain = selectedDomain === "all" || t.domain === selectedDomain;
+    const matchesStatus =
+      statusFilter === "all" ||
+      (statusFilter === "active" && t.isActive !== false) ||
+      (statusFilter === "inactive" && t.isActive === false);
 
-    if (!searchQuery.trim()) return matchesDomain;
+    if (!searchQuery.trim()) return matchesDomain && matchesStatus;
 
     const q = searchQuery.toLowerCase();
     const matchesQuery =
@@ -38,8 +45,18 @@ export function TechStackTab({
       t.shortDesc?.toLowerCase().includes(q) ||
       t.highlight?.toLowerCase().includes(q);
 
-    return matchesDomain && matchesQuery;
+    return matchesDomain && matchesStatus && matchesQuery;
   });
+
+  const activeCount = technologies.filter((t) => t.isActive !== false).length;
+  const inactiveCount = technologies.filter((t) => t.isActive === false).length;
+
+  const handleConfirmSeed = async () => {
+    if (seedConfirmInput.trim().toUpperCase() !== "SEED") return;
+    setShowSeedModal(false);
+    setSeedConfirmInput("");
+    await onSeedDefaults();
+  };
 
   return (
     <div className="space-y-6">
@@ -57,9 +74,9 @@ export function TechStackTab({
         <div className="flex w-full sm:w-auto items-center gap-2 shrink-0">
           <button
             type="button"
-            onClick={onSeedDefaults}
+            onClick={() => setShowSeedModal(true)}
             disabled={isSeeding}
-            className="flex-1 sm:flex-initial inline-flex items-center justify-center whitespace-nowrap gap-1.5 rounded-xl border border-border bg-surface px-3 py-2.5 text-xs font-bold text-foreground hover:border-brand/40 hover:text-brand transition-all disabled:opacity-50 cursor-pointer shrink-0"
+            className="flex-1 sm:flex-initial inline-flex items-center justify-center whitespace-nowrap gap-1.5 rounded-xl border border-amber-500/30 bg-amber-500/10 px-3 py-2.5 text-xs font-bold text-amber-500 hover:bg-amber-500/20 transition-all disabled:opacity-50 cursor-pointer shrink-0"
             title="Seed default technology catalog"
           >
             <Database className="h-3.5 w-3.5 shrink-0" />
@@ -77,53 +94,136 @@ export function TechStackTab({
         </div>
       </div>
 
-      {/* Domain Filters (Horizontal scrollable on mobile) */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-1.5 pt-0.5 max-w-full">
-        <button
-          type="button"
-          onClick={() => setSelectedDomain("all")}
-          className={`shrink-0 rounded-xl px-3.5 py-1.5 text-xs font-bold transition-all cursor-pointer ${
-            selectedDomain === "all"
-              ? "bg-brand text-black shadow-sm"
-              : "border border-border bg-surface text-foreground-muted hover:border-brand/40 hover:text-foreground"
-          }`}
-        >
-          All Domains ({technologies.length})
-        </button>
-        <button
-          type="button"
-          onClick={() => setSelectedDomain("software")}
-          className={`shrink-0 rounded-xl px-3.5 py-1.5 text-xs font-bold transition-all cursor-pointer ${
-            selectedDomain === "software"
-              ? "bg-brand text-black shadow-sm"
-              : "border border-border bg-surface text-foreground-muted hover:border-brand/40 hover:text-foreground"
-          }`}
-        >
-          Software Engineering (Web & Cloud)
-        </button>
-        <button
-          type="button"
-          onClick={() => setSelectedDomain("ai-ml")}
-          className={`shrink-0 rounded-xl px-3.5 py-1.5 text-xs font-bold transition-all cursor-pointer ${
-            selectedDomain === "ai-ml"
-              ? "bg-brand text-black shadow-sm"
-              : "border border-border bg-surface text-foreground-muted hover:border-brand/40 hover:text-foreground"
-          }`}
-        >
-          AI, ML & Data Science
-        </button>
-        <button
-          type="button"
-          onClick={() => setSelectedDomain("mobile")}
-          className={`shrink-0 rounded-xl px-3.5 py-1.5 text-xs font-bold transition-all cursor-pointer ${
-            selectedDomain === "mobile"
-              ? "bg-brand text-black shadow-sm"
-              : "border border-border bg-surface text-foreground-muted hover:border-brand/40 hover:text-foreground"
-          }`}
-        >
-          Mobile Engineering
-        </button>
+      {/* Domain and Status Filters */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        {/* Domain Filters (Horizontal scrollable on mobile) */}
+        <div className="flex items-center gap-2 overflow-x-auto pb-1.5 pt-0.5 max-w-full">
+          <button
+            type="button"
+            onClick={() => setSelectedDomain("all")}
+            className={`shrink-0 rounded-xl px-3.5 py-1.5 text-xs font-bold transition-all cursor-pointer ${
+              selectedDomain === "all"
+                ? "bg-brand text-black shadow-sm"
+                : "border border-border bg-surface text-foreground-muted hover:border-brand/40 hover:text-foreground"
+            }`}
+          >
+            All Domains ({technologies.length})
+          </button>
+          <button
+            type="button"
+            onClick={() => setSelectedDomain("software")}
+            className={`shrink-0 rounded-xl px-3.5 py-1.5 text-xs font-bold transition-all cursor-pointer ${
+              selectedDomain === "software"
+                ? "bg-brand text-black shadow-sm"
+                : "border border-border bg-surface text-foreground-muted hover:border-brand/40 hover:text-foreground"
+            }`}
+          >
+            Software
+          </button>
+          <button
+            type="button"
+            onClick={() => setSelectedDomain("ai-ml")}
+            className={`shrink-0 rounded-xl px-3.5 py-1.5 text-xs font-bold transition-all cursor-pointer ${
+              selectedDomain === "ai-ml"
+                ? "bg-brand text-black shadow-sm"
+                : "border border-border bg-surface text-foreground-muted hover:border-brand/40 hover:text-foreground"
+            }`}
+          >
+            AI & ML
+          </button>
+          <button
+            type="button"
+            onClick={() => setSelectedDomain("mobile")}
+            className={`shrink-0 rounded-xl px-3.5 py-1.5 text-xs font-bold transition-all cursor-pointer ${
+              selectedDomain === "mobile"
+                ? "bg-brand text-black shadow-sm"
+                : "border border-border bg-surface text-foreground-muted hover:border-brand/40 hover:text-foreground"
+            }`}
+          >
+            Mobile
+          </button>
+        </div>
+
+        {/* Status Filter (P1-03) */}
+        <div className="flex items-center gap-1.5 shrink-0 bg-surface p-1 rounded-xl border border-border">
+          <button
+            type="button"
+            onClick={() => setStatusFilter("all")}
+            className={`rounded-lg px-2.5 py-1 text-[11px] font-bold transition-colors cursor-pointer ${
+              statusFilter === "all"
+                ? "bg-card text-foreground shadow-xs border border-border"
+                : "text-foreground-muted hover:text-foreground"
+            }`}
+          >
+            All ({technologies.length})
+          </button>
+          <button
+            type="button"
+            onClick={() => setStatusFilter("active")}
+            className={`rounded-lg px-2.5 py-1 text-[11px] font-bold transition-colors cursor-pointer ${
+              statusFilter === "active"
+                ? "bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30"
+                : "text-foreground-muted hover:text-foreground"
+            }`}
+          >
+            Active ({activeCount})
+          </button>
+          <button
+            type="button"
+            onClick={() => setStatusFilter("inactive")}
+            className={`rounded-lg px-2.5 py-1 text-[11px] font-bold transition-colors cursor-pointer ${
+              statusFilter === "inactive"
+                ? "bg-rose-500/15 text-rose-500 border border-rose-500/30"
+                : "text-foreground-muted hover:text-foreground"
+            }`}
+          >
+            Hidden ({inactiveCount})
+          </button>
+        </div>
       </div>
+
+      {/* Seed Confirmation Modal (P2-09) */}
+      {showSeedModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div className="fixed inset-0 bg-black/70 backdrop-blur-xs" onClick={() => setShowSeedModal(false)} />
+          <div className="relative w-full max-w-md rounded-2xl border border-amber-500/30 bg-card p-6 shadow-2xl space-y-4">
+            <div className="flex items-center gap-3 text-amber-500">
+              <Database className="h-6 w-6" />
+              <h3 className="text-base font-extrabold text-foreground">Confirm Production Seeding</h3>
+            </div>
+            <p className="text-xs text-foreground-muted leading-relaxed">
+              This action will reset or restore standard technologies in your catalog. To confirm, please type <strong className="text-amber-500 font-mono">SEED</strong> below.
+            </p>
+            <input
+              type="text"
+              value={seedConfirmInput}
+              onChange={(e) => setSeedConfirmInput(e.target.value)}
+              placeholder="Type SEED to confirm"
+              className="w-full rounded-xl border border-border bg-surface px-3 py-2 text-xs font-mono text-foreground focus:border-amber-500 focus:outline-none"
+            />
+            <div className="flex items-center justify-end gap-2 pt-2">
+              <button
+                type="button"
+                onClick={() => {
+                  setShowSeedModal(false);
+                  setSeedConfirmInput("");
+                }}
+                className="rounded-xl border border-border bg-surface px-4 py-2 text-xs font-semibold text-foreground hover:bg-surface-hover"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                disabled={seedConfirmInput.trim().toUpperCase() !== "SEED" || isSeeding}
+                onClick={handleConfirmSeed}
+                className="rounded-xl bg-amber-500 px-4 py-2 text-xs font-bold text-black hover:bg-amber-400 disabled:opacity-50 transition-all cursor-pointer"
+              >
+                {isSeeding ? "Seeding Catalog..." : "Confirm & Seed"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Tech Cards Grid */}
       {filteredTech.length === 0 ? (

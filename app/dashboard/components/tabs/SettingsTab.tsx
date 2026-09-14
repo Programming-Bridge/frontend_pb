@@ -30,8 +30,8 @@ export function SettingsTab({ currentUser, onShowAlert }: SettingsTabProps) {
       return;
     }
 
-    if (newPassword.length < 6) {
-      onShowAlert("error", "New password must be at least 6 characters long.");
+    if (newPassword.length < 12) {
+      onShowAlert("error", "New password must be at least 12 characters long with high complexity.");
       return;
     }
 
@@ -151,10 +151,10 @@ export function SettingsTab({ currentUser, onShowAlert }: SettingsTabProps) {
               <input
                 type="password"
                 required
-                minLength={6}
+                minLength={12}
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
-                placeholder="Minimum 6 characters"
+                placeholder="Minimum 12 characters (letters, numbers, symbols)"
                 className="mt-1 h-9 w-full rounded-xl border border-border bg-surface px-3 text-xs text-foreground focus:border-brand focus:outline-none"
               />
             </div>
@@ -164,7 +164,7 @@ export function SettingsTab({ currentUser, onShowAlert }: SettingsTabProps) {
               <input
                 type="password"
                 required
-                minLength={6}
+                minLength={12}
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 placeholder="Re-enter new password"

@@ -89,6 +89,15 @@ export function UsersTab({
     }
   };
 
+  const getUserDisplayName = (u: User) => {
+    if (u.name && u.name.trim().length > 0) return u.name.trim();
+    if (u.email) {
+      const prefix = u.email.split("@")[0];
+      return prefix.charAt(0).toUpperCase() + prefix.slice(1);
+    }
+    return "Staff Member";
+  };
+
   return (
     <div className="space-y-6 animate-fadeIn">
       {/* Tab Header & Action */}
@@ -150,6 +159,7 @@ export function UsersTab({
               const roleInfo = getRoleBadge(u.role);
               const RoleIcon = roleInfo.icon;
               const isSelf = currentUser?._id === uId || currentUser?.id === uId;
+              const displayName = getUserDisplayName(u);
 
               return (
                 <div
@@ -159,12 +169,12 @@ export function UsersTab({
                   <div className="flex items-start justify-between gap-2">
                     <div className="flex items-center gap-3 min-w-0">
                       <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand/15 text-brand font-black text-sm">
-                        {u.name?.charAt(0).toUpperCase() || "U"}
+                        {displayName.charAt(0).toUpperCase() || "U"}
                       </div>
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center gap-2">
                           <span className="font-extrabold text-sm text-foreground truncate">
-                            {u.name}
+                            {displayName}
                           </span>
                           {isSelf && (
                             <span className="rounded-md bg-brand/10 border border-brand/20 px-1.5 py-0.2 text-[9px] font-bold text-brand uppercase tracking-wider">
@@ -190,7 +200,7 @@ export function UsersTab({
                       {!isSelf && (
                         <button
                           type="button"
-                          onClick={() => onDelete(uId, u.name)}
+                          onClick={() => onDelete(uId, displayName)}
                           className="rounded-lg p-1.5 text-foreground-muted hover:bg-rose-500/10 hover:text-rose-500 transition-colors cursor-pointer"
                           title="Delete User"
                         >
@@ -228,7 +238,7 @@ export function UsersTab({
           </div>
 
           {/* Desktop Data Table (Screen >= 768px) */}
-          <div className="hidden md:block overflow-hidden rounded-2xl border border-border bg-card">
+          <div className="hidden md:block overflow-hidden rounded-2xl border border-border bg-card shadow-xs">
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">
                 <thead className="border-b border-border bg-surface/70 text-[10px] font-bold uppercase tracking-wider text-foreground-subtle">
@@ -247,6 +257,7 @@ export function UsersTab({
                     const roleInfo = getRoleBadge(u.role);
                     const RoleIcon = roleInfo.icon;
                     const isSelf = currentUser?._id === uId || currentUser?.id === uId;
+                    const displayName = getUserDisplayName(u);
 
                     return (
                       <tr
@@ -256,12 +267,12 @@ export function UsersTab({
                         <td className="px-5 py-4">
                           <div className="flex items-center gap-3">
                             <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-brand/15 text-brand font-black text-xs">
-                              {u.name?.charAt(0).toUpperCase() || "U"}
+                              {displayName.charAt(0).toUpperCase() || "U"}
                             </div>
                             <div className="flex flex-col">
                               <div className="flex items-center gap-1.5">
                                 <span className="font-extrabold text-foreground">
-                                  {u.name}
+                                  {displayName}
                                 </span>
                                 {isSelf && (
                                   <span className="rounded-md bg-brand/10 border border-brand/20 px-1.5 py-0.2 text-[9px] font-bold text-brand uppercase tracking-wider">

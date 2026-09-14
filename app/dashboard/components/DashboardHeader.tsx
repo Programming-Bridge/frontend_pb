@@ -109,7 +109,7 @@ export function DashboardHeader({
       <div className="flex items-center gap-2 sm:gap-3 shrink-0">
         {/* Global Filter / Search input on tabs that support it */}
         {activeTab !== "overview" && activeTab !== "settings" && (
-          <div className="relative hidden xl:block w-44 2xl:w-60">
+          <div className="relative hidden sm:block w-36 md:w-48 lg:w-56 xl:w-64">
             <Search className="pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-foreground-subtle" />
             <input
               type="text"

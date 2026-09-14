@@ -34,7 +34,6 @@ import {
   LayoutDashboard,
   LogOut,
   ShieldCheck,
-  User as UserIcon,
   Home,
   FolderGit2,
   Mail,
@@ -42,7 +41,6 @@ import {
   Briefcase,
   Sparkles,
   Bot,
-  MessageSquare,
 } from "lucide-react";
 
 export function Navbar() {
@@ -308,21 +306,8 @@ export function Navbar() {
             )}
           </nav>
 
-          {/* Right Side Actions: ThemeToggle + ChatBot trigger + CTA / Admin Status */}
+          {/* Right Side Actions: ThemeToggle + CTA / Admin Status */}
           <div className="flex items-center gap-2.5 sm:gap-3">
-            <button
-              onClick={openGlobalChatBot}
-              title="Chat with AI Assistant"
-              aria-label="Open Chatbot Assistant"
-              className="relative flex h-9 w-9 items-center justify-center rounded-xl border border-border bg-surface text-foreground transition-all hover:border-brand/40 hover:bg-surface-hover hover:text-brand cursor-pointer"
-            >
-              <Bot className="h-4 w-4" />
-              <span className="absolute -top-0.5 -right-0.5 flex h-2 w-2">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75"></span>
-                <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500 ring-1 ring-card"></span>
-              </span>
-            </button>
-
             <ThemeToggle />
 
             {/* Authenticated Admin Controls vs Guest CTA */}

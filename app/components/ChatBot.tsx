@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import {
   MessageSquare,
   X,
@@ -15,78 +16,59 @@ import {
   Maximize2,
 } from "lucide-react";
 
+interface QuickAction {
+  label: string;
+  action: string;
+  href?: string;
+  budget?: string;
+}
+
 interface Message {
   id: string;
   sender: "bot" | "user";
   text: string;
   timestamp: string;
-  quickActions?: { label: string; action: string; href?: string }[];
+  quickActions?: QuickAction[];
 }
 
-const INITIAL_QUICK_ACTIONS = [
-  { label: "💼 Request a Project Quote", action: "quote" },
-  { label: "🛠️ Explore Services & Tech Stack", action: "services" },
-  { label: "📱 Chat on WhatsApp Directly", action: "whatsapp" },
-  { label: "⏱️ Pricing & Delivery Timelines", action: "pricing" },
-  { label: "👨‍💻 Speak with a Tech Lead", action: "contact" },
-  { label: "🚀 Careers & Open Roles", action: "careers" },
+const INITIAL_QUICK_ACTIONS: QuickAction[] = [
+  { label: "🚀 View Featured Projects", action: "navigate_portfolio", href: "/portfolio" },
+  { label: "💼 Explore Engineering Services", action: "navigate_services", href: "/services" },
+  { label: "💰 Request Instant Quotation", action: "quote_flow" },
+  { label: "⚡ Talk to Technical Lead", action: "whatsapp_connect" },
+  { label: "📅 Schedule Discovery Call", action: "navigate_contact", href: "/contact" },
 ];
 
-const BOT_KNOWLEDGE: { keywords: string[]; reply: string; quickActions?: { label: string; action: string; href?: string }[] }[] = [
+const BOT_KNOWLEDGE_BASE: { keywords: string[]; reply: string; quickActions?: QuickAction[] }[] = [
   {
-    keywords: ["quote", "cost", "price", "pricing", "budget", "rate", "estimate", "karcha", "paisa", "kitna"],
+    keywords: ["price", "cost", "quote", "pricing", "budget", "how much", "rate", "estimation"],
     reply:
-      "We offer affordable, flexible, and startup-friendly pricing customized to your requirements:\n\n• **Starter / MVP Web App**: $300 – $800 (delivered in 1–2 weeks)\n• **Custom Full-Stack Web & Mobile App**: $1,000 – $2,500 (3–6 weeks)\n• **Enterprise Cloud & AI Solutions**: $3,000+ (Dedicated sprint squads)\n\nWe also offer flexible milestone-based payments. Would you like to share your project details for an exact quote?",
+      "We provide affordable, high-efficiency engineering packages tailored for high-growth startups and global enterprises:\n\n• **MVP Launch Tier:** $300 – $800 (4–8 Business Days)\n• **Full-Stack SaaS Platform:** $1,000 – $2,500 (2–4 Weeks)\n• **Enterprise Distributed Architecture:** $3,000+ (Bespoke SLA)\n\nWould you like to start a formal project inquiry or discuss directly with our technical lead?",
     quickActions: [
-      { label: "📩 Open Contact & Quote Form", action: "navigate_contact", href: "/contact" },
-      { label: "📱 Chat on WhatsApp", action: "whatsapp" },
+      { label: "📝 Fill Project Inquiry", action: "navigate_contact", href: "/contact" },
+      { label: "💬 Connect on WhatsApp", action: "whatsapp_connect" },
     ],
   },
   {
-    keywords: ["service", "services", "offer", "tech", "technology", "stack", "react", "next", "node", "python", "mobile", "app", "web", "cloud", "ai", "kya karte ho", "khidmaat"],
+    keywords: ["service", "services", "offer", "capabilities", "tech stack", "what do you do"],
     reply:
-      "Programming Bridge specializes in full-lifecycle digital engineering:\n\n1. **Full-Stack Web Engineering**: Next.js 16, React 19, TypeScript, Tailwind CSS\n2. **High-Concurrency Backends**: Node.js, Express, Python FastAPI/Django, MongoDB, PostgreSQL\n3. **Native & Cross-Platform Mobile**: Kotlin (Android), Swift (iOS), Flutter\n4. **Cloud Infrastructure & DevOps**: AWS, Docker, Kubernetes, CI/CD, 99.9% Uptime SLA\n5. **AI & Machine Learning**: LLMs, Custom RAG Workflows, Intelligent Automation",
+      "Our full-cycle agency engineering disciplines include:\n\n1. **Bespoke Web & Cloud Systems** (Next.js 15, React 19, Node.js, Go)\n2. **Mobile App Engineering** (Kotlin Jetpack Compose, Flutter, React Native)\n3. **AI, LLMs & Multi-Agent Workflows** (PyTorch, RAG, Qdrant, LangChain)\n4. **Cloud Infrastructure & DevOps** (AWS, K8s, Docker, CI/CD)\n5. **Headless CMS & High-Volume E-Commerce** (WordPress ISR, Shopify, Medusa)",
     quickActions: [
-      { label: "🌐 View All Services", action: "navigate_services", href: "/services" },
-      { label: "🚀 View Featured Projects", action: "navigate_portfolio", href: "/portfolio" },
+      { label: "Explore All 8 Services", action: "navigate_services", href: "/services" },
+      { label: "View Client Case Studies", action: "navigate_portfolio", href: "/portfolio" },
     ],
   },
   {
-    keywords: ["timeline", "time", "duration", "kitna time", "kab tak", "delivery", "sprint", "fast"],
+    keywords: ["contact", "email", "phone", "call", "reach", "talk", "whatsapp", "meet"],
     reply:
-      "Our Agile delivery sprints are designed for rapid turnaround without compromising security or code quality:\n\n• **Discovery & Architecture**: 3–5 days\n• **MVP Production Build**: 2–4 weeks\n• **Full Product Release**: 6–12 weeks\n\nWe provide weekly demo staging links and zero-downtime automated deployments.",
+      "You can connect directly with our engineering leadership:\n\n• **Email:** `official@programmingbridge.org`\n• **WhatsApp Live:** `+92 315 5831940` (Instant Response)\n• **SLA Response Window:** Under 2 hours (24/7 Global Coverage)",
     quickActions: [
-      { label: "📋 Schedule a Tech Consultation", action: "navigate_contact", href: "/contact" },
+      { label: "Open WhatsApp Live Chat", action: "whatsapp_connect" },
+      { label: "Submit Inquiry Form", action: "navigate_contact", href: "/contact" },
     ],
   },
   {
-    keywords: ["career", "job", "jobs", "hire", "hiring", "apply", "internship", "developer", "engineer", "naukri", "vacancy"],
-    reply:
-      "We're always looking for top engineering talent! We have open roles in Full-Stack Web, Mobile Apps, Backend Systems, and AI Engineering. Check out our open positions and submit your application online.",
-    quickActions: [
-      { label: "💼 View Open Positions", action: "navigate_careers", href: "/about/careers" },
-      { label: "📝 Apply for a Role", action: "navigate_apply", href: "/about/careers/apply" },
-    ],
-  },
-  {
-    keywords: ["contact", "email", "phone", "call", "office", "address", "reach", "location", "kahan", "rabta"],
-    reply:
-      "You can connect directly with our engineering and partnership team:\n\n• **WhatsApp**: +92 315 5831940\n• **Email**: official@programmingbridge.org\n• **Website**: www.programmingbridge.org\n• **Response SLA**: Within 2 business hours",
-    quickActions: [
-      { label: "📱 Chat on WhatsApp", action: "whatsapp" },
-      { label: "📩 Send Direct Inquiry", action: "navigate_contact", href: "/contact" },
-    ],
-  },
-  {
-    keywords: ["whatsapp", "wa", "number", "chat", "msg"],
-    reply:
-      "You can reach us directly on WhatsApp at **+92 315 5831940** for instant discussions and technical consultations.",
-    quickActions: [
-      { label: "📱 Open WhatsApp Chat", action: "whatsapp" },
-    ],
-  },
-  {
-    keywords: ["hello", "hi", "hey", "salam", "assalam", "morning", "afternoon", "evening", "kese ho", "kaise"],
+    keywords: ["hello", "hi", "hey", "assalam", "good morning", "good evening"],
     reply:
       "Hello! 👋 Welcome to Programming Bridge. I'm your digital engineering assistant. How can we help elevate your software, web, mobile, or AI product today?",
     quickActions: INITIAL_QUICK_ACTIONS.slice(0, 4),
@@ -100,6 +82,11 @@ export function openGlobalChatBot() {
 }
 
 export function ChatBot() {
+  const pathname = usePathname();
+  if (pathname?.startsWith("/dashboard") || pathname?.startsWith("/login")) {
+    return null;
+  }
+
   const [isOpen, setIsOpen] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
   const [showPromptBadge, setShowPromptBadge] = useState(false);
@@ -248,7 +235,7 @@ export function ChatBot() {
     // AI Knowledge matching
     setTimeout(() => {
       const lower = query.toLowerCase();
-      let matched = BOT_KNOWLEDGE.find((item) =>
+      let matched = BOT_KNOWLEDGE_BASE.find((item) =>
         item.keywords.some((kw) => lower.includes(kw))
       );
 

@@ -77,8 +77,29 @@ export function BannerModal({
         <form onSubmit={(e) => onSubmit(e, uploadedFile)} className="mt-5 space-y-4">
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
-              <label className="text-xs font-bold text-foreground">Badge Tagline</label>
+              <label htmlFor="banner-pageType" className="text-xs font-bold text-foreground">
+                Page / Route Target *
+              </label>
+              <select
+                id="banner-pageType"
+                name="pageType"
+                required
+                defaultValue={banner?.pageType || "web-development"}
+                className="mt-1 h-9 w-full rounded-xl border border-border bg-surface px-3 text-xs text-foreground focus:border-brand focus:outline-none"
+              >
+                <option value="web-development">Web Development (/services/web-development)</option>
+                <option value="wordpress-development">WordPress & CMS (/services/wordpress-development)</option>
+                <option value="app-development">Mobile App Engineering (/services/app-development)</option>
+                <option value="ai-automation">AI & ML Automation (/services/ai-automation)</option>
+              </select>
+            </div>
+
+            <div>
+              <label htmlFor="banner-badge" className="text-xs font-bold text-foreground">
+                Badge Tagline
+              </label>
               <input
+                id="banner-badge"
                 type="text"
                 name="badge"
                 defaultValue={banner?.badge || "Next-Gen Agency"}
@@ -86,10 +107,15 @@ export function BannerModal({
                 className="mt-1 h-9 w-full rounded-xl border border-border bg-surface px-3 text-xs text-foreground focus:border-brand focus:outline-none"
               />
             </div>
+          </div>
 
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
-              <label className="text-xs font-bold text-foreground">Display Order</label>
+              <label htmlFor="banner-order" className="text-xs font-bold text-foreground">
+                Display Order
+              </label>
               <input
+                id="banner-order"
                 type="number"
                 name="order"
                 defaultValue={banner?.order ?? 1}
