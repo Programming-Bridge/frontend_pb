@@ -47,6 +47,19 @@ const nextConfig: NextConfig = {
   async headers() {
     return [
       {
+        source: "/dashboard/:path*",
+        headers: [
+          {
+            key: "X-Frame-Options",
+            value: "DENY",
+          },
+          {
+            key: "Content-Security-Policy",
+            value: "frame-ancestors 'none';",
+          },
+        ],
+      },
+      {
         source: "/(.*)",
         headers: [
           {
@@ -75,7 +88,7 @@ const nextConfig: NextConfig = {
           },
           {
             key: "Content-Security-Policy",
-            value: "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline' https://va.vercel-scripts.com https://embed.tawk.to https://*.tawk.to https://tawk.to https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://embed.tawk.to https://*.tawk.to https://tawk.to https://cdn.jsdelivr.net; font-src 'self' https://fonts.gstatic.com https://embed.tawk.to https://*.tawk.to https://tawk.to data:; img-src 'self' data: blob: https: http:; media-src 'self' https://embed.tawk.to https://*.tawk.to https://tawk.to data: blob:; connect-src 'self' https: http: ws: wss: https://*.tawk.to wss://*.tawk.to https://embed.tawk.to; frame-src 'self' https://tawk.to https://*.tawk.to https://embed.tawk.to; object-src 'none';",
+            value: "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline' https://va.vercel-scripts.com https://embed.tawk.to https://*.tawk.to https://tawk.to https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://embed.tawk.to https://*.tawk.to https://tawk.to https://cdn.jsdelivr.net; font-src 'self' https://fonts.gstatic.com https://embed.tawk.to https://*.tawk.to https://tawk.to data:; img-src 'self' data: blob: https: http:; media-src 'self' https://embed.tawk.to https://*.tawk.to https://tawk.to data: blob:; connect-src 'self' https: http: ws: wss: https://*.tawk.to wss://*.tawk.to https://embed.tawk.to; frame-src 'self' https://tawk.to https://*.tawk.to https://embed.tawk.to; frame-ancestors 'self'; object-src 'none';",
           },
         ],
       },

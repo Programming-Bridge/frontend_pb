@@ -151,7 +151,20 @@ export default function DashboardPage() {
     itemName: "",
   });
 
-  // 1. Session verification on mount
+  const tabTitleMap: Record<ActiveTab, string> = {
+    overview: "System Overview",
+    banners: "Hero Banners",
+    projects: "Portfolio Projects",
+    technologies: "Tech Stack",
+    services: "Service Offerings",
+    careers: "Careers & Recruitment",
+    inquiries: "Client Inquiries",
+    team: "Team Directory",
+    users: "Admin Access",
+    settings: "Admin Settings",
+  };
+
+  // 1. Session verification and URL tab synchronization on mount
   useEffect(() => {
     const token = getToken();
     const user = getUser();
@@ -164,9 +177,131 @@ export default function DashboardPage() {
       dispatch(setCredentials({ token, user }));
     }
     setAuthChecked(true);
+
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const tabParam = params.get("tab") as ActiveTab | null;
+      const validTabs: ActiveTab[] = [
+        "overview",
+        "banners",
+        "projects",
+        "technologies",
+        "services",
+        "careers",
+        "inquiries",
+        "team",
+        "users",
+        "settings",
+      ];
+      if (tabParam && validTabs.includes(tabParam)) {
+        setActiveTab(tabParam);
+        document.title = `${tabTitleMap[tabParam]} | Admin Panel - Programming Bridge`;
+      } else {
+        document.title = `System Overview | Admin Panel - Programming Bridge`;
+      }
+    }
   }, [dispatch, router]);
 
-  // 2. Fetch all collections
+  // Tab navigation handler with URL query sync and scroll-to-top
+  const handleSelectTab = (tab: ActiveTab) => {
+    setActiveTab(tab);
+    setSearchQuery("");
+    if (typeof window !== "undefined") {
+      const url = new URL(window.location.href);
+      url.searchParams.set("tab", tab);
+      window.history.pushState({}, "", url.toString());
+      document.title = `${tabTitleMap[tab] || "Dashboard"} | Admin Panel - Programming Bridge`;
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
+
+  // 2. Individual targeted collection fetchers
+  const fetchBanners = async () => {
+    try {
+      const res = await getBanners();
+      setBanners(res || []);
+    } catch (e) {
+      console.error("Failed to fetch banners:", e);
+    }
+  };
+
+  const fetchProjects = async () => {
+    try {
+      const res = await getProjects();
+      setProjects(res || []);
+    } catch (e) {
+      console.error("Failed to fetch projects:", e);
+    }
+  };
+
+  const fetchTechnologies = async () => {
+    try {
+      const res = await getTechnologies("all");
+      setTechnologies(res || []);
+    } catch (e) {
+      console.error("Failed to fetch technologies:", e);
+    }
+  };
+
+  const fetchServices = async () => {
+    try {
+      const res = await getServiceCards();
+      setServices(res || []);
+    } catch (e) {
+      console.error("Failed to fetch services:", e);
+    }
+  };
+
+  const fetchCareers = async () => {
+    try {
+      const res = await getCareers();
+      setCareers(res || []);
+    } catch (e) {
+      console.error("Failed to fetch careers:", e);
+    }
+  };
+
+  const fetchApplications = async () => {
+    try {
+      const res = await getApplications();
+      setApplications(res || []);
+    } catch (e) {
+      console.error("Failed to fetch applications:", e);
+    }
+  };
+
+  const fetchInquiries = async () => {
+    try {
+      const res = await getInquiries();
+      setInquiries(res || []);
+    } catch (e) {
+      console.error("Failed to fetch inquiries:", e);
+    }
+  };
+
+  const fetchTeam = async () => {
+    try {
+      const res = await getTeamMembers();
+      setTeamMembers(res || []);
+    } catch (e) {
+      console.error("Failed to fetch team:", e);
+    }
+  };
+
+  const fetchUsers = async () => {
+    try {
+      const user = getUser();
+      const isSuper = user?.role === "superadmin" || currentUser?.role === "superadmin";
+      if (isSuper) {
+        const res = await getAllUsers();
+        setUsers(res || []);
+      }
+    } catch (e) {
+      console.error("Failed to fetch users:", e);
+    }
+  };
+
+  // Fetch all collections
   const loadAllData = async () => {
     setIsLoadingData(true);
     try {
@@ -217,6 +352,34 @@ export default function DashboardPage() {
     }
   }, [authChecked]);
 
+  // 3. Modal body scroll lock and Escape key listener
+  const isAnyModalOpen = Boolean(modalType || deleteModal.isOpen);
+
+  useEffect(() => {
+    if (isAnyModalOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        if (deleteModal.isOpen) {
+          setDeleteModal({ isOpen: false, type: null, id: null, title: "" });
+        } else if (modalType) {
+          setModalType(null);
+          setSelectedItem(null);
+        }
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.body.style.overflow = "";
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isAnyModalOpen, modalType, deleteModal.isOpen]);
+
   // Toast Helper
   const showToast = (type: "success" | "error" | "info", message: string) => {
     setToast({ type, message });
@@ -235,7 +398,10 @@ export default function DashboardPage() {
   const handleSaveBanner = async (e: React.FormEvent<HTMLFormElement>, file: File | null) => {
     e.preventDefault();
     setIsSubmitting(true);
-    const formData = new FormData(e.currentTarget);
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+    const isActive = (form.elements.namedItem("isActive") as HTMLInputElement)?.checked ?? false;
+    formData.set("isActive", String(isActive));
     if (file) formData.set("image", file);
 
     try {
@@ -248,7 +414,7 @@ export default function DashboardPage() {
       }
       setModalType(null);
       setSelectedItem(null);
-      loadAllData();
+      fetchBanners();
     } catch (err) {
       const msg = err instanceof Error ? err.message : "Failed to save banner.";
       showToast("error", msg);
@@ -261,7 +427,12 @@ export default function DashboardPage() {
   const handleSaveProject = async (e: React.FormEvent<HTMLFormElement>, file: File | null) => {
     e.preventDefault();
     setIsSubmitting(true);
-    const formData = new FormData(e.currentTarget);
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+    const isActive = (form.elements.namedItem("isActive") as HTMLInputElement)?.checked ?? false;
+    const featured = (form.elements.namedItem("featured") as HTMLInputElement)?.checked ?? false;
+    formData.set("isActive", String(isActive));
+    formData.set("featured", String(featured));
     if (file) formData.set("image", file);
 
     try {
@@ -274,7 +445,7 @@ export default function DashboardPage() {
       }
       setModalType(null);
       setSelectedItem(null);
-      loadAllData();
+      fetchProjects();
     } catch (err) {
       const msg = err instanceof Error ? err.message : "Failed to save project.";
       showToast("error", msg);
@@ -287,7 +458,10 @@ export default function DashboardPage() {
   const handleSaveTech = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
-    const formData = new FormData(e.currentTarget);
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+    const isActive = (form.elements.namedItem("isActive") as HTMLInputElement)?.checked ?? false;
+    const invertInDark = (form.elements.namedItem("invertInDark") as HTMLInputElement)?.checked ?? false;
 
     const payload: TechnologyPayload = {
       name: formData.get("name") as string,
@@ -299,8 +473,8 @@ export default function DashboardPage() {
       shortDesc: formData.get("shortDesc") as string,
       highlight: formData.get("highlight") as string,
       order: Number(formData.get("order")) || 0,
-      isActive: formData.get("isActive") === "on",
-      invertInDark: formData.get("invertInDark") === "on",
+      isActive,
+      invertInDark,
     };
 
     try {
@@ -313,7 +487,7 @@ export default function DashboardPage() {
       }
       setModalType(null);
       setSelectedItem(null);
-      loadAllData();
+      fetchTechnologies();
     } catch (err) {
       const msg = err instanceof Error ? err.message : "Failed to save technology.";
       showToast("error", msg);
@@ -327,7 +501,7 @@ export default function DashboardPage() {
     try {
       await seedTechnologies();
       showToast("success", "Technologies catalog seeded successfully!");
-      loadAllData();
+      fetchTechnologies();
     } catch (err) {
       const msg = err instanceof Error ? err.message : "Failed to seed technologies.";
       showToast("error", msg);
@@ -340,7 +514,9 @@ export default function DashboardPage() {
   const handleSaveService = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
-    const formData = new FormData(e.currentTarget);
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+    const isActive = (form.elements.namedItem("isActive") as HTMLInputElement)?.checked ?? false;
     const tagsStr = (formData.get("tags") as string) || "";
     const tags = tagsStr.split(",").map((t) => t.trim()).filter(Boolean);
 
@@ -352,7 +528,7 @@ export default function DashboardPage() {
       link: formData.get("link") as string,
       tags,
       order: Number(formData.get("order")) || 0,
-      isActive: formData.get("isActive") === "on",
+      isActive,
     };
 
     try {
@@ -365,7 +541,7 @@ export default function DashboardPage() {
       }
       setModalType(null);
       setSelectedItem(null);
-      loadAllData();
+      fetchServices();
     } catch (err) {
       const msg = err instanceof Error ? err.message : "Failed to save service.";
       showToast("error", msg);
@@ -378,7 +554,10 @@ export default function DashboardPage() {
   const handleSaveCareer = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
-    const formData = new FormData(e.currentTarget);
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+    const isOpen = (form.elements.namedItem("isOpen") as HTMLInputElement)?.checked ?? false;
+    const isActive = (form.elements.namedItem("isActive") as HTMLInputElement)?.checked ?? false;
     const skillsStr = (formData.get("skills") as string) || "";
     const skills = skillsStr.split(",").map((s) => s.trim()).filter(Boolean);
 
@@ -391,8 +570,8 @@ export default function DashboardPage() {
       salaryRange: formData.get("salaryRange") as string,
       description: formData.get("description") as string,
       skills,
-      isOpen: formData.get("isOpen") === "on",
-      isActive: formData.get("isActive") === "on",
+      isOpen,
+      isActive,
     };
 
     try {
@@ -405,7 +584,7 @@ export default function DashboardPage() {
       }
       setModalType(null);
       setSelectedItem(null);
-      loadAllData();
+      fetchCareers();
     } catch (err) {
       const msg = err instanceof Error ? err.message : "Failed to save job opening.";
       showToast("error", msg);
@@ -418,7 +597,10 @@ export default function DashboardPage() {
   const handleSaveTeam = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
-    const formData = new FormData(e.currentTarget);
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+    const featured = (form.elements.namedItem("featured") as HTMLInputElement)?.checked ?? false;
+    const isActive = (form.elements.namedItem("isActive") as HTMLInputElement)?.checked ?? false;
     const skillsStr = (formData.get("skills") as string) || "";
     const skills = skillsStr.split(",").map((s) => s.trim()).filter(Boolean);
 
@@ -430,8 +612,8 @@ export default function DashboardPage() {
       avatar: formData.get("avatar") as string,
       experience: formData.get("experience") as string,
       skills,
-      featured: formData.get("featured") === "on",
-      isActive: formData.get("isActive") === "on",
+      featured,
+      isActive,
       socialLinks: {
         github: (formData.get("github") as string) || "",
         linkedin: (formData.get("linkedin") as string) || "",
@@ -449,7 +631,7 @@ export default function DashboardPage() {
       }
       setModalType(null);
       setSelectedItem(null);
-      loadAllData();
+      fetchTeam();
     } catch (err) {
       const msg = err instanceof Error ? err.message : "Failed to save team member.";
       showToast("error", msg);
@@ -634,10 +816,7 @@ export default function DashboardPage() {
       {/* 100% Height Fixed Dashboard Sidebar */}
       <DashboardSidebar
         activeTab={activeTab}
-        onSelectTab={(tab) => {
-          setActiveTab(tab);
-          setSearchQuery("");
-        }}
+        onSelectTab={handleSelectTab}
         currentUser={currentUser}
         onLogout={handleLogout}
         isMobileOpen={isMobileMenuOpen}
@@ -668,7 +847,7 @@ export default function DashboardPage() {
             <OverviewTab
               stats={dashboardStats}
               currentUser={currentUser}
-              onNavigateTab={setActiveTab}
+              onNavigateTab={handleSelectTab}
               onOpenCreateModal={(tab) => {
                 if (tab === "projects") setModalType("add-project");
                 if (tab === "careers") setModalType("add-career");

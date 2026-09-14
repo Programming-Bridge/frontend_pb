@@ -37,7 +37,8 @@ export function BannersTab({
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
         <div>
           <h2 className="text-base sm:text-lg font-extrabold text-foreground tracking-tight">
-            Homepage Hero Banners ({banners.length})
+            Homepage Hero Banners ({filteredBanners.length}
+            {filteredBanners.length !== banners.length ? ` of ${banners.length}` : ""})
           </h2>
           <p className="text-[11px] sm:text-xs text-foreground-muted">
             Manage high-converting headlines, value propositions, and background graphics

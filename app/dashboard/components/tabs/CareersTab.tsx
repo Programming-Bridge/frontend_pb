@@ -105,7 +105,10 @@ export function CareersTab({
           }`}
         >
           <Briefcase className="h-4 w-4 shrink-0" />
-          <span className="whitespace-nowrap">Job Openings ({careers.length})</span>
+          <span className="whitespace-nowrap">
+            Job Openings ({filteredCareers.length}
+            {filteredCareers.length !== careers.length ? ` of ${careers.length}` : ""})
+          </span>
         </button>
 
         <button
@@ -118,7 +121,10 @@ export function CareersTab({
           }`}
         >
           <UserCheck className="h-4 w-4 shrink-0" />
-          <span className="whitespace-nowrap">Candidate Applications ({applications.length})</span>
+          <span className="whitespace-nowrap">
+            Candidate Applications ({filteredApplications.length}
+            {filteredApplications.length !== applications.length ? ` of ${applications.length}` : ""})
+          </span>
           {pendingCount > 0 && (
             <span className="shrink-0 whitespace-nowrap rounded-full bg-black/20 px-2 py-0.5 text-[10px] font-extrabold text-black">
               {pendingCount} new

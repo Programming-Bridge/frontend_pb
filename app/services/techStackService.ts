@@ -48,10 +48,15 @@ export const sanitizeTechItem = (item: TechStackItem): TechStackItem => {
 };
 
 export const getTechnologies = async (
-  domain?: "software" | "ai-ml" | "mobile" | "all"
+  domain?: "software" | "ai-ml" | "mobile" | "all",
+  includeInactive?: boolean
 ): Promise<TechStackItem[]> => {
   try {
-    const url = domain && domain !== "all" ? `/tech-stack?domain=${domain}` : "/tech-stack";
+    const params = new URLSearchParams();
+    if (domain && domain !== "all") params.append("domain", domain);
+    if (includeInactive) params.append("includeInactive", "true");
+    const query = params.toString() ? `?${params.toString()}` : "";
+    const url = `/tech-stack${query}`;
     const response = await cachedGet<any>(url);
 
     // Case 1: Backend returns { success: true, count: N, data: TechStackItem[] }

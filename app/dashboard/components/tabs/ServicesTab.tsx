@@ -36,7 +36,8 @@ export function ServicesTab({
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
         <div>
           <h2 className="text-base sm:text-lg font-extrabold text-foreground tracking-tight">
-            Service Capabilities ({services.length})
+            Service Capabilities ({filteredServices.length}
+            {filteredServices.length !== services.length ? ` of ${services.length}` : ""})
           </h2>
           <p className="text-[11px] sm:text-xs text-foreground-muted">
             Manage engineering service cards, technical skillsets, and client solutions

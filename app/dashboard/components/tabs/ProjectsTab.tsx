@@ -48,7 +48,8 @@ export function ProjectsTab({
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
         <div>
           <h2 className="text-base sm:text-lg font-extrabold text-foreground tracking-tight">
-            Portfolio & Case Studies ({projects.length})
+            Portfolio & Case Studies ({filteredProjects.length}
+            {filteredProjects.length !== projects.length ? ` of ${projects.length}` : ""})
           </h2>
           <p className="text-[11px] sm:text-xs text-foreground-muted">
             Manage public client success stories, live demos, and technologies stack badges
@@ -97,6 +98,9 @@ export function ProjectsTab({
           {filteredProjects.map((proj) => {
             const pId = proj._id || proj.id || "";
             const imageSrc = proj.image || proj.img || proj.imageUrl;
+            const validTechs = (proj.technologies || []).filter(
+              (t) => typeof t === "string" && t.trim().length > 0
+            );
 
             return (
               <div
@@ -172,9 +176,9 @@ export function ProjectsTab({
                   </p>
 
                   {/* Tech stack badges */}
-                  {proj.technologies && proj.technologies.length > 0 && (
+                  {validTechs.length > 0 && (
                     <div className="mt-3 flex flex-wrap gap-1">
-                      {proj.technologies.slice(0, 4).map((tech, idx) => (
+                      {validTechs.slice(0, 4).map((tech, idx) => (
                         <span
                           key={idx}
                           className="rounded-md bg-surface border border-border px-1.5 py-0.5 text-[10px] font-semibold text-foreground-muted"
@@ -182,9 +186,9 @@ export function ProjectsTab({
                           {tech}
                         </span>
                       ))}
-                      {proj.technologies.length > 4 && (
+                      {validTechs.length > 4 && (
                         <span className="rounded-md bg-surface border border-border px-1.5 py-0.5 text-[10px] font-semibold text-brand">
-                          +{proj.technologies.length - 4} more
+                          +{validTechs.length - 4} more
                         </span>
                       )}
                     </div>

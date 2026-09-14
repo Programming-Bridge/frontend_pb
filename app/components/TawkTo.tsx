@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { useTheme } from "next-themes";
+import { usePathname } from "next/navigation";
 
 declare global {
   interface Window {
@@ -11,15 +12,23 @@ declare global {
 }
 
 export function TawkTo() {
+  const pathname = usePathname();
+  const isExcludedRoute = pathname?.startsWith("/dashboard") || pathname?.startsWith("/login");
   const propertyId =
     process.env.NEXT_PUBLIC_TAWK_PROPERTY_ID?.trim() || "6a9eabc827a69434428b8879";
   const widgetId =
     process.env.NEXT_PUBLIC_TAWK_WIDGET_ID?.trim() || "1k1tsu280";
   const { resolvedTheme } = useTheme();
 
+  useEffect(() => {
+    if (isExcludedRoute && typeof window !== "undefined" && window.Tawk_API?.hideWidget) {
+      window.Tawk_API.hideWidget();
+    }
+  }, [isExcludedRoute]);
+
   // 1. Deferred Script Injection (Finding 3: recovered main thread for fast first paint)
   useEffect(() => {
-    if (!propertyId || typeof window === "undefined") return;
+    if (isExcludedRoute || !propertyId || typeof window === "undefined") return;
 
     const loadTawkScript = () => {
       window.Tawk_API = window.Tawk_API || {};

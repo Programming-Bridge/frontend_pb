@@ -45,7 +45,8 @@ export function InquiriesTab({
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
           <h2 className="text-lg font-extrabold text-foreground tracking-tight">
-            Client Inquiries & Project Leads ({inquiries.length})
+            Client Inquiries & Project Leads ({filteredInquiries.length}
+            {filteredInquiries.length !== inquiries.length ? ` of ${inquiries.length}` : ""})
           </h2>
           <p className="text-xs text-foreground-muted">
             Manage inbound client contact forms, project scopes, and follow-ups
@@ -121,7 +122,7 @@ export function InquiriesTab({
                     </div>
                   </div>
 
-                  <p className="text-xs text-foreground-muted line-clamp-2 leading-relaxed bg-surface/40 p-2.5 rounded-xl border border-border/60">
+                  <p className="text-xs text-foreground-muted line-clamp-2 leading-relaxed bg-surface/40 p-2.5 rounded-xl border border-border/60 break-words overflow-hidden">
                     {inq.message}
                   </p>
 

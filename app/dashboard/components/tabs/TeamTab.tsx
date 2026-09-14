@@ -38,7 +38,8 @@ export function TeamTab({
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
         <div>
           <h2 className="text-base sm:text-lg font-extrabold text-foreground tracking-tight">
-            Engineering Team & Leadership ({teamMembers.length})
+            Engineering Team & Leadership ({filteredTeam.length}
+            {filteredTeam.length !== teamMembers.length ? ` of ${teamMembers.length}` : ""})
           </h2>
           <p className="text-[11px] sm:text-xs text-foreground-muted">
             Manage public team bios, architect designations, core skills, and social handles
