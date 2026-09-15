@@ -238,7 +238,7 @@ export function ProjectsSection({ isPage = false, className = "" }: ProjectsSect
                 )}
 
                 {/* Top Badge Overlay */}
-                <div className="absolute left-3.5 top-3.5 z-30 flex items-center gap-2 pointer-events-none">
+                <div className="absolute left-3.5 top-3.5 z-30 flex items-center gap-2 pointer-events-none flex-wrap">
                   {project.badge ? (
                     <span className="rounded-full bg-surface/90 px-2.5 py-1 text-xs font-bold uppercase tracking-wider text-brand backdrop-blur-md border border-brand/20 shadow-xs">
                       {project.badge}
@@ -248,6 +248,29 @@ export function ProjectsSection({ isPage = false, className = "" }: ProjectsSect
                       Featured
                     </span>
                   ) : null}
+
+                  {project.status && (
+                    <span
+                      className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-bold tracking-wide backdrop-blur-md shadow-xs border ${
+                        project.status === "In Progress"
+                          ? "bg-amber-500/90 text-black border-amber-300/40"
+                          : project.status === "Upcoming"
+                          ? "bg-blue-600/90 text-white border-blue-400/30"
+                          : "bg-emerald-600/90 text-white border-emerald-400/30"
+                      }`}
+                    >
+                      {project.status === "In Progress" ? (
+                        <>
+                          <span className="h-1.5 w-1.5 rounded-full bg-black animate-pulse" />
+                          <span>In Progress</span>
+                        </>
+                      ) : project.status === "Upcoming" ? (
+                        <span>Upcoming</span>
+                      ) : (
+                        <span>✓ Completed</span>
+                      )}
+                    </span>
+                  )}
                 </div>
 
                 {/* Hover Overlay */}

@@ -37,6 +37,7 @@ export function ProjectsTab({
       p.title?.toLowerCase().includes(q) ||
       p.client?.toLowerCase().includes(q) ||
       p.description?.toLowerCase().includes(q) ||
+      p.status?.toLowerCase().includes(q) ||
       p.technologies?.some((t) => t.toLowerCase().includes(q));
 
     return matchesCategory && matchesQuery;
@@ -125,7 +126,7 @@ export function ProjectsTab({
                     )}
 
                     {/* Badges on image */}
-                    <div className="absolute top-2.5 left-2.5 flex items-center gap-1.5">
+                    <div className="absolute top-2.5 left-2.5 flex items-center gap-1.5 flex-wrap">
                       {proj.featured && (
                         <span className="flex items-center gap-1 rounded-md bg-black/70 backdrop-blur-md px-2 py-0.5 text-[10px] font-bold text-amber-400 border border-amber-400/30">
                           <Star className="h-2.5 w-2.5 fill-amber-400" />
@@ -135,6 +136,28 @@ export function ProjectsTab({
                       <span className="rounded-md bg-black/70 backdrop-blur-md px-2 py-0.5 text-[10px] font-bold text-white border border-white/10">
                         {proj.category || "Web App"}
                       </span>
+                      {proj.status && (
+                        <span
+                          className={`flex items-center gap-1 rounded-md px-2 py-0.5 text-[10px] font-bold backdrop-blur-md border ${
+                            proj.status === "In Progress"
+                              ? "bg-amber-500/90 text-black border-amber-300/40"
+                              : proj.status === "Upcoming"
+                              ? "bg-blue-600/90 text-white border-blue-300/40"
+                              : "bg-emerald-600/90 text-white border-emerald-400/40"
+                          }`}
+                        >
+                          {proj.status === "In Progress" ? (
+                            <>
+                              <span className="h-1.5 w-1.5 rounded-full bg-black animate-pulse" />
+                              <span>In Progress</span>
+                            </>
+                          ) : proj.status === "Upcoming" ? (
+                            <span>Upcoming</span>
+                          ) : (
+                            <span>✓ Completed</span>
+                          )}
+                        </span>
+                      )}
                     </div>
                   </div>
 
