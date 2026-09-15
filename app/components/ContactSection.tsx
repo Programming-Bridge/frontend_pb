@@ -137,7 +137,7 @@ export function ContactSection({ isPage = false, className = "" }: ContactSectio
       <div className="mt-14 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
         {/* Left Column: Info & SLAs */}
         <div className="lg:col-span-5 space-y-6">
-          <div className="rounded-2xl border border-card-border bg-card p-6 sm:p-8 shadow-xs">
+          <div className="rounded-2xl border border-card-border border-l-[5px] border-l-brand bg-card p-6 sm:p-8 shadow-xs">
             <h3 className="text-lg font-bold text-foreground">What to expect</h3>
             <p className="mt-2 text-xs sm:text-sm text-foreground-muted leading-relaxed">
               Direct conversations with engineers who write code—not sales representatives.
@@ -169,7 +169,7 @@ export function ContactSection({ isPage = false, className = "" }: ContactSectio
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <a
               href="mailto:official@programmingbridge.org"
-              className="group flex flex-col rounded-xl border border-card-border bg-card p-4 transition-all hover:border-brand/40 hover:shadow-xs"
+              className="group flex flex-col rounded-xl border border-card-border border-l-[4px] border-l-brand bg-card p-4 transition-all hover:border-brand/40 hover:shadow-xs"
             >
               <div className="flex items-center gap-2 text-brand">
                 <Mail className="h-4 w-4" />
@@ -181,7 +181,7 @@ export function ContactSection({ isPage = false, className = "" }: ContactSectio
               <span className="text-xs text-foreground-subtle mt-0.5">Avg response: &lt; 2 hours</span>
             </a>
 
-            <div className="flex flex-col rounded-xl border border-card-border bg-card p-4">
+            <div className="flex flex-col rounded-xl border border-card-border border-l-[4px] border-l-brand bg-card p-4">
               <div className="flex items-center gap-2 text-brand-cyan">
                 <Globe className="h-4 w-4" />
                 <span className="text-xs font-bold uppercase tracking-wider">Availability</span>
@@ -194,7 +194,7 @@ export function ContactSection({ isPage = false, className = "" }: ContactSectio
 
         {/* Right Column: Form */}
         <div className="lg:col-span-7">
-          <div className="rounded-2xl border border-card-border bg-card p-6 sm:p-8 shadow-xs">
+          <div className="rounded-2xl border border-card-border border-l-[5px] border-l-brand bg-card p-6 sm:p-8 shadow-xs">
             {successMessage ? (
               <div className="py-12 flex flex-col items-center text-center space-y-4">
                 <div className="flex h-14 w-14 items-center justify-center rounded-full bg-brand/10 text-brand ring-8 ring-brand/5">

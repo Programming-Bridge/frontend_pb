@@ -139,6 +139,26 @@ select:focus-visible,
   animation-play-state: paused;
 }
 
+/* Project Cards Auto-Moving Infinite Marquee */
+@keyframes project-marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-project-marquee {
+  display: flex;
+  width: max-content;
+  animation: project-marquee 50s linear infinite;
+}
+
+.animate-project-marquee:hover {
+  animation-play-state: paused;
+}
+
 /* Mobile Drawer & Fade Transitions */
 @keyframes drawerFadeIn {
   from {

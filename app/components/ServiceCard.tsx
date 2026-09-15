@@ -83,7 +83,7 @@ export function ServiceCard({ card, index = 0 }: ServiceCardProps) {
 
   return (
     <div
-      className="group relative flex h-full min-h-[380px] flex-col justify-between overflow-hidden rounded-2xl border border-card-border bg-card p-6 sm:p-7 shadow-sm transition-all duration-300 hover:-translate-y-1.5 hover:border-brand/40 hover:shadow-xl hover:shadow-brand/5"
+      className="group relative flex h-full min-h-[380px] flex-col justify-between overflow-hidden rounded-2xl border border-card-border border-l-[5px] border-l-brand bg-card p-6 sm:p-7 shadow-sm transition-all duration-300 hover:-translate-y-1.5 hover:border-l-brand-hover hover:border-brand/40 hover:shadow-xl hover:shadow-brand/5"
       style={{
         animationDelay: `${index * 100}ms`,
       }}

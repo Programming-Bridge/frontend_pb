@@ -13,7 +13,7 @@ export function ServicesSkeleton() {
       />
       <div className="mt-14 sm:mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {Array.from({ length: 4 }).map((_, idx) => (
-          <div key={idx} className="flex flex-col justify-between rounded-2xl border border-card-border bg-card p-6 shadow-xs">
+          <div key={idx} className="flex flex-col justify-between rounded-2xl border border-card-border border-l-[5px] border-l-brand bg-card p-6 shadow-xs">
             <div>
               <div className="flex items-center justify-between">
                 <div className="h-11 w-11 rounded-xl skeleton-box animate-shimmer" />

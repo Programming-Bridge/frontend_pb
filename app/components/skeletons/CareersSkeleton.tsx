@@ -2,7 +2,7 @@ export function CareersSkeleton() {
   return (
     <div className="space-y-6 max-w-4xl mx-auto w-full">
       {Array.from({ length: 3 }).map((_, idx) => (
-        <div key={idx} className="flex flex-col gap-5 rounded-2xl border border-card-border bg-card p-6 sm:p-8 shadow-xs">
+        <div key={idx} className="flex flex-col gap-5 rounded-2xl border border-card-border border-l-[5px] border-l-brand bg-card p-6 sm:p-8 shadow-xs">
           <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
             <div className="space-y-3 flex-1">
               <div className="flex items-center gap-2">

@@ -160,7 +160,7 @@ export function OverviewTab({
       {/* Quick Feeds: Recent Inquiries + Recent Job Applicants */}
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         {/* Recent Inquiries Card */}
-        <div className="rounded-2xl border border-border bg-card p-5 space-y-4">
+        <div className="rounded-2xl border border-border border-l-[5px] border-l-brand bg-card p-5 space-y-4">
           <div className="flex items-center justify-between border-b border-border pb-3">
             <div className="flex items-center gap-2">
               <div className="flex h-8 w-8 shrink-0 aspect-square items-center justify-center rounded-lg bg-brand/15 text-brand">
@@ -216,7 +216,7 @@ export function OverviewTab({
         </div>
 
         {/* Recent Applications Card */}
-        <div className="rounded-2xl border border-border bg-card p-5 space-y-4">
+        <div className="rounded-2xl border border-border border-l-[5px] border-l-brand bg-card p-5 space-y-4">
           <div className="flex items-center justify-between border-b border-border pb-3">
             <div className="flex items-center gap-2">
               <div className="flex h-8 w-8 shrink-0 aspect-square items-center justify-center rounded-lg bg-amber-500/15 text-amber-500">

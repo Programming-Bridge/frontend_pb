@@ -207,7 +207,7 @@ export default function CompanyPage() {
           </div>
 
           <div className="lg:col-span-6">
-            <div className="rounded-2xl border border-card-border bg-card p-6 sm:p-8 shadow-xs space-y-6">
+            <div className="rounded-2xl border border-card-border border-l-[5px] border-l-brand bg-card p-6 sm:p-8 shadow-xs space-y-6">
               <h3 className="text-lg font-bold text-foreground flex items-center gap-2">
                 <Globe2 className="h-5 w-5 text-brand" />
                 <span>Our Standard Guarantees</span>
@@ -252,7 +252,7 @@ export default function CompanyPage() {
             return (
               <div
                 key={idx}
-                className="group flex flex-col justify-between rounded-2xl border border-card-border bg-card p-6 sm:p-8 shadow-xs transition-all duration-300 hover:border-brand/40 hover:-translate-y-1"
+                className="group flex flex-col justify-between rounded-2xl border border-card-border border-l-[4px] border-l-brand bg-card p-6 sm:p-8 shadow-xs transition-all duration-300 hover:border-brand/40 hover:-translate-y-1"
               >
                 <div>
                   <div className="flex items-center justify-between">
@@ -295,7 +295,7 @@ export default function CompanyPage() {
           {lifecycleStages.map((stage, idx) => (
             <div
               key={idx}
-              className="flex flex-col justify-between rounded-2xl border border-card-border bg-card p-6 shadow-xs transition-all hover:border-brand/40"
+              className="flex flex-col justify-between rounded-2xl border border-card-border border-l-[4px] border-l-brand bg-card p-6 shadow-xs transition-all hover:border-brand/40"
             >
               <div>
                 <span className="font-mono text-2xl font-black text-brand/40">

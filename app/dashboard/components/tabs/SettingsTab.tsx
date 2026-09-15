@@ -63,7 +63,7 @@ export function SettingsTab({ currentUser, onShowAlert }: SettingsTabProps) {
 
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
         {/* 1. Admin Profile Card */}
-        <div className="rounded-2xl border border-border bg-card p-6 space-y-5">
+        <div className="rounded-2xl border border-border border-l-[5px] border-l-brand bg-card p-6 space-y-5">
           <div className="flex items-center gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand/15 text-brand">
               <User className="h-5 w-5" />
@@ -122,7 +122,7 @@ export function SettingsTab({ currentUser, onShowAlert }: SettingsTabProps) {
         </div>
 
         {/* 2. Password Change Form */}
-        <div className="rounded-2xl border border-border bg-card p-6 space-y-5">
+        <div className="rounded-2xl border border-border border-l-[5px] border-l-brand bg-card p-6 space-y-5">
           <div className="flex items-center gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-500/15 text-amber-500">
               <Key className="h-5 w-5" />

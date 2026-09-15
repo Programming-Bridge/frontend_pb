@@ -71,7 +71,7 @@ export function ServicesTab({
             return (
               <div
                 key={sId}
-                className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-border bg-card p-5 transition-all hover:border-brand/40 hover:shadow-lg"
+                className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-border border-l-[5px] border-l-brand bg-card p-5 transition-all hover:border-l-brand-hover hover:border-brand/40 hover:shadow-lg"
               >
                 <div>
                   <div className="flex items-start justify-between gap-2">

@@ -99,7 +99,7 @@ export function AboutUsSection({ isPage = false, className = "" }: AboutUsSectio
           return (
             <div
               key={idx}
-              className={`group flex flex-col justify-between rounded-2xl border border-card-border bg-card p-6 shadow-xs transition-all duration-300 hover:-translate-y-1 hover:shadow-md ${pillar.border}`}
+              className={`group flex flex-col justify-between rounded-2xl border border-card-border border-l-[4px] border-l-brand bg-card p-6 shadow-xs transition-all duration-300 hover:-translate-y-1 hover:shadow-md ${pillar.border}`}
             >
               <div>
                 <div className={`flex h-11 w-11 items-center justify-center rounded-xl ${pillar.bg} ${pillar.color} transition-transform duration-300 group-hover:scale-105`}>
@@ -126,7 +126,7 @@ export function AboutUsSection({ isPage = false, className = "" }: AboutUsSectio
       </div>
 
       {/* Stats Bar */}
-      <div className="mt-12 sm:mt-16 rounded-2xl border border-card-border bg-card p-4 sm:p-8 shadow-xs">
+      <div className="mt-12 sm:mt-16 rounded-2xl border border-card-border border-l-[5px] border-l-brand bg-card p-4 sm:p-8 shadow-xs">
         <div className="grid grid-cols-2 gap-3 sm:gap-6 md:grid-cols-4">
           {stats.map((stat, idx) => (
             <div
@@ -148,7 +148,7 @@ export function AboutUsSection({ isPage = false, className = "" }: AboutUsSectio
       </div>
 
       {/* Bottom Feature Box */}
-      <div className="mt-12 sm:mt-16 rounded-2xl border border-border bg-gradient-to-r from-surface via-card to-surface p-6 sm:p-10 shadow-xs">
+      <div className="mt-12 sm:mt-16 rounded-2xl border border-border border-l-[5px] border-l-brand bg-gradient-to-r from-surface via-card to-surface p-6 sm:p-10 shadow-xs">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-center">
           <div className="lg:col-span-7 space-y-4">
             <div className="inline-flex items-center gap-2 text-brand font-semibold text-xs sm:text-sm">

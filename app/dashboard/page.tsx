@@ -433,7 +433,13 @@ export default function DashboardPage() {
     const featured = (form.elements.namedItem("featured") as HTMLInputElement)?.checked ?? false;
     formData.set("isActive", String(isActive));
     formData.set("featured", String(featured));
-    if (file) formData.set("image", file);
+    if (file) {
+      formData.set("image", file);
+    }
+    const imgUrlVal = formData.get("imageUrl");
+    if (typeof imgUrlVal === "string" && imgUrlVal.trim() === "") {
+      formData.delete("imageUrl");
+    }
 
     try {
       if (modalType === "edit-project" && selectedItem?._id) {

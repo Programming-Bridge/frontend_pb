@@ -215,6 +215,7 @@ export function ProjectModal({
                   <span className="text-[10px] text-foreground-muted">PNG, JPG, WEBP up to 5MB</span>
                   <input
                     type="file"
+                    name="image"
                     accept="image/*"
                     onChange={handleFileChange}
                     className="hidden"

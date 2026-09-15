@@ -371,7 +371,7 @@ export default async function ServiceDetailPage({
           {config.deliverables.map((item, idx) => (
             <div
               key={idx}
-              className="flex items-start gap-4 rounded-2xl border border-card-border bg-card p-6 shadow-xs transition-all hover:border-brand/40"
+              className="flex items-start gap-4 rounded-2xl border border-card-border border-l-[4px] border-l-brand bg-card p-6 shadow-xs transition-all hover:border-brand/40"
             >
               <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-brand/10 text-brand font-bold text-xs">
                 {idx + 1}

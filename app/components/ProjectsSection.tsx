@@ -154,9 +154,10 @@ export function ProjectsSection({ isPage = false, className = "" }: ProjectsSect
         }
         description="A curated selection of high-concurrency web platforms, native mobile applications, and distributed cloud systems engineered for our global clients."
       >
-        {/* Filter Pills */}
-        {categories.length > 1 && (
-          <div className="mt-8 inline-flex flex-wrap items-center justify-center gap-2 p-1.5 rounded-2xl bg-surface border border-border shadow-xs max-w-full">
+      {/* Filter Pills (Shown on dedicated Portfolio page or when filtered) */}
+      {isPage && categories.length > 1 && (
+        <div className="mt-8 flex justify-center">
+          <div className="inline-flex flex-wrap items-center justify-center gap-2 p-1.5 rounded-2xl bg-surface border border-border shadow-xs max-w-full">
             {categories.map((category) => {
               const isActive = selectedCategory === category;
               const count =
@@ -188,208 +189,56 @@ export function ProjectsSection({ isPage = false, className = "" }: ProjectsSect
               );
             })}
           </div>
-        )}
+        </div>
+      )}
       </SectionHeader>
 
-      {/* Project Cards Grid */}
-      <div className="mt-14 sm:mt-16 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-        {filteredProjects.map((project: Project, index: number) => {
-          const CategoryIcon = getCategoryIcon(project.category);
-          const projectImage = project.image || project.imageUrl || project.img;
-          const rawLive = project.liveLink || project.liveUrl;
-          const rawGit = project.gitLink || project.githubUrl;
-
-          const legitimateLiveUrl = isLegitimateLiveUrl(rawLive) ? rawLive : null;
-          const legitimateGitUrl = isLegitimateGitUrl(rawGit) ? rawGit : null;
-
-          return (
-            <div
+      {/* Projects Display: Animated Auto-Moving Infinite Row on Home, Responsive Grid on Portfolio Page */}
+      {isPage ? (
+        /* Dedicated Portfolio Page: Multi-Column Grid */
+        <div className="mt-14 sm:mt-16 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+          {filteredProjects.map((project: Project, index: number) => (
+            <ProjectCard
               key={project._id || project.id || `project-${index}`}
-              className="group flex flex-col justify-between overflow-hidden rounded-2xl border border-card-border bg-card shadow-xs transition-all duration-300 hover:-translate-y-1 hover:border-brand/40 hover:shadow-md"
+              project={project}
+              getCategoryIcon={getCategoryIcon}
+            />
+          ))}
+        </div>
+      ) : (
+        /* Homepage: Auto-Moving Animated Infinite Carousel Row */
+        <div className="mt-12 sm:mt-14 relative w-full overflow-hidden py-4">
+          {/* Subtle Left & Right Edge Gradient Fade */}
+          <div className="pointer-events-none absolute inset-y-0 left-0 w-8 sm:w-20 bg-gradient-to-r from-background via-background/80 to-transparent z-20" />
+          <div className="pointer-events-none absolute inset-y-0 right-0 w-8 sm:w-20 bg-gradient-to-l from-background via-background/80 to-transparent z-20" />
+
+          {/* Marquee Track (Duplicated 2x for seamless continuous loop) */}
+          <div className="animate-project-marquee flex gap-6 sm:gap-8 hover:[animation-play-state:paused]">
+            {[...filteredProjects, ...filteredProjects].map((project: Project, index: number) => (
+              <div
+                key={`marquee-${project._id || project.id || index}-${index}`}
+                className="w-[300px] sm:w-[380px] md:w-[420px] shrink-0"
+              >
+                <ProjectCard
+                  project={project}
+                  getCategoryIcon={getCategoryIcon}
+                />
+              </div>
+            ))}
+          </div>
+
+          {/* Homepage CTA Link to Portfolio */}
+          <div className="mt-10 flex items-center justify-center">
+            <Link
+              href="/portfolio"
+              className="inline-flex items-center gap-2 rounded-2xl bg-surface border border-border px-6 py-3 text-xs sm:text-sm font-bold text-foreground shadow-sm transition-all hover:border-brand/40 hover:text-brand hover:scale-105 active:scale-95"
             >
-              {/* Project Image Banner */}
-              <div className="relative aspect-video w-full overflow-hidden bg-surface border-b border-border/80">
-                {projectImage ? (
-                  <img
-                    src={projectImage}
-                    alt={project.title}
-                    width={600}
-                    height={338}
-                    loading="lazy"
-                    decoding="async"
-                    onError={(e) => {
-                      const target = e.currentTarget;
-                      target.onerror = null;
-                      target.src = "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=1200&auto=format&fit=crop&q=80";
-                    }}
-                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
-                ) : (
-                  <div className="flex h-full w-full items-center justify-center bg-surface p-6 text-center">
-                    <div className="flex flex-col items-center gap-2 text-foreground-subtle">
-                      <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-brand/10 text-brand">
-                        <CategoryIcon className="h-6 w-6" />
-                      </div>
-                      <span className="text-xs font-semibold uppercase tracking-wider text-foreground-muted">
-                        {project.category || "Engineered Solution"}
-                      </span>
-                    </div>
-                  </div>
-                )}
-
-                {/* Top Badge Overlay */}
-                <div className="absolute left-3.5 top-3.5 z-30 flex items-center gap-2 pointer-events-none flex-wrap">
-                  {project.badge ? (
-                    <span className="rounded-full bg-surface/90 px-2.5 py-1 text-xs font-bold uppercase tracking-wider text-brand backdrop-blur-md border border-brand/20 shadow-xs">
-                      {project.badge}
-                    </span>
-                  ) : project.featured ? (
-                    <span className="rounded-full bg-brand px-2.5 py-1 text-xs font-bold uppercase tracking-wider text-white shadow-xs">
-                      Featured
-                    </span>
-                  ) : null}
-
-                  {project.status && (
-                    <span
-                      className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-bold tracking-wide backdrop-blur-md shadow-xs border ${
-                        project.status === "In Progress"
-                          ? "bg-amber-500/90 text-black border-amber-300/40"
-                          : project.status === "Upcoming"
-                          ? "bg-blue-600/90 text-white border-blue-400/30"
-                          : "bg-emerald-600/90 text-white border-emerald-400/30"
-                      }`}
-                    >
-                      {project.status === "In Progress" ? (
-                        <>
-                          <span className="h-1.5 w-1.5 rounded-full bg-black animate-pulse" />
-                          <span>In Progress</span>
-                        </>
-                      ) : project.status === "Upcoming" ? (
-                        <span>Upcoming</span>
-                      ) : (
-                        <span>✓ Completed</span>
-                      )}
-                    </span>
-                  )}
-                </div>
-
-                {/* Hover Overlay */}
-                <div className="absolute inset-0 z-20 flex items-center justify-center gap-3.5 bg-black/60 backdrop-blur-xs opacity-0 transition-all duration-300 group-hover:opacity-100 p-4">
-                  {legitimateLiveUrl && (
-                    <a
-                      href={legitimateLiveUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label={`Live Demo for ${project.title}`}
-                      className="flex h-10 w-10 items-center justify-center rounded-full bg-brand text-white shadow-lg transition-all hover:scale-110 hover:bg-brand-hover active:scale-95 cursor-pointer"
-                    >
-                      <ExternalLink className="h-4 w-4" />
-                    </a>
-                  )}
-
-                  {legitimateGitUrl && (
-                    <a
-                      href={legitimateGitUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label={`GitHub Repository for ${project.title}`}
-                      className="flex h-10 w-10 items-center justify-center rounded-full bg-surface/95 border border-border text-foreground shadow-lg backdrop-blur-md transition-all hover:scale-110 hover:border-brand hover:text-brand active:scale-95 cursor-pointer"
-                    >
-                      <FolderGit2 className="h-4 w-4" />
-                    </a>
-                  )}
-
-                  {!legitimateLiveUrl && !legitimateGitUrl && (
-                    <Link
-                      href={`/contact?subject=${encodeURIComponent("Case Study: " + project.title)}`}
-                      className="inline-flex items-center gap-2 rounded-xl bg-surface/95 border border-border px-4 py-2 text-xs font-semibold text-foreground backdrop-blur-md transition-all hover:border-brand hover:text-brand hover:scale-105 active:scale-95 cursor-pointer"
-                    >
-                      <span>Request Case Study Brief</span>
-                      <ArrowRight className="h-3.5 w-3.5" />
-                    </Link>
-                  )}
-                </div>
-              </div>
-
-              {/* Card Body */}
-              <div className="flex flex-1 flex-col justify-between p-6 sm:p-7">
-                <div>
-                  <div className="flex items-center justify-between text-xs text-foreground-subtle">
-                    <span className="font-semibold text-brand">
-                      {project.client || "Client Engagement"}
-                    </span>
-                    <span>{project.category || "Full-Stack"}</span>
-                  </div>
-
-                  <h3 className="mt-2 text-lg sm:text-xl font-bold tracking-tight text-foreground transition-colors group-hover:text-brand">
-                    {project.title}
-                  </h3>
-
-                  <p className="mt-2 text-sm text-foreground-muted leading-relaxed line-clamp-3">
-                    {project.shortDescription || project.description}
-                  </p>
-
-                  {project.technologies && project.technologies.length > 0 && (
-                    <div className="mt-4 flex flex-wrap gap-1.5">
-                      {project.technologies.map((tech, tIdx) => (
-                        <span
-                          key={tIdx}
-                          className="inline-flex items-center rounded-md border border-border/80 bg-surface px-2 py-0.5 text-xs font-medium text-foreground-muted"
-                        >
-                          {tech}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-                </div>
-
-                {/* Footer Row */}
-                <div className="mt-6 flex items-center justify-between pt-4 border-t border-border/60">
-                  <div className="flex items-center gap-3">
-                    {legitimateLiveUrl ? (
-                      <a
-                        href={legitimateLiveUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1 text-xs font-semibold text-brand hover:text-brand-hover transition-colors"
-                      >
-                        <span>Live Demo</span>
-                        <ExternalLink className="h-3 w-3" />
-                      </a>
-                    ) : null}
-
-                    {legitimateGitUrl ? (
-                      <a
-                        href={legitimateGitUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1 text-xs font-semibold text-foreground-muted hover:text-foreground transition-colors"
-                      >
-                        <FolderGit2 className="h-3 w-3" />
-                        <span>Code</span>
-                      </a>
-                    ) : null}
-
-                    {!legitimateLiveUrl && !legitimateGitUrl && (
-                      <span className="inline-flex items-center gap-1 text-xs font-medium text-foreground-subtle">
-                        <ShieldCheck className="h-3.5 w-3.5 text-brand" />
-                        <span>Enterprise NDA</span>
-                      </span>
-                    )}
-                  </div>
-
-                  <Link
-                    href={`/contact?subject=${encodeURIComponent("Inquiry: " + project.title)}`}
-                    className="text-xs font-semibold text-foreground-subtle hover:text-brand transition-colors"
-                  >
-                    <span>Inquire →</span>
-                  </Link>
-                </div>
-              </div>
-            </div>
-          );
-        })}
-      </div>
+              <span>Explore All {rawActiveProjects.length} Case Studies</span>
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
+        </div>
+      )}
 
       {/* Callout Banner */}
       <CalloutBanner
@@ -401,6 +250,208 @@ export function ProjectsSection({ isPage = false, className = "" }: ProjectsSect
         buttonHref="/contact"
       />
     </SectionWrapper>
+  );
+}
+
+interface ProjectCardProps {
+  project: Project;
+  getCategoryIcon: (category?: string) => React.ComponentType<{ className?: string }>;
+}
+
+function ProjectCard({ project, getCategoryIcon }: ProjectCardProps) {
+  const CategoryIcon = getCategoryIcon(project.category);
+  const projectImage = project.image || project.imageUrl || project.img;
+  const rawLive = project.liveLink || project.liveUrl;
+  const rawGit = project.gitLink || project.githubUrl;
+
+  const legitimateLiveUrl = isLegitimateLiveUrl(rawLive) ? rawLive : null;
+  const legitimateGitUrl = isLegitimateGitUrl(rawGit) ? rawGit : null;
+
+  return (
+    <div
+      className="group flex h-full flex-col justify-between overflow-hidden rounded-2xl border border-card-border border-l-[5px] border-l-brand bg-card shadow-xs transition-all duration-300 hover:-translate-y-1 hover:border-l-brand-hover hover:shadow-md"
+    >
+      {/* Project Image Banner */}
+      <div className="relative aspect-video w-full overflow-hidden bg-surface border-b border-border/80">
+        {projectImage ? (
+          <img
+            src={projectImage}
+            alt={project.title}
+            width={600}
+            height={338}
+            loading="lazy"
+            decoding="async"
+            onError={(e) => {
+              const target = e.currentTarget;
+              target.onerror = null;
+              target.src =
+                "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=1200&auto=format&fit=crop&q=80";
+            }}
+            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+          />
+        ) : (
+          <div className="flex h-full w-full items-center justify-center bg-surface p-6 text-center">
+            <div className="flex flex-col items-center gap-2 text-foreground-subtle">
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-brand/10 text-brand">
+                <CategoryIcon className="h-6 w-6" />
+              </div>
+              <span className="text-xs font-semibold uppercase tracking-wider text-foreground-muted">
+                {project.category || "Engineered Solution"}
+              </span>
+            </div>
+          </div>
+        )}
+
+        {/* Top Badge Overlay */}
+        <div className="absolute left-3.5 top-3.5 z-30 flex items-center gap-2 pointer-events-none flex-wrap">
+          {project.badge ? (
+            <span className="rounded-full bg-surface/90 px-2.5 py-1 text-xs font-bold uppercase tracking-wider text-brand backdrop-blur-md border border-brand/20 shadow-xs">
+              {project.badge}
+            </span>
+          ) : project.featured ? (
+            <span className="rounded-full bg-brand px-2.5 py-1 text-xs font-bold uppercase tracking-wider text-white shadow-xs">
+              Featured
+            </span>
+          ) : null}
+
+          {project.status && (
+            <span
+              className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-bold tracking-wide backdrop-blur-md shadow-xs border ${
+                project.status === "In Progress"
+                  ? "bg-amber-500/90 text-black border-amber-300/40"
+                  : project.status === "Upcoming"
+                  ? "bg-blue-600/90 text-white border-blue-400/30"
+                  : "bg-emerald-600/90 text-white border-emerald-400/30"
+              }`}
+            >
+              {project.status === "In Progress" ? (
+                <>
+                  <span className="h-1.5 w-1.5 rounded-full bg-black animate-pulse" />
+                  <span>In Progress</span>
+                </>
+              ) : project.status === "Upcoming" ? (
+                <span>Upcoming</span>
+              ) : (
+                <span>✓ Completed</span>
+              )}
+            </span>
+          )}
+        </div>
+
+        {/* Hover Overlay */}
+        <div className="absolute inset-0 z-20 flex items-center justify-center gap-3.5 bg-black/60 backdrop-blur-xs opacity-0 transition-all duration-300 group-hover:opacity-100 p-4">
+          {legitimateLiveUrl && (
+            <a
+              href={legitimateLiveUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`Live Demo for ${project.title}`}
+              className="flex h-10 w-10 items-center justify-center rounded-full bg-brand text-white shadow-lg transition-all hover:scale-110 hover:bg-brand-hover active:scale-95 cursor-pointer"
+            >
+              <ExternalLink className="h-4 w-4" />
+            </a>
+          )}
+
+          {legitimateGitUrl && (
+            <a
+              href={legitimateGitUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`GitHub Repository for ${project.title}`}
+              className="flex h-10 w-10 items-center justify-center rounded-full bg-surface/95 border border-border text-foreground shadow-lg backdrop-blur-md transition-all hover:scale-110 hover:border-brand hover:text-brand active:scale-95 cursor-pointer"
+            >
+              <FolderGit2 className="h-4 w-4" />
+            </a>
+          )}
+
+          {!legitimateLiveUrl && !legitimateGitUrl && (
+            <Link
+              href={`/contact?subject=${encodeURIComponent("Case Study: " + project.title)}`}
+              className="inline-flex items-center gap-2 rounded-xl bg-surface/95 border border-border px-4 py-2 text-xs font-semibold text-foreground backdrop-blur-md transition-all hover:border-brand hover:text-brand hover:scale-105 active:scale-95 cursor-pointer"
+            >
+              <span>Request Case Study Brief</span>
+              <ArrowRight className="h-3.5 w-3.5" />
+            </Link>
+          )}
+        </div>
+      </div>
+
+      {/* Card Body */}
+      <div className="flex flex-1 flex-col justify-between p-6 sm:p-7">
+        <div>
+          <div className="flex items-center justify-between text-xs text-foreground-subtle">
+            <span className="font-semibold text-brand">
+              {project.client || "Client Engagement"}
+            </span>
+            <span>{project.category || "Full-Stack"}</span>
+          </div>
+
+          <h3 className="mt-2 text-lg sm:text-xl font-bold tracking-tight text-foreground transition-colors group-hover:text-brand">
+            {project.title}
+          </h3>
+
+          <p className="mt-2 text-sm text-foreground-muted leading-relaxed line-clamp-3">
+            {project.shortDescription || project.description}
+          </p>
+
+          {project.technologies && project.technologies.length > 0 && (
+            <div className="mt-4 flex flex-wrap gap-1.5">
+              {project.technologies.map((tech, tIdx) => (
+                <span
+                  key={tIdx}
+                  className="inline-flex items-center rounded-md border border-border/80 bg-surface px-2 py-0.5 text-xs font-medium text-foreground-muted"
+                >
+                  {tech}
+                </span>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Footer Row */}
+        <div className="mt-6 flex items-center justify-between pt-4 border-t border-border/60">
+          <div className="flex items-center gap-3">
+            {legitimateLiveUrl ? (
+              <a
+                href={legitimateLiveUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 text-xs font-semibold text-brand hover:text-brand-hover transition-colors"
+              >
+                <span>Live Demo</span>
+                <ExternalLink className="h-3 w-3" />
+              </a>
+            ) : null}
+
+            {legitimateGitUrl ? (
+              <a
+                href={legitimateGitUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 text-xs font-semibold text-foreground-muted hover:text-foreground transition-colors"
+              >
+                <FolderGit2 className="h-3 w-3" />
+                <span>Code</span>
+              </a>
+            ) : null}
+
+            {!legitimateLiveUrl && !legitimateGitUrl && (
+              <span className="inline-flex items-center gap-1 text-xs font-medium text-foreground-subtle">
+                <ShieldCheck className="h-3.5 w-3.5 text-brand" />
+                <span>Enterprise NDA</span>
+              </span>
+            )}
+          </div>
+
+          <Link
+            href={`/contact?subject=${encodeURIComponent("Inquiry: " + project.title)}`}
+            className="text-xs font-semibold text-foreground-subtle hover:text-brand transition-colors"
+          >
+            <span>Inquire →</span>
+          </Link>
+        </div>
+      </div>
+    </div>
   );
 }
 

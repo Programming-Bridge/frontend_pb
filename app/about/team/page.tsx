@@ -164,7 +164,7 @@ export default function TeamPage() {
                 return (
                   <div
                     key={member._id || idx}
-                    className="group flex flex-col justify-between overflow-hidden rounded-2xl border border-card-border bg-card shadow-xs transition-all duration-300 hover:border-brand/40 hover:-translate-y-1"
+                    className="group flex flex-col justify-between overflow-hidden rounded-2xl border border-card-border border-l-[5px] border-l-brand bg-card shadow-xs transition-all duration-300 hover:border-brand/40 hover:-translate-y-1"
                   >
                     {/* Member Avatar */}
                     <div className="relative aspect-square w-full overflow-hidden bg-surface">

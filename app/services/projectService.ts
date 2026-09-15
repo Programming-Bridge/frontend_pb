@@ -1,4 +1,4 @@
-import apiClient, { cachedGet } from "./apiClient";
+import apiClient, { cachedGet, invalidateClientCache } from "./apiClient";
 
 export interface Project {
   _id?: string;
@@ -54,7 +54,9 @@ export const getProjects = async (): Promise<Project[]> => {
 
 export const createProject = async (data: FormData | Partial<Project>): Promise<Project> => {
   try {
+    invalidateClientCache();
     const response = await apiClient.post<any>("/projects/add", data);
+    invalidateClientCache();
     return (response as any)?.data || response;
   } catch (error) {
     const message = error instanceof Error ? error.message : "Failed to create project";
@@ -64,7 +66,9 @@ export const createProject = async (data: FormData | Partial<Project>): Promise<
 
 export const updateProject = async (id: string, data: FormData | Partial<Project>): Promise<Project> => {
   try {
+    invalidateClientCache();
     const response = await apiClient.put<any>(`/projects/${id}`, data);
+    invalidateClientCache();
     return (response as any)?.data || response;
   } catch (error) {
     const message = error instanceof Error ? error.message : "Failed to update project";
@@ -74,7 +78,9 @@ export const updateProject = async (id: string, data: FormData | Partial<Project
 
 export const deleteProject = async (id: string): Promise<{ success: boolean; message: string }> => {
   try {
+    invalidateClientCache();
     const response = await apiClient.delete<any>(`/projects/${id}`);
+    invalidateClientCache();
     return response as any;
   } catch (error) {
     const message = error instanceof Error ? error.message : "Failed to delete project";

@@ -106,7 +106,7 @@ export function ProjectsTab({
             return (
               <div
                 key={pId}
-                className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-border bg-card p-4 transition-all hover:border-brand/40 hover:shadow-lg"
+                className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-border border-l-[5px] border-l-brand bg-card p-4 transition-all hover:border-l-brand-hover hover:shadow-lg"
               >
                 <div>
                   {/* Image Cover */}

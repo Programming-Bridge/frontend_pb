@@ -27,7 +27,7 @@ export function StatsStrip() {
   return (
     <section className="w-full py-10 sm:py-14 bg-background transition-colors duration-200">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="rounded-2xl sm:rounded-3xl border border-border bg-card p-4 sm:p-8 shadow-sm">
+        <div className="rounded-2xl sm:rounded-3xl border border-border border-l-[5px] border-l-brand bg-card p-4 sm:p-8 shadow-sm">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6 text-center">
             {stats.map((stat, idx) => (
               <div

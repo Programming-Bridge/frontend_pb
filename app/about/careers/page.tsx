@@ -158,7 +158,7 @@ export default function CareersPage() {
             return (
               <div
                 key={idx}
-                className="flex flex-col justify-between rounded-2xl border border-card-border bg-card p-6 shadow-xs transition-all hover:border-brand/40"
+                className="flex flex-col justify-between rounded-2xl border border-card-border border-l-[4px] border-l-brand bg-card p-6 shadow-xs transition-all hover:border-brand/40"
               >
                 <div>
                   <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand/10 text-brand">
@@ -237,7 +237,7 @@ export default function CareersPage() {
             filteredCareers.map((job: Career, idx: number) => (
               <div
                 key={job._id || job.id || idx}
-                className="group flex flex-col gap-5 rounded-2xl border border-card-border bg-card p-6 sm:p-8 shadow-xs transition-all duration-300 hover:border-brand/40 hover:shadow-md"
+                className="group flex flex-col gap-5 rounded-2xl border border-card-border border-l-[5px] border-l-brand bg-card p-6 sm:p-8 shadow-xs transition-all duration-300 hover:border-brand/40 hover:shadow-md"
               >
                 <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
                   <div>
@@ -317,7 +317,7 @@ export default function CareersPage() {
 
       {/* Talent & Open Application CTA Section (Replaces Client Project Inquiry Form) */}
       <SectionWrapper variant="surface" border="top" ariaLabel="Open Engineering Application">
-        <div className="relative overflow-hidden rounded-3xl border border-card-border bg-card p-8 sm:p-12 shadow-xl max-w-5xl mx-auto text-center">
+        <div className="relative overflow-hidden rounded-3xl border border-card-border border-l-[5px] border-l-brand bg-card p-8 sm:p-12 shadow-xl max-w-5xl mx-auto text-center">
           <div className="pointer-events-none absolute -top-24 left-1/2 -z-10 h-72 w-96 -translate-x-1/2 rounded-full bg-brand/10 blur-3xl" />
 
           <div className="mx-auto max-w-2xl space-y-4">
