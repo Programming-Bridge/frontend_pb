@@ -93,7 +93,9 @@ apiClient.interceptors.response.use(
   },
   (error) => {
     if (error.response?.status === 401 && typeof window !== "undefined") {
-      // If token expired or unauthorized
+      // If token expired or unauthorized, automatically clear stale credentials
+      localStorage.removeItem("pb_token");
+      localStorage.removeItem("pb_user");
       if (!window.location.pathname.startsWith("/login")) {
         console.warn("Session expired or unauthorized request. Clearing auth credentials.");
       }

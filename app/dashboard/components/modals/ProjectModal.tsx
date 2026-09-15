@@ -115,6 +115,19 @@ export function ProjectModal({
             </div>
 
             <div>
+              <label className="text-xs font-bold text-foreground">Project Status *</label>
+              <select
+                name="status"
+                defaultValue={project?.status || "Completed"}
+                className="mt-1 h-9 w-full rounded-xl border border-border bg-surface px-3 text-xs text-foreground focus:border-brand focus:outline-none cursor-pointer"
+              >
+                <option value="Completed">✓ Completed</option>
+                <option value="In Progress">⚡ In Progress</option>
+                <option value="Upcoming">📅 Upcoming</option>
+              </select>
+            </div>
+
+            <div className="sm:col-span-2">
               <label className="text-xs font-bold text-foreground">Badge / Tag</label>
               <input
                 type="text"

@@ -20,6 +20,7 @@ export interface Project {
   technologies?: string[];
   client?: string;
   featured?: boolean;
+  status?: "Completed" | "In Progress" | "Upcoming" | string;
   order?: number;
   isActive?: boolean;
   createdAt?: string;
