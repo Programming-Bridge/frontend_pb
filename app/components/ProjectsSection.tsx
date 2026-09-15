@@ -253,23 +253,6 @@ export function ProjectsSection({ isPage = false, className = "" }: ProjectsSect
   );
 }
 
-const getCategoryLeftBorder = (category?: string) => {
-  const cat = (category || "").toLowerCase();
-  if (cat.includes("mobile") || cat.includes("app") || cat.includes("android") || cat.includes("flutter")) {
-    return "border-l-[5px] border-l-cyan-500 hover:border-l-cyan-400";
-  }
-  if (cat.includes("ai") || cat.includes("data") || cat.includes("ml") || cat.includes("intelligence")) {
-    return "border-l-[5px] border-l-purple-500 hover:border-l-purple-400";
-  }
-  if (cat.includes("cloud") || cat.includes("devops") || cat.includes("k8s") || cat.includes("aws")) {
-    return "border-l-[5px] border-l-amber-500 hover:border-l-amber-400";
-  }
-  if (cat.includes("cms") || cat.includes("wordpress") || cat.includes("commerce")) {
-    return "border-l-[5px] border-l-rose-500 hover:border-l-rose-400";
-  }
-  return "border-l-[5px] border-l-brand hover:border-l-brand-hover";
-};
-
 interface ProjectCardProps {
   project: Project;
   getCategoryIcon: (category?: string) => React.ComponentType<{ className?: string }>;
@@ -286,7 +269,7 @@ function ProjectCard({ project, getCategoryIcon }: ProjectCardProps) {
 
   return (
     <div
-      className={`group flex h-full flex-col justify-between overflow-hidden rounded-2xl border border-card-border bg-card shadow-xs transition-all duration-300 hover:-translate-y-1 hover:shadow-md ${getCategoryLeftBorder(project.category)}`}
+      className="group flex h-full flex-col justify-between overflow-hidden rounded-2xl border border-card-border border-l-[5px] border-l-brand bg-card shadow-xs transition-all duration-300 hover:-translate-y-1 hover:border-l-brand-hover hover:shadow-md"
     >
       {/* Project Image Banner */}
       <div className="relative aspect-video w-full overflow-hidden bg-surface border-b border-border/80">

@@ -103,19 +103,10 @@ export function ProjectsTab({
               (t) => typeof t === "string" && t.trim().length > 0
             );
 
-            const getCategoryBorder = (catName?: string) => {
-              const cat = (catName || "").toLowerCase();
-              if (cat.includes("mobile") || cat.includes("app") || cat.includes("android")) return "border-l-[5px] border-l-cyan-500 hover:border-l-cyan-400";
-              if (cat.includes("ai") || cat.includes("data") || cat.includes("ml")) return "border-l-[5px] border-l-purple-500 hover:border-l-purple-400";
-              if (cat.includes("cloud") || cat.includes("devops") || cat.includes("k8s")) return "border-l-[5px] border-l-amber-500 hover:border-l-amber-400";
-              if (cat.includes("cms") || cat.includes("wordpress")) return "border-l-[5px] border-l-rose-500 hover:border-l-rose-400";
-              return "border-l-[5px] border-l-brand hover:border-l-brand-hover";
-            };
-
             return (
               <div
                 key={pId}
-                className={`group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-border bg-card p-4 transition-all hover:shadow-lg ${getCategoryBorder(proj.category)}`}
+                className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-border border-l-[5px] border-l-brand bg-card p-4 transition-all hover:border-l-brand-hover hover:shadow-lg"
               >
                 <div>
                   {/* Image Cover */}
