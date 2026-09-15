@@ -89,7 +89,7 @@ export function InquiriesTab({
               return (
                 <div
                   key={inqId}
-                  className="rounded-2xl border border-border bg-card p-4 space-y-3 shadow-xs"
+                  className="rounded-2xl border border-border border-l-[4px] border-l-brand bg-card p-4 space-y-3 shadow-xs"
                 >
                   <div className="flex items-start justify-between gap-2">
                     <div>

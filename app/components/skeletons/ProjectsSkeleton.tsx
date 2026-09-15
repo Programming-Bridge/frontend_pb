@@ -19,7 +19,7 @@ export function ProjectsSkeleton() {
       </SectionHeader>
       <div className="mt-14 sm:mt-16 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
         {Array.from({ length: 3 }).map((_, idx) => (
-          <div key={idx} className="flex flex-col justify-between overflow-hidden rounded-2xl border border-card-border bg-card shadow-xs">
+          <div key={idx} className="flex flex-col justify-between overflow-hidden rounded-2xl border border-card-border border-l-[5px] border-l-brand bg-card shadow-xs">
             <div className="relative aspect-video w-full overflow-hidden bg-surface border-b border-border/80">
               <div className="h-full w-full skeleton-box animate-shimmer" />
               <div className="absolute left-3.5 top-3.5 h-5 w-24 rounded-full skeleton-box animate-shimmer border border-border/50" />

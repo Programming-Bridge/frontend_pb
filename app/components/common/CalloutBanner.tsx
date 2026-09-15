@@ -22,7 +22,7 @@ export function CalloutBanner({
 }: CalloutBannerProps) {
   return (
     <div
-      className={`mt-12 sm:mt-16 rounded-2xl border border-card-border bg-card p-6 sm:p-10 shadow-xs ${className}`}
+      className={`mt-12 sm:mt-16 rounded-2xl border border-card-border border-l-[5px] border-l-brand bg-card p-6 sm:p-10 shadow-xs ${className}`}
     >
       <div className="flex flex-col md:flex-row items-center justify-between gap-6">
         <div className="space-y-1.5 text-center md:text-left">

@@ -164,7 +164,7 @@ export function UsersTab({
               return (
                 <div
                   key={uId}
-                  className="rounded-2xl border border-border bg-card p-4 space-y-3 transition-all hover:border-brand/30"
+                  className="rounded-2xl border border-border border-l-[4px] border-l-brand bg-card p-4 space-y-3 transition-all hover:border-brand/30"
                 >
                   <div className="flex items-start justify-between gap-2">
                     <div className="flex items-center gap-3 min-w-0">

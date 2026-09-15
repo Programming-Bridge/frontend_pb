@@ -2,7 +2,7 @@ export function TeamSkeleton() {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
       {Array.from({ length: 4 }).map((_, idx) => (
-        <div key={idx} className="flex flex-col justify-between overflow-hidden rounded-2xl border border-card-border bg-card shadow-xs">
+        <div key={idx} className="flex flex-col justify-between overflow-hidden rounded-2xl border border-card-border border-l-[5px] border-l-brand bg-card shadow-xs">
           <div className="relative aspect-square w-full overflow-hidden bg-surface">
             <div className="h-full w-full skeleton-box animate-shimmer" />
             <div className="absolute top-3 left-3 h-5 w-24 rounded-full skeleton-box animate-shimmer border border-border/50" />

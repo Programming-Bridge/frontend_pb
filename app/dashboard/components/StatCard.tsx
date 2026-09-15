@@ -32,7 +32,7 @@ export function StatCard({
   return (
     <div
       onClick={onClick}
-      className={`group relative overflow-hidden rounded-2xl border border-border bg-card p-4 sm:p-5 transition-all duration-300 hover:border-brand/40 hover:shadow-lg hover:shadow-brand/5 ${
+      className={`group relative overflow-hidden rounded-2xl border border-border border-l-[4px] border-l-brand bg-card p-4 sm:p-5 transition-all duration-300 hover:border-brand/40 hover:shadow-lg hover:shadow-brand/5 ${
         onClick ? "cursor-pointer active:scale-[0.98]" : ""
       }`}
     >

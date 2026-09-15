@@ -137,7 +137,7 @@ function ApplyFormContent() {
   return (
     <div className="mx-auto max-w-2xl">
       {success ? (
-        <div className="rounded-3xl border border-card-border bg-card p-8 sm:p-12 text-center space-y-5 shadow-sm">
+        <div className="rounded-3xl border border-card-border border-l-[5px] border-l-brand bg-card p-8 sm:p-12 text-center space-y-5 shadow-sm">
           <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-brand/10 text-brand ring-8 ring-brand/5">
             <CheckCircle2 className="h-9 w-9" />
           </div>
@@ -161,7 +161,7 @@ function ApplyFormContent() {
           </div>
         </div>
       ) : (
-        <div className="rounded-3xl border border-card-border bg-card p-6 sm:p-10 shadow-sm">
+        <div className="rounded-3xl border border-card-border border-l-[5px] border-l-brand bg-card p-6 sm:p-10 shadow-sm">
           <div className="space-y-2 mb-6">
             <div className="inline-flex items-center gap-2 rounded-full border border-brand/25 bg-brand-tint px-3 py-1 text-xs font-semibold text-brand">
               <Sparkles className="h-3.5 w-3.5" />
