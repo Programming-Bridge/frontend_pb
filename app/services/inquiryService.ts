@@ -94,3 +94,29 @@ export const deleteInquiry = async (
     throw new Error(message);
   }
 };
+
+export interface SendClientEmailPayload {
+  to: string;
+  subject: string;
+  message: string;
+  inquiryId?: string;
+  clientName?: string;
+}
+
+export const sendClientEmail = async (
+  payload: SendClientEmailPayload
+): Promise<{ success: boolean; message: string; data?: any }> => {
+  try {
+    const response = await apiClient.post<any>("/inquiries/send-client-email", payload);
+    return {
+      success: true,
+      message: (response as any)?.message || "Email sent successfully!",
+      data: (response as any)?.data,
+    };
+  } catch (error) {
+    const message =
+      error instanceof Error ? error.message : "Failed to send email to client";
+    throw new Error(message);
+  }
+};
+

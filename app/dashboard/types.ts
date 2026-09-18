@@ -37,6 +37,7 @@ export type ModalType =
   | "edit-user"
   | "view-inquiry"
   | "view-application"
+  | "compose-email"
   | null;
 
 export interface DeleteModalState {

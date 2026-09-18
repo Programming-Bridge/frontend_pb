@@ -107,6 +107,7 @@ import { TeamModal } from "./components/modals/TeamModal";
 import { UserModal } from "./components/modals/UserModal";
 import { InquiryViewModal } from "./components/modals/InquiryViewModal";
 import { ApplicationViewModal } from "./components/modals/ApplicationViewModal";
+import { ComposeEmailModal } from "./components/modals/ComposeEmailModal";
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -980,6 +981,10 @@ export default function DashboardPage() {
                 setSelectedItem(inq);
                 setModalType("view-inquiry");
               }}
+              onComposeEmail={(inq) => {
+                setSelectedItem(inq || null);
+                setModalType("compose-email");
+              }}
               onUpdateStatus={handleUpdateInquiryStatus}
               onDeleteInquiry={(id, name) =>
                 requestDelete("inquiry", id, "Delete Inquiry Message", name)
@@ -1120,6 +1125,31 @@ export default function DashboardPage() {
         }}
         inquiry={selectedItem}
         onUpdateStatus={handleUpdateInquiryStatus}
+        onComposeEmail={(inq) => {
+          setSelectedItem(inq);
+          setModalType("compose-email");
+        }}
+      />
+
+      <ComposeEmailModal
+        isOpen={modalType === "compose-email"}
+        onClose={() => {
+          setModalType(null);
+          setSelectedItem(null);
+        }}
+        inquiry={selectedItem}
+        onEmailSent={(updatedData) => {
+          showToast("success", "Email / Proposal sent successfully from official@programmingbridge.org!");
+          if (updatedData && (updatedData._id || updatedData.id)) {
+            setInquiries((prev) =>
+              prev.map((item) =>
+                (item._id || item.id) === (updatedData._id || updatedData.id)
+                  ? { ...item, status: "Contacted" }
+                  : item
+              )
+            );
+          }
+        }}
       />
 
       <ApplicationViewModal
