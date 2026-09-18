@@ -97,13 +97,13 @@ export function CareersTab({
       </div>
 
       {/* Sub-Tabs Nav Buttons */}
-      <div className="flex items-center gap-2.5 overflow-x-auto pb-3 pt-0.5 max-w-full border-b border-border">
+      <div className="flex items-center gap-2.5 overflow-x-auto pb-3 pt-0.5 max-w-full border-b border-border scrollbar-none">
         <button
           type="button"
           onClick={() => setSubTab("jobs")}
-          className={`inline-flex shrink-0 items-center whitespace-nowrap gap-2 rounded-xl px-4 py-2.5 text-xs font-bold transition-all cursor-pointer ${
+          className={`inline-flex shrink-0 items-center whitespace-nowrap gap-2 rounded-xl px-4 py-2.5 text-xs font-extrabold transition-all cursor-pointer ${
             subTab === "jobs"
-              ? "bg-brand text-black shadow-sm"
+              ? "bg-brand text-black shadow-lg shadow-brand/20"
               : "border border-border bg-surface text-foreground-muted hover:border-brand/40 hover:text-foreground"
           }`}
         >
@@ -117,10 +117,10 @@ export function CareersTab({
         <button
           type="button"
           onClick={() => setSubTab("applications")}
-          className={`inline-flex shrink-0 items-center whitespace-nowrap gap-2 rounded-xl px-4 py-2.5 text-xs font-bold transition-all cursor-pointer ${
+          className={`inline-flex shrink-0 items-center whitespace-nowrap gap-2 rounded-xl px-4 py-2.5 text-xs font-extrabold transition-all cursor-pointer ${
             subTab === "applications"
-              ? "bg-amber-500 text-black shadow-sm"
-              : "border border-border bg-surface text-foreground-muted hover:border-amber-500/40 hover:text-foreground"
+              ? "bg-brand text-black shadow-lg shadow-brand/20"
+              : "border border-border bg-surface text-foreground-muted hover:border-brand/40 hover:text-foreground"
           }`}
         >
           <UserCheck className="h-4 w-4 shrink-0" />
@@ -129,7 +129,11 @@ export function CareersTab({
             {filteredApplications.length !== applications.length ? ` of ${applications.length}` : ""})
           </span>
           {pendingCount > 0 && (
-            <span className="ml-1 rounded-full bg-amber-500/20 px-2 py-0.5 text-[10px] font-black text-amber-500">
+            <span
+              className={`ml-1 rounded-full px-2 py-0.5 text-[10px] font-black ${
+                subTab === "applications" ? "bg-black/20 text-black" : "bg-brand/20 text-brand"
+              }`}
+            >
               {pendingCount} New
             </span>
           )}
@@ -154,7 +158,7 @@ export function CareersTab({
                 return (
                   <div
                     key={careerId}
-                    className="flex flex-col justify-between rounded-2xl border border-border bg-card p-5 shadow-sm hover:shadow-md transition-all space-y-4"
+                    className="flex flex-col justify-between rounded-2xl border border-border border-l-4 border-l-brand bg-card p-5 shadow-sm hover:shadow-md transition-all space-y-4"
                   >
                     <div>
                       <div className="flex items-start justify-between gap-2 mb-2">
@@ -249,7 +253,7 @@ export function CareersTab({
                   return (
                     <div
                       key={appId}
-                      className="rounded-2xl border border-border bg-card p-4 shadow-sm space-y-3"
+                      className="rounded-2xl border border-border border-l-4 border-l-brand bg-card p-4 shadow-sm space-y-3"
                     >
                       <div className="flex items-start justify-between gap-2">
                         <div>
@@ -266,7 +270,7 @@ export function CareersTab({
                             <button
                               type="button"
                               onClick={() => onOpenInterviewModal(app)}
-                              className="rounded-lg p-1.5 bg-amber-500/10 text-amber-500 hover:bg-amber-500 hover:text-black transition-colors cursor-pointer"
+                              className="rounded-lg p-1.5 bg-brand/10 border border-brand/20 text-brand hover:bg-brand hover:text-black transition-colors cursor-pointer"
                               title="Schedule Interview"
                             >
                               <Calendar className="h-4 w-4" />
@@ -327,7 +331,7 @@ export function CareersTab({
                               : app.status === "Shortlisted"
                               ? "bg-cyan-500/10 border-cyan-500/30 text-cyan-600 dark:text-cyan-400"
                               : app.status === "Interview Scheduled"
-                              ? "bg-amber-500/15 border-amber-500/30 text-amber-500"
+                              ? "bg-brand/15 border-brand/30 text-brand"
                               : app.status === "Rejected"
                               ? "bg-rose-500/10 border-rose-500/30 text-rose-500"
                               : app.status === "Reviewing"
@@ -421,7 +425,7 @@ export function CareersTab({
                                   : app.status === "Shortlisted"
                                   ? "bg-cyan-500/10 border-cyan-500/30 text-cyan-600 dark:text-cyan-400"
                                   : app.status === "Interview Scheduled"
-                                  ? "bg-amber-500/15 border-amber-500/30 text-amber-500 font-extrabold"
+                                  ? "bg-brand/15 border-brand/30 text-brand font-extrabold"
                                   : app.status === "Rejected"
                                   ? "bg-rose-500/10 border-rose-500/30 text-rose-500"
                                   : app.status === "Reviewing"
@@ -444,7 +448,7 @@ export function CareersTab({
                                 <button
                                   type="button"
                                   onClick={() => onOpenInterviewModal(app)}
-                                  className="rounded-lg p-1.5 bg-amber-500/10 text-amber-500 hover:bg-amber-500 hover:text-black transition-colors cursor-pointer flex items-center gap-1 font-bold text-[11px] px-2.5"
+                                  className="rounded-lg p-1.5 bg-brand/10 border border-brand/20 text-brand hover:bg-brand hover:text-black transition-colors cursor-pointer flex items-center gap-1 font-bold text-[11px] px-2.5 shadow-xs"
                                   title="Schedule Interview"
                                 >
                                   <Calendar className="h-3.5 w-3.5" />

@@ -614,12 +614,12 @@ export function ComposeEmailModal({
         </div>
 
         {/* Footer Actions */}
-        <div className="flex items-center justify-between border-t border-border px-6 py-4 bg-surface/40">
+        <div className="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-between gap-2.5 border-t border-border px-4 sm:px-6 py-3.5 sm:py-4 bg-surface/50">
           <button
             type="button"
             onClick={onClose}
             disabled={loading}
-            className="rounded-xl border border-border bg-surface px-4 py-2 text-xs font-semibold text-foreground hover:bg-surface-hover transition-colors cursor-pointer"
+            className="rounded-xl border border-border bg-surface px-4 py-2.5 text-xs font-semibold text-foreground hover:bg-surface-hover transition-colors cursor-pointer text-center"
           >
             Cancel
           </button>
@@ -633,7 +633,7 @@ export function ComposeEmailModal({
                 handleSend(e);
               }
             }}
-            className="flex items-center gap-2 rounded-xl bg-brand px-6 py-2.5 text-xs font-extrabold text-black hover:bg-brand-hover hover:text-white transition-all shadow-md disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+            className="flex items-center justify-center gap-2 rounded-xl bg-brand px-6 py-2.5 text-xs font-extrabold text-black shadow-lg shadow-brand/20 hover:bg-brand-hover hover:text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
           >
             {loading ? (
               <>
