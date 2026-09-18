@@ -108,6 +108,7 @@ import { UserModal } from "./components/modals/UserModal";
 import { InquiryViewModal } from "./components/modals/InquiryViewModal";
 import { ApplicationViewModal } from "./components/modals/ApplicationViewModal";
 import { ComposeEmailModal } from "./components/modals/ComposeEmailModal";
+import { InterviewInviteModal } from "./components/modals/InterviewInviteModal";
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -651,7 +652,11 @@ export default function DashboardPage() {
   const handleUpdateAppStatus = async (id: string, status: string) => {
     try {
       await updateApplicationStatus(id, status);
-      showToast("success", `Application marked as ${status}`);
+      const toastMessage =
+        status === "Rejected"
+          ? "Application marked as Rejected and polite rejection email sent."
+          : `Application marked as ${status}`;
+      showToast("success", toastMessage);
       setApplications((prev) =>
         prev.map((app) => (app._id === id || app.id === id ? { ...app, status: status as any } : app))
       );
@@ -970,6 +975,10 @@ export default function DashboardPage() {
               onDeleteApplication={(id, name) =>
                 requestDelete("application", id, "Delete Application", name)
               }
+              onOpenInterviewModal={(app) => {
+                setSelectedItem(app);
+                setModalType("invite-interview");
+              }}
             />
           )}
 
@@ -1160,6 +1169,29 @@ export default function DashboardPage() {
         }}
         application={selectedItem}
         onUpdateStatus={handleUpdateAppStatus}
+        onOpenInterviewModal={(app) => {
+          setSelectedItem(app);
+          setModalType("invite-interview");
+        }}
+      />
+
+      <InterviewInviteModal
+        isOpen={modalType === "invite-interview"}
+        onClose={() => {
+          setModalType(null);
+          setSelectedItem(null);
+        }}
+        application={selectedItem}
+        onInterviewScheduled={(updatedApp) => {
+          showToast("success", `Interview invitation sent to ${updatedApp.fullName} successfully!`);
+          setApplications((prev) =>
+            prev.map((a) =>
+              (a._id || a.id) === (updatedApp._id || updatedApp.id)
+                ? { ...a, status: "Interview Scheduled" }
+                : a
+            )
+          );
+        }}
       />
 
       {/* Accessible Confirmation Deletion Dialog */}

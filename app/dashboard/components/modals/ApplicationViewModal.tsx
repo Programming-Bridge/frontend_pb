@@ -9,6 +9,7 @@ interface ApplicationViewModalProps {
   onClose: () => void;
   application: JobApplication | null;
   onUpdateStatus: (id: string, status: string) => Promise<void>;
+  onOpenInterviewModal?: (app: JobApplication) => void;
 }
 
 export function ApplicationViewModal({
@@ -16,6 +17,7 @@ export function ApplicationViewModal({
   onClose,
   application,
   onUpdateStatus,
+  onOpenInterviewModal,
 }: ApplicationViewModalProps) {
   if (!isOpen || !application) return null;
 
@@ -178,7 +180,7 @@ export function ApplicationViewModal({
           </div>
         )}
 
-        {/* Status Pipeline & Direct Action Buttons */}
+        {/* Status Pipeline & Action Buttons */}
         <div className="mt-5 flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-border pt-4">
           <div className="flex items-center gap-2 w-full sm:w-auto">
             <span className="text-xs font-bold text-foreground">Pipeline Stage:</span>
@@ -190,19 +192,26 @@ export function ApplicationViewModal({
               <option value="Pending">Pending</option>
               <option value="Reviewing">Reviewing</option>
               <option value="Shortlisted">Shortlisted</option>
-              <option value="Rejected">Rejected</option>
+              <option value="Interview Scheduled">Interview Scheduled</option>
               <option value="Hired">Hired</option>
+              <option value="Rejected">Rejected (Auto-send email)</option>
             </select>
           </div>
 
-          <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
-            <a
-              href={`mailto:${application.email}?subject=${encodeURIComponent(`Application for ${application.roleApplied} at Programming Bridge`)}`}
-              className="flex items-center gap-1.5 rounded-xl bg-brand px-4 py-2 text-xs font-bold text-black hover:bg-brand-hover hover:text-white transition-all shadow-sm"
-            >
-              <Mail className="h-3.5 w-3.5" />
-              <span>Contact Candidate</span>
-            </a>
+          <div className="flex items-center gap-2 w-full sm:w-auto justify-end flex-wrap">
+            {onOpenInterviewModal && (
+              <button
+                type="button"
+                onClick={() => {
+                  onClose();
+                  onOpenInterviewModal(application);
+                }}
+                className="flex items-center gap-1.5 rounded-xl bg-amber-500 px-3.5 py-2 text-xs font-bold text-black hover:bg-amber-400 transition-all shadow-sm cursor-pointer"
+              >
+                <span>📅 Schedule Interview</span>
+              </button>
+            )}
+
             <button
               type="button"
               onClick={onClose}

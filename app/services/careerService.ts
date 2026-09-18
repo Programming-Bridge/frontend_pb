@@ -83,7 +83,7 @@ export interface JobApplication {
   linkedinUrl?: string;
   resumeUrl?: string;
   coverLetter?: string;
-  status?: "Pending" | "Reviewing" | "Shortlisted" | "Rejected" | "Hired";
+  status?: "Pending" | "Reviewing" | "Shortlisted" | "Interview Scheduled" | "Rejected" | "Hired";
   createdAt?: string;
 }
 
@@ -156,14 +156,59 @@ export const getApplications = async (): Promise<JobApplication[]> => {
 
 export const updateApplicationStatus = async (
   id: string,
-  status: string
+  status: string,
+  sendEmail = true
 ): Promise<JobApplication> => {
   try {
-    const response = await apiClient.put<any>(`/applications/${id}`, { status });
+    const response = await apiClient.put<any>(`/applications/${id}`, { status, sendEmail });
     return (response as any)?.data || response;
   } catch (error) {
     const message =
       error instanceof Error ? error.message : "Failed to update application status";
+    throw new Error(message);
+  }
+};
+
+export interface InterviewInvitePayload {
+  interviewDate: string;
+  interviewTime: string;
+  interviewType?: string;
+  interviewLink?: string;
+  notes?: string;
+  interviewerName?: string;
+}
+
+export const inviteCandidateToInterview = async (
+  id: string,
+  payload: InterviewInvitePayload
+): Promise<{ success: boolean; message: string; data?: JobApplication }> => {
+  try {
+    const response = await apiClient.post<any>(`/applications/${id}/invite-interview`, payload);
+    return {
+      success: true,
+      message: (response as any)?.message || "Interview invitation sent successfully!",
+      data: (response as any)?.data,
+    };
+  } catch (error) {
+    const message =
+      error instanceof Error ? error.message : "Failed to send interview invitation";
+    throw new Error(message);
+  }
+};
+
+export const sendCandidateRejection = async (
+  id: string
+): Promise<{ success: boolean; message: string; data?: JobApplication }> => {
+  try {
+    const response = await apiClient.post<any>(`/applications/${id}/send-rejection`);
+    return {
+      success: true,
+      message: (response as any)?.message || "Rejection notice sent successfully.",
+      data: (response as any)?.data,
+    };
+  } catch (error) {
+    const message =
+      error instanceof Error ? error.message : "Failed to send rejection notice";
     throw new Error(message);
   }
 };

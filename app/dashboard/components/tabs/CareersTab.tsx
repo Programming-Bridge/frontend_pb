@@ -12,6 +12,7 @@ import {
   Briefcase,
   MapPin,
   Clock,
+  Calendar,
 } from "lucide-react";
 import type { Career, JobApplication } from "@/app/services/careerService";
 import { getMediaUrl } from "@/app/services/apiClient";
@@ -27,6 +28,7 @@ interface CareersTabProps {
   onViewApplication: (app: JobApplication) => void;
   onUpdateAppStatus: (id: string, status: string) => Promise<void>;
   onDeleteApplication: (id: string, candidateName: string) => void;
+  onOpenInterviewModal?: (app: JobApplication) => void;
 }
 
 export function CareersTab({
@@ -39,6 +41,7 @@ export function CareersTab({
   onViewApplication,
   onUpdateAppStatus,
   onDeleteApplication,
+  onOpenInterviewModal,
 }: CareersTabProps) {
   const [subTab, setSubTab] = useState<"jobs" | "applications">("jobs");
 
@@ -122,123 +125,100 @@ export function CareersTab({
         >
           <UserCheck className="h-4 w-4 shrink-0" />
           <span className="whitespace-nowrap">
-            Candidate Applications ({filteredApplications.length}
+            Inbound Applications ({filteredApplications.length}
             {filteredApplications.length !== applications.length ? ` of ${applications.length}` : ""})
           </span>
           {pendingCount > 0 && (
-            <span className="shrink-0 whitespace-nowrap rounded-full bg-black/20 px-2 py-0.5 text-[10px] font-extrabold text-black">
-              {pendingCount} new
+            <span className="ml-1 rounded-full bg-amber-500/20 px-2 py-0.5 text-[10px] font-black text-amber-500">
+              {pendingCount} New
             </span>
           )}
         </button>
       </div>
 
-      {/* 1. Job Openings Sub-Tab */}
+      {/* SUBTAB 1: JOB VACANCIES LIST */}
       {subTab === "jobs" && (
         <>
           {filteredCareers.length === 0 ? (
             <EmptyState
-              icon={FileText}
-              title="No Job Positions Posted"
-              description="Create job vacancies to attract talented engineers and leaders to Programming Bridge."
-              actionLabel="Post Job Opening"
+              icon={Briefcase}
+              title="No Job Postings Found"
+              description="You haven't posted any job vacancies matching your query."
+              actionLabel="Create First Job Vacancy"
               onAction={onOpenCreateCareer}
             />
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-5">
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
               {filteredCareers.map((career) => {
-                const cId = career._id || career.id || "";
-                const applicantsForRole = applications.filter(
-                  (a) => a.roleApplied?.toLowerCase() === career.title?.toLowerCase()
-                ).length;
-
+                const careerId = career._id || career.id || "";
                 return (
                   <div
-                    key={cId}
-                    className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-border border-l-[5px] border-l-brand bg-card p-4 sm:p-5 transition-all hover:border-l-brand-hover hover:border-brand/40 hover:shadow-lg"
+                    key={careerId}
+                    className="flex flex-col justify-between rounded-2xl border border-border bg-card p-5 shadow-sm hover:shadow-md transition-all space-y-4"
                   >
                     <div>
-                      <div className="flex flex-wrap items-center justify-between gap-2 pb-1">
-                        <div className="flex items-center gap-2 min-w-0">
-                          <span className="truncate rounded-md bg-brand/10 border border-brand/20 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-brand whitespace-nowrap">
-                            {career.department}
-                          </span>
-                          <span className="truncate rounded-md bg-surface border border-border px-2 py-0.5 text-[10px] font-semibold text-foreground-muted whitespace-nowrap">
-                            {career.type || "Full-Time (Remote)"}
-                          </span>
-                        </div>
-
-                        <div className="flex items-center gap-1 shrink-0 ml-auto">
+                      <div className="flex items-start justify-between gap-2 mb-2">
+                        <span className="inline-flex items-center rounded-full bg-brand/10 border border-brand/20 px-2.5 py-0.5 text-[10px] font-bold text-brand uppercase tracking-wider">
+                          {career.department}
+                        </span>
+                        <div className="flex items-center gap-1">
                           <button
                             type="button"
                             onClick={() => onOpenEditCareer(career)}
                             className="rounded-lg p-1.5 text-foreground-muted hover:bg-surface-hover hover:text-foreground transition-colors cursor-pointer"
-                            title="Edit Job Opening"
+                            title="Edit Vacancy"
                           >
-                            <Edit3 className="h-3.5 w-3.5" />
+                            <Edit3 className="h-4 w-4" />
                           </button>
                           <button
                             type="button"
-                            onClick={() => onDeleteCareer(cId, career.title)}
+                            onClick={() => onDeleteCareer(careerId, career.title)}
                             className="rounded-lg p-1.5 text-foreground-muted hover:bg-rose-500/10 hover:text-rose-500 transition-colors cursor-pointer"
-                            title="Delete Job"
+                            title="Delete Vacancy"
                           >
-                            <Trash2 className="h-3.5 w-3.5" />
+                            <Trash2 className="h-4 w-4" />
                           </button>
                         </div>
                       </div>
 
-                      <h3 className="mt-3 text-sm sm:text-base font-black text-foreground tracking-tight line-clamp-2 leading-snug">
+                      <h3 className="text-base font-extrabold text-foreground leading-snug">
                         {career.title}
                       </h3>
 
-                      <div className="mt-2 flex flex-wrap items-center gap-3 text-xs text-foreground-muted">
-                        <div className="flex items-center gap-1">
+                      <div className="mt-2.5 flex flex-wrap items-center gap-x-3 gap-y-1.5 text-[11px] text-foreground-muted">
+                        <span className="flex items-center gap-1">
                           <MapPin className="h-3 w-3 text-brand" />
-                          <span>{career.location || "Remote"}</span>
-                        </div>
-                        <div className="flex items-center gap-1">
+                          {career.location || "Remote"}
+                        </span>
+                        <span className="flex items-center gap-1">
                           <Clock className="h-3 w-3 text-brand" />
-                          <span>{career.experience || "3+ Years"}</span>
-                        </div>
-                        {career.salaryRange && (
-                          <span className="font-semibold text-foreground">
-                            {career.salaryRange}
+                          {career.type || "Full-Time"}
+                        </span>
+                        {career.experience && (
+                          <span className="flex items-center gap-1">
+                            <Briefcase className="h-3 w-3 text-brand" />
+                            {career.experience}
                           </span>
                         )}
                       </div>
 
-                      <p className="mt-3 text-xs leading-relaxed text-foreground-muted line-clamp-2">
+                      <p className="mt-3 text-xs text-foreground-muted line-clamp-2 leading-relaxed">
                         {career.description}
                       </p>
-
-                      {career.skills && career.skills.length > 0 && (
-                        <div className="mt-3 flex flex-wrap gap-1">
-                          {career.skills.map((skill, idx) => (
-                            <span
-                              key={idx}
-                              className="rounded-md bg-surface border border-border px-1.5 py-0.5 text-[10px] font-semibold text-foreground-muted"
-                            >
-                              {skill}
-                            </span>
-                          ))}
-                        </div>
-                      )}
                     </div>
 
-                    <div className="mt-4 flex items-center justify-between border-t border-border/70 pt-3 text-xs">
-                      <span className="font-semibold text-foreground-muted">
-                        {applicantsForRole} applicant{applicantsForRole === 1 ? "" : "s"}
+                    <div className="flex items-center justify-between pt-3 border-t border-border/60 text-xs">
+                      <span className="font-extrabold text-brand">
+                        {career.salaryRange || "Competitive Package"}
                       </span>
-
                       <span
-                        className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[9px] font-bold ${
+                        className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[10px] font-bold ${
                           career.isOpen !== false
-                            ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
-                            : "bg-rose-500/10 text-rose-500"
+                            ? "bg-emerald-500/10 text-emerald-500 border border-emerald-500/20"
+                            : "bg-rose-500/10 text-rose-500 border border-rose-500/20"
                         }`}
                       >
-                        {career.isOpen !== false ? "Open / Active" : "Closed"}
+                        {career.isOpen !== false ? "Active Hiring" : "Closed"}
                       </span>
                     </div>
                   </div>
@@ -249,17 +229,17 @@ export function CareersTab({
         </>
       )}
 
-      {/* 2. Candidate Applications Sub-Tab */}
+      {/* SUBTAB 2: INBOUND APPLICATIONS */}
       {subTab === "applications" && (
         <>
           {filteredApplications.length === 0 ? (
             <EmptyState
               icon={UserCheck}
-              title="No Applications Received"
-              description="When candidates apply on your careers page, their profiles and resumes will appear here in real-time."
+              title="No Inbound Applications"
+              description="Candidates applying to your career openings will appear here."
             />
           ) : (
-            <div>
+            <div className="space-y-4">
               {/* Mobile Card View (< md) */}
               <div className="space-y-3.5 block md:hidden">
                 {filteredApplications.map((app) => {
@@ -269,25 +249,34 @@ export function CareersTab({
                   return (
                     <div
                       key={appId}
-                      className="rounded-2xl border border-border border-l-[4px] border-l-brand bg-card p-4 space-y-3 shadow-xs"
+                      className="rounded-2xl border border-border bg-card p-4 shadow-sm space-y-3"
                     >
                       <div className="flex items-start justify-between gap-2">
                         <div>
-                          <h4 className="text-sm font-bold text-foreground">{app.fullName}</h4>
-                          <span className="text-[11px] font-semibold text-brand">
+                          <h4 className="text-sm font-extrabold text-foreground">
+                            {app.fullName}
+                          </h4>
+                          <span className="text-xs font-semibold text-brand block mt-0.5">
                             {app.roleApplied}
                           </span>
-                          <p className="text-[10px] text-foreground-subtle mt-0.5">
-                            {app.experienceYears || "Applicant"}
-                          </p>
                         </div>
 
-                        <div className="flex items-center gap-1 shrink-0">
+                        <div className="flex items-center gap-1">
+                          {onOpenInterviewModal && (
+                            <button
+                              type="button"
+                              onClick={() => onOpenInterviewModal(app)}
+                              className="rounded-lg p-1.5 bg-amber-500/10 text-amber-500 hover:bg-amber-500 hover:text-black transition-colors cursor-pointer"
+                              title="Schedule Interview"
+                            >
+                              <Calendar className="h-4 w-4" />
+                            </button>
+                          )}
                           <button
                             type="button"
                             onClick={() => onViewApplication(app)}
                             className="rounded-lg p-1.5 text-foreground-muted hover:bg-surface-hover hover:text-foreground transition-colors cursor-pointer"
-                            title="Inspect Application"
+                            title="Inspect Details"
                           >
                             <Eye className="h-4 w-4" />
                           </button>
@@ -337,6 +326,8 @@ export function CareersTab({
                               ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-600 dark:text-emerald-400"
                               : app.status === "Shortlisted"
                               ? "bg-cyan-500/10 border-cyan-500/30 text-cyan-600 dark:text-cyan-400"
+                              : app.status === "Interview Scheduled"
+                              ? "bg-amber-500/15 border-amber-500/30 text-amber-500"
                               : app.status === "Rejected"
                               ? "bg-rose-500/10 border-rose-500/30 text-rose-500"
                               : app.status === "Reviewing"
@@ -347,8 +338,9 @@ export function CareersTab({
                           <option value="Pending">Pending</option>
                           <option value="Reviewing">Reviewing</option>
                           <option value="Shortlisted">Shortlisted</option>
-                          <option value="Rejected">Rejected</option>
+                          <option value="Interview Scheduled">Interview Scheduled</option>
                           <option value="Hired">Hired</option>
+                          <option value="Rejected">Rejected (Auto-email)</option>
                         </select>
                       </div>
                     </div>
@@ -428,6 +420,8 @@ export function CareersTab({
                                   ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-600 dark:text-emerald-400"
                                   : app.status === "Shortlisted"
                                   ? "bg-cyan-500/10 border-cyan-500/30 text-cyan-600 dark:text-cyan-400"
+                                  : app.status === "Interview Scheduled"
+                                  ? "bg-amber-500/15 border-amber-500/30 text-amber-500 font-extrabold"
                                   : app.status === "Rejected"
                                   ? "bg-rose-500/10 border-rose-500/30 text-rose-500"
                                   : app.status === "Reviewing"
@@ -438,13 +432,25 @@ export function CareersTab({
                               <option value="Pending">Pending</option>
                               <option value="Reviewing">Reviewing</option>
                               <option value="Shortlisted">Shortlisted</option>
-                              <option value="Rejected">Rejected</option>
+                              <option value="Interview Scheduled">Interview Scheduled</option>
                               <option value="Hired">Hired</option>
+                              <option value="Rejected">Rejected (Auto-email)</option>
                             </select>
                           </td>
 
                           <td className="px-4 py-3.5 text-right">
                             <div className="flex items-center justify-end gap-1.5">
+                              {onOpenInterviewModal && (
+                                <button
+                                  type="button"
+                                  onClick={() => onOpenInterviewModal(app)}
+                                  className="rounded-lg p-1.5 bg-amber-500/10 text-amber-500 hover:bg-amber-500 hover:text-black transition-colors cursor-pointer flex items-center gap-1 font-bold text-[11px] px-2.5"
+                                  title="Schedule Interview"
+                                >
+                                  <Calendar className="h-3.5 w-3.5" />
+                                  <span className="hidden lg:inline">Interview</span>
+                                </button>
+                              )}
                               <button
                                 type="button"
                                 onClick={() => onViewApplication(app)}

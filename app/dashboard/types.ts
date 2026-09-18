@@ -38,6 +38,7 @@ export type ModalType =
   | "view-inquiry"
   | "view-application"
   | "compose-email"
+  | "invite-interview"
   | null;
 
 export interface DeleteModalState {
