@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { MessageSquare, Eye, Trash2 } from "lucide-react";
+import { MessageSquare, Eye, Trash2, Send, Mail } from "lucide-react";
 import type { InquiryItem } from "@/app/services/inquiryService";
 import { EmptyState } from "../ui/EmptyState";
 
@@ -11,6 +11,7 @@ interface InquiriesTabProps {
   onViewInquiry: (inquiry: InquiryItem) => void;
   onUpdateStatus: (id: string, status: string) => Promise<void>;
   onDeleteInquiry: (id: string, name: string) => void;
+  onComposeEmail?: (inquiry?: InquiryItem) => void;
 }
 
 export function InquiriesTab({
@@ -19,6 +20,7 @@ export function InquiriesTab({
   onViewInquiry,
   onUpdateStatus,
   onDeleteInquiry,
+  onComposeEmail,
 }: InquiriesTabProps) {
   const [statusFilter, setStatusFilter] = useState<string>("all");
 
@@ -52,6 +54,17 @@ export function InquiriesTab({
             Manage inbound client contact forms, project scopes, and follow-ups
           </p>
         </div>
+
+        {onComposeEmail && (
+          <button
+            type="button"
+            onClick={() => onComposeEmail()}
+            className="flex items-center justify-center gap-2 rounded-xl bg-brand px-4 py-2.5 text-xs font-bold text-black hover:bg-brand-hover hover:text-white transition-all shadow-sm cursor-pointer w-full sm:w-auto shrink-0"
+          >
+            <Send className="h-3.5 w-3.5" />
+            <span>Compose Email / Proposal</span>
+          </button>
+        )}
       </div>
 
       {/* Filter Tabs (Horizontally scrollable on mobile) */}
@@ -103,6 +116,16 @@ export function InquiriesTab({
                     </div>
 
                     <div className="flex items-center gap-1 shrink-0">
+                      {onComposeEmail && (
+                        <button
+                          type="button"
+                          onClick={() => onComposeEmail(inq)}
+                          className="rounded-lg p-1.5 text-brand hover:bg-brand/10 transition-colors cursor-pointer"
+                          title="Send Email / Proposal"
+                        >
+                          <Send className="h-4 w-4" />
+                        </button>
+                      )}
                       <button
                         type="button"
                         onClick={() => onViewInquiry(inq)}
@@ -243,6 +266,16 @@ export function InquiriesTab({
 
                       <td className="px-4 py-3.5 text-right">
                         <div className="flex items-center justify-end gap-1.5">
+                          {onComposeEmail && (
+                            <button
+                              type="button"
+                              onClick={() => onComposeEmail(inq)}
+                              className="rounded-lg p-1.5 text-brand hover:bg-brand/10 transition-colors cursor-pointer"
+                              title="Send Email / Proposal"
+                            >
+                              <Send className="h-4 w-4" />
+                            </button>
+                          )}
                           <button
                             type="button"
                             onClick={() => onViewInquiry(inq)}
@@ -272,3 +305,4 @@ export function InquiriesTab({
     </div>
   );
 }
+

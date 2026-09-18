@@ -8,6 +8,7 @@ interface InquiryViewModalProps {
   onClose: () => void;
   inquiry: InquiryItem | null;
   onUpdateStatus: (id: string, status: string) => Promise<void>;
+  onComposeEmail?: (inquiry: InquiryItem) => void;
 }
 
 export function InquiryViewModal({
@@ -15,6 +16,7 @@ export function InquiryViewModal({
   onClose,
   inquiry,
   onUpdateStatus,
+  onComposeEmail,
 }: InquiryViewModalProps) {
   if (!isOpen || !inquiry) return null;
 
@@ -41,7 +43,7 @@ export function InquiryViewModal({
           <button
             type="button"
             onClick={onClose}
-            className="rounded-lg p-1 text-foreground-muted hover:bg-surface-hover hover:text-foreground"
+            className="rounded-lg p-1 text-foreground-muted hover:bg-surface-hover hover:text-foreground cursor-pointer"
           >
             <X className="h-4 w-4" />
           </button>
@@ -131,7 +133,7 @@ export function InquiryViewModal({
             <select
               value={inquiry.status || "New"}
               onChange={(e) => onUpdateStatus(inqId, e.target.value)}
-              className="h-8 rounded-lg border border-border bg-surface px-2.5 text-xs font-semibold text-foreground focus:border-brand focus:outline-none"
+              className="h-8 rounded-lg border border-border bg-surface px-2.5 text-xs font-semibold text-foreground focus:border-brand focus:outline-none cursor-pointer"
             >
               <option value="New">New</option>
               <option value="In Review">In Review</option>
@@ -141,17 +143,23 @@ export function InquiryViewModal({
           </div>
 
           <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
-            <a
-              href={`mailto:${inquiry.email}?subject=${encodeURIComponent(`Re: Your Project Inquiry - Programming Bridge`)}`}
-              className="flex items-center gap-1.5 rounded-xl bg-brand px-4 py-2 text-xs font-bold text-black hover:bg-brand-hover hover:text-white transition-all shadow-sm"
+            <button
+              type="button"
+              onClick={() => {
+                onClose();
+                if (onComposeEmail) {
+                  onComposeEmail(inquiry);
+                }
+              }}
+              className="flex items-center gap-1.5 rounded-xl bg-brand px-4 py-2 text-xs font-bold text-black hover:bg-brand-hover hover:text-white transition-all shadow-sm cursor-pointer"
             >
               <Mail className="h-3.5 w-3.5" />
-              <span>Reply via Email</span>
-            </a>
+              <span>Send Proposal / Email</span>
+            </button>
             <button
               type="button"
               onClick={onClose}
-              className="rounded-xl border border-border bg-surface px-4 py-2 text-xs font-semibold text-foreground hover:bg-surface-hover"
+              className="rounded-xl border border-border bg-surface px-4 py-2 text-xs font-semibold text-foreground hover:bg-surface-hover cursor-pointer"
             >
               Close
             </button>
@@ -161,3 +169,4 @@ export function InquiryViewModal({
     </div>
   );
 }
+
