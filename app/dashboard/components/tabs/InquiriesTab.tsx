@@ -4,6 +4,34 @@ import { useState } from "react";
 import { MessageSquare, Eye, Trash2, Send, Mail } from "lucide-react";
 import type { InquiryItem } from "@/app/services/inquiryService";
 import { EmptyState } from "../ui/EmptyState";
+import { StatusDropdown, type StatusOption } from "../ui/StatusDropdown";
+
+const INQUIRY_STATUS_OPTIONS: StatusOption[] = [
+  {
+    value: "New",
+    label: "New",
+    badgeClass: "bg-amber-500/15 border-amber-500/30 text-amber-500",
+    dotClass: "bg-amber-400",
+  },
+  {
+    value: "In Review",
+    label: "In Review",
+    badgeClass: "bg-cyan-500/15 border-cyan-500/30 text-cyan-400",
+    dotClass: "bg-cyan-400",
+  },
+  {
+    value: "Contacted",
+    label: "Contacted",
+    badgeClass: "bg-brand/15 border-brand/30 text-brand",
+    dotClass: "bg-brand",
+  },
+  {
+    value: "Closed",
+    label: "Closed",
+    badgeClass: "bg-slate-500/15 border-slate-500/30 text-slate-400",
+    dotClass: "bg-slate-400",
+  },
+];
 
 interface InquiriesTabProps {
   inquiries: InquiryItem[];
@@ -68,7 +96,7 @@ export function InquiriesTab({
       </div>
 
       {/* Filter Tabs (Horizontally scrollable on mobile) */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-1.5 pt-0.5 max-w-full">
+      <div className="flex items-center gap-2 overflow-x-auto pb-1.5 pt-0.5 max-w-full scrollbar-none">
         {["all", "New", "In Review", "Contacted", "Closed"].map((status) => (
           <button
             key={status}
@@ -157,152 +185,129 @@ export function InquiriesTab({
                       {inq.email}
                     </a>
 
-                    <select
+                    <StatusDropdown
                       value={inq.status || "New"}
-                      onChange={(e) => onUpdateStatus(inqId, e.target.value)}
-                      className={`rounded-lg border px-2 py-1 text-[11px] font-bold focus:outline-none transition-colors cursor-pointer ${
-                        inq.status === "Closed"
-                          ? "bg-slate-500/10 border-slate-500/30 text-slate-500"
-                          : inq.status === "Contacted"
-                          ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-600 dark:text-emerald-400"
-                          : inq.status === "In Review"
-                          ? "bg-cyan-500/10 border-cyan-500/30 text-cyan-600 dark:text-cyan-400"
-                          : "bg-brand/10 border-brand/30 text-brand"
-                      }`}
-                    >
-                      <option value="New">New</option>
-                      <option value="In Review">In Review</option>
-                      <option value="Contacted">Contacted</option>
-                      <option value="Closed">Closed</option>
-                    </select>
+                      options={INQUIRY_STATUS_OPTIONS}
+                      onChange={(newVal) => onUpdateStatus(inqId, newVal)}
+                    />
                   </div>
                 </div>
               );
             })}
           </div>
 
-          {/* Desktop Data Table (>= md) */}
-          <div className="hidden md:block overflow-x-auto rounded-2xl border border-border bg-card">
-            <table className="w-full text-left text-xs">
-              <thead className="border-b border-border bg-surface/60 text-[10px] font-bold uppercase tracking-wider text-foreground-subtle">
-                <tr>
-                  <th className="px-4 py-3">Client / Sender</th>
-                  <th className="px-4 py-3">Project Type & Budget</th>
-                  <th className="px-4 py-3">Message Summary</th>
-                  <th className="px-4 py-3">Date</th>
-                  <th className="px-4 py-3">Status</th>
-                  <th className="px-4 py-3 text-right">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y border-border font-medium">
-                {filteredInquiries.map((inq) => {
-                  const inqId = inq._id || inq.id || "";
+          {/* Desktop Data Table (>= md) with full horizontal scroll support */}
+          <div className="hidden md:block w-full overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
+            <div className="overflow-x-auto w-full scrollbar-thin">
+              <table className="w-full min-w-[880px] text-left text-xs">
+                <thead className="border-b border-border bg-surface/60 text-[10px] font-bold uppercase tracking-wider text-foreground-subtle">
+                  <tr>
+                    <th className="px-5 py-3.5 whitespace-nowrap">Client / Sender</th>
+                    <th className="px-5 py-3.5 whitespace-nowrap">Project Type & Budget</th>
+                    <th className="px-5 py-3.5 whitespace-nowrap">Message Summary</th>
+                    <th className="px-5 py-3.5 whitespace-nowrap">Date</th>
+                    <th className="px-5 py-3.5 whitespace-nowrap">Status</th>
+                    <th className="px-5 py-3.5 text-right whitespace-nowrap">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y border-border font-medium">
+                  {filteredInquiries.map((inq) => {
+                    const inqId = inq._id || inq.id || "";
 
-                  return (
-                    <tr key={inqId} className="hover:bg-surface-hover/50 transition-colors">
-                      <td className="px-4 py-3.5">
-                        <div className="flex flex-col">
-                          <span className="font-bold text-foreground">{inq.name}</span>
-                          <a
-                            href={`mailto:${inq.email}`}
-                            className="text-[11px] text-brand hover:underline font-semibold mt-0.5"
-                          >
-                            {inq.email}
-                          </a>
-                          {inq.company && (
-                            <span className="text-[10px] text-foreground-subtle">{inq.company}</span>
-                          )}
-                        </div>
-                      </td>
+                    return (
+                      <tr key={inqId} className="hover:bg-surface-hover/50 transition-colors">
+                        <td className="px-5 py-3.5">
+                          <div className="flex flex-col">
+                            <span className="font-bold text-foreground">{inq.name}</span>
+                            <a
+                              href={`mailto:${inq.email}`}
+                              className="text-[11px] text-brand hover:underline font-semibold mt-0.5"
+                            >
+                              {inq.email}
+                            </a>
+                            {inq.company && (
+                              <span className="text-[10px] text-foreground-subtle">{inq.company}</span>
+                            )}
+                          </div>
+                        </td>
 
-                      <td className="px-4 py-3.5">
-                        <div className="flex flex-col">
-                          <span className="font-semibold text-foreground">
-                            {inq.projectType || "General Inquiry"}
-                          </span>
-                          {inq.budgetRange && (
-                            <span className="text-[10px] text-foreground-muted">
-                              Est: {inq.budgetRange}
+                        <td className="px-5 py-3.5">
+                          <div className="flex flex-col">
+                            <span className="font-semibold text-foreground">
+                              {inq.projectType || "General Inquiry"}
                             </span>
-                          )}
-                        </div>
-                      </td>
+                            {inq.budgetRange && (
+                              <span className="text-[10px] text-foreground-muted">
+                                Est: {inq.budgetRange}
+                              </span>
+                            )}
+                          </div>
+                        </td>
 
-                      <td className="px-4 py-3.5 max-w-xs">
-                        <p className="line-clamp-2 text-foreground-muted leading-relaxed">
-                          {inq.message}
-                        </p>
-                      </td>
+                        <td className="px-5 py-3.5 max-w-xs">
+                          <p className="line-clamp-2 text-foreground-muted leading-relaxed">
+                            {inq.message}
+                          </p>
+                        </td>
 
-                      <td className="px-4 py-3.5 text-foreground-subtle text-[11px] whitespace-nowrap">
-                        {inq.createdAt
-                          ? new Date(inq.createdAt).toLocaleDateString("en-US", {
-                              month: "short",
-                              day: "numeric",
-                            })
-                          : "Recent"}
-                      </td>
+                        <td className="px-5 py-3.5 text-foreground-subtle text-[11px] whitespace-nowrap">
+                          {inq.createdAt
+                            ? new Date(inq.createdAt).toLocaleDateString("en-US", {
+                                month: "short",
+                                day: "numeric",
+                              })
+                            : "Recent"}
+                        </td>
 
-                      <td className="px-4 py-3.5">
-                        <select
-                          value={inq.status || "New"}
-                          onChange={(e) => onUpdateStatus(inqId, e.target.value)}
-                          className={`rounded-lg border px-2 py-1 text-[11px] font-bold focus:outline-none transition-colors cursor-pointer ${
-                            inq.status === "Closed"
-                              ? "bg-slate-500/10 border-slate-500/30 text-slate-500"
-                              : inq.status === "Contacted"
-                              ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-600 dark:text-emerald-400"
-                              : inq.status === "In Review"
-                              ? "bg-cyan-500/10 border-cyan-500/30 text-cyan-600 dark:text-cyan-400"
-                              : "bg-brand/10 border-brand/30 text-brand"
-                          }`}
-                        >
-                          <option value="New">New</option>
-                          <option value="In Review">In Review</option>
-                          <option value="Contacted">Contacted</option>
-                          <option value="Closed">Closed</option>
-                        </select>
-                      </td>
+                        <td className="px-5 py-3.5">
+                          <StatusDropdown
+                            value={inq.status || "New"}
+                            options={INQUIRY_STATUS_OPTIONS}
+                            onChange={(newVal) => onUpdateStatus(inqId, newVal)}
+                          />
+                        </td>
 
-                      <td className="px-4 py-3.5 text-right">
-                        <div className="flex items-center justify-end gap-1.5">
-                          {onComposeEmail && (
+                        <td className="px-5 py-3.5 text-right">
+                          <div className="flex items-center justify-end gap-1.5">
+                            {onComposeEmail && (
+                              <button
+                                type="button"
+                                onClick={() => onComposeEmail(inq)}
+                                className="rounded-lg p-1.5 text-brand hover:bg-brand/10 transition-colors cursor-pointer"
+                                title="Send Email / Proposal"
+                              >
+                                <Send className="h-4 w-4" />
+                              </button>
+                            )}
                             <button
                               type="button"
-                              onClick={() => onComposeEmail(inq)}
-                              className="rounded-lg p-1.5 text-brand hover:bg-brand/10 transition-colors cursor-pointer"
-                              title="Send Email / Proposal"
+                              onClick={() => onViewInquiry(inq)}
+                              className="rounded-lg p-1.5 text-foreground-muted hover:bg-surface-hover hover:text-foreground transition-colors cursor-pointer"
+                              title="View Message"
                             >
-                              <Send className="h-4 w-4" />
+                              <Eye className="h-4 w-4" />
                             </button>
-                          )}
-                          <button
-                            type="button"
-                            onClick={() => onViewInquiry(inq)}
-                            className="rounded-lg p-1.5 text-foreground-muted hover:bg-surface-hover hover:text-foreground transition-colors cursor-pointer"
-                            title="View Message"
-                          >
-                            <Eye className="h-4 w-4" />
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => onDeleteInquiry(inqId, inq.name)}
-                            className="rounded-lg p-1.5 text-foreground-muted hover:bg-rose-500/10 hover:text-rose-500 transition-colors cursor-pointer"
-                            title="Delete Message"
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
+                            <button
+                              type="button"
+                              onClick={() => onDeleteInquiry(inqId, inq.name)}
+                              className="rounded-lg p-1.5 text-foreground-muted hover:bg-rose-500/10 hover:text-rose-500 transition-colors cursor-pointer"
+                              title="Delete Message"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       )}
     </div>
   );
 }
+
 

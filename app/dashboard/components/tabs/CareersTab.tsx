@@ -17,6 +17,46 @@ import {
 import type { Career, JobApplication } from "@/app/services/careerService";
 import { getMediaUrl } from "@/app/services/apiClient";
 import { EmptyState } from "../ui/EmptyState";
+import { StatusDropdown, type StatusOption } from "../ui/StatusDropdown";
+
+const APPLICATION_STATUS_OPTIONS: StatusOption[] = [
+  {
+    value: "Pending",
+    label: "Pending",
+    badgeClass: "bg-surface border-border text-foreground-muted",
+    dotClass: "bg-slate-400",
+  },
+  {
+    value: "Reviewing",
+    label: "Reviewing",
+    badgeClass: "bg-amber-500/15 border-amber-500/30 text-amber-500",
+    dotClass: "bg-amber-400",
+  },
+  {
+    value: "Shortlisted",
+    label: "Shortlisted",
+    badgeClass: "bg-cyan-500/15 border-cyan-500/30 text-cyan-400",
+    dotClass: "bg-cyan-400",
+  },
+  {
+    value: "Interview Scheduled",
+    label: "Interview Scheduled",
+    badgeClass: "bg-brand/15 border-brand/30 text-brand font-extrabold",
+    dotClass: "bg-brand",
+  },
+  {
+    value: "Hired",
+    label: "Hired",
+    badgeClass: "bg-emerald-500/15 border-emerald-500/30 text-emerald-400",
+    dotClass: "bg-emerald-400",
+  },
+  {
+    value: "Rejected",
+    label: "Rejected (Auto-email)",
+    badgeClass: "bg-rose-500/15 border-rose-500/30 text-rose-500",
+    dotClass: "bg-rose-500",
+  },
+];
 
 interface CareersTabProps {
   careers: Career[];
@@ -322,162 +362,126 @@ export function CareersTab({
                           <span className="text-[10px] text-foreground-subtle italic">No CV</span>
                         )}
 
-                        <select
+                        <StatusDropdown
                           value={app.status || "Pending"}
-                          onChange={(e) => onUpdateAppStatus(appId, e.target.value)}
-                          className={`rounded-lg border px-2 py-1 text-[11px] font-bold focus:outline-none transition-colors cursor-pointer ${
-                            app.status === "Hired"
-                              ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-600 dark:text-emerald-400"
-                              : app.status === "Shortlisted"
-                              ? "bg-cyan-500/10 border-cyan-500/30 text-cyan-600 dark:text-cyan-400"
-                              : app.status === "Interview Scheduled"
-                              ? "bg-brand/15 border-brand/30 text-brand"
-                              : app.status === "Rejected"
-                              ? "bg-rose-500/10 border-rose-500/30 text-rose-500"
-                              : app.status === "Reviewing"
-                              ? "bg-amber-500/10 border-amber-500/30 text-amber-600 dark:text-amber-400"
-                              : "bg-surface border-border text-foreground-muted"
-                          }`}
-                        >
-                          <option value="Pending">Pending</option>
-                          <option value="Reviewing">Reviewing</option>
-                          <option value="Shortlisted">Shortlisted</option>
-                          <option value="Interview Scheduled">Interview Scheduled</option>
-                          <option value="Hired">Hired</option>
-                          <option value="Rejected">Rejected (Auto-email)</option>
-                        </select>
+                          options={APPLICATION_STATUS_OPTIONS}
+                          onChange={(newVal) => onUpdateAppStatus(appId, newVal)}
+                        />
                       </div>
                     </div>
                   );
                 })}
               </div>
 
-              {/* Desktop Data Table (>= md) */}
-              <div className="hidden md:block overflow-x-auto rounded-2xl border border-border bg-card">
-                <table className="w-full text-left text-xs">
-                  <thead className="border-b border-border bg-surface/60 text-[10px] font-bold uppercase tracking-wider text-foreground-subtle">
-                    <tr>
-                      <th className="px-4 py-3">Applicant Name</th>
-                      <th className="px-4 py-3">Role Applied</th>
-                      <th className="px-4 py-3">Contact</th>
-                      <th className="px-4 py-3">Resume / CV</th>
-                      <th className="px-4 py-3">Status</th>
-                      <th className="px-4 py-3 text-right">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y border-border font-medium">
-                    {filteredApplications.map((app) => {
-                      const appId = app._id || app.id || "";
-                      const resumeHref = app.resumeUrl ? getMediaUrl(app.resumeUrl) : null;
+              {/* Desktop Data Table (>= md) with full horizontal scroll support */}
+              <div className="hidden md:block w-full overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
+                <div className="overflow-x-auto w-full scrollbar-thin">
+                  <table className="w-full min-w-[880px] text-left text-xs">
+                    <thead className="border-b border-border bg-surface/60 text-[10px] font-bold uppercase tracking-wider text-foreground-subtle">
+                      <tr>
+                        <th className="px-5 py-3.5 whitespace-nowrap">Applicant Name</th>
+                        <th className="px-5 py-3.5 whitespace-nowrap">Role Applied</th>
+                        <th className="px-5 py-3.5 whitespace-nowrap">Contact</th>
+                        <th className="px-5 py-3.5 whitespace-nowrap">Resume / CV</th>
+                        <th className="px-5 py-3.5 whitespace-nowrap">Status</th>
+                        <th className="px-5 py-3.5 text-right whitespace-nowrap">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y border-border font-medium">
+                      {filteredApplications.map((app) => {
+                        const appId = app._id || app.id || "";
+                        const resumeHref = app.resumeUrl ? getMediaUrl(app.resumeUrl) : null;
 
-                      return (
-                        <tr key={appId} className="hover:bg-surface-hover/50 transition-colors">
-                          <td className="px-4 py-3.5">
-                            <div className="flex flex-col">
-                              <span className="font-bold text-foreground">{app.fullName}</span>
-                              <span className="text-[10px] text-foreground-subtle">
-                                {app.experienceYears || "Applicant"}
-                              </span>
-                            </div>
-                          </td>
+                        return (
+                          <tr key={appId} className="hover:bg-surface-hover/50 transition-colors">
+                            <td className="px-5 py-3.5">
+                              <div className="flex flex-col">
+                                <span className="font-bold text-foreground">{app.fullName}</span>
+                                <span className="text-[10px] text-foreground-subtle">
+                                  {app.experienceYears || "Applicant"}
+                                </span>
+                              </div>
+                            </td>
 
-                          <td className="px-4 py-3.5 font-semibold text-foreground">
-                            {app.roleApplied}
-                          </td>
+                            <td className="px-5 py-3.5 font-semibold text-foreground">
+                              {app.roleApplied}
+                            </td>
 
-                          <td className="px-4 py-3.5">
-                            <div className="flex flex-col gap-0.5">
-                              <a
-                                href={`mailto:${app.email}`}
-                                className="text-brand hover:underline font-semibold flex items-center gap-1 text-[11px]"
-                              >
-                                <span>{app.email}</span>
-                              </a>
-                              {app.phone && (
-                                <span className="text-[10px] text-foreground-muted">{app.phone}</span>
+                            <td className="px-5 py-3.5">
+                              <div className="flex flex-col gap-0.5">
+                                <a
+                                  href={`mailto:${app.email}`}
+                                  className="text-brand hover:underline font-semibold flex items-center gap-1 text-[11px]"
+                                >
+                                  <span>{app.email}</span>
+                                </a>
+                                {app.phone && (
+                                  <span className="text-[10px] text-foreground-muted">{app.phone}</span>
+                                )}
+                              </div>
+                            </td>
+
+                            <td className="px-5 py-3.5">
+                              {resumeHref ? (
+                                <a
+                                  href={resumeHref}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="inline-flex items-center gap-1 rounded-lg bg-brand/10 border border-brand/20 px-2.5 py-1 text-[11px] font-bold text-brand hover:bg-brand hover:text-black transition-all"
+                                >
+                                  <Download className="h-3 w-3" />
+                                  <span>Resume</span>
+                                </a>
+                              ) : (
+                                <span className="text-[10px] text-foreground-subtle italic">No File</span>
                               )}
-                            </div>
-                          </td>
+                            </td>
 
-                          <td className="px-4 py-3.5">
-                            {resumeHref ? (
-                              <a
-                                href={resumeHref}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="inline-flex items-center gap-1 rounded-lg bg-brand/10 border border-brand/20 px-2.5 py-1 text-[11px] font-bold text-brand hover:bg-brand hover:text-black transition-all"
-                              >
-                                <Download className="h-3 w-3" />
-                                <span>Resume</span>
-                              </a>
-                            ) : (
-                              <span className="text-[10px] text-foreground-subtle italic">No File</span>
-                            )}
-                          </td>
+                            <td className="px-5 py-3.5">
+                              <StatusDropdown
+                                value={app.status || "Pending"}
+                                options={APPLICATION_STATUS_OPTIONS}
+                                onChange={(newVal) => onUpdateAppStatus(appId, newVal)}
+                              />
+                            </td>
 
-                          <td className="px-4 py-3.5">
-                            <select
-                              value={app.status || "Pending"}
-                              onChange={(e) => onUpdateAppStatus(appId, e.target.value)}
-                              className={`rounded-lg border px-2 py-1 text-[11px] font-bold focus:outline-none transition-colors cursor-pointer ${
-                                app.status === "Hired"
-                                  ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-600 dark:text-emerald-400"
-                                  : app.status === "Shortlisted"
-                                  ? "bg-cyan-500/10 border-cyan-500/30 text-cyan-600 dark:text-cyan-400"
-                                  : app.status === "Interview Scheduled"
-                                  ? "bg-brand/15 border-brand/30 text-brand font-extrabold"
-                                  : app.status === "Rejected"
-                                  ? "bg-rose-500/10 border-rose-500/30 text-rose-500"
-                                  : app.status === "Reviewing"
-                                  ? "bg-amber-500/10 border-amber-500/30 text-amber-600 dark:text-amber-400"
-                                  : "bg-surface border-border text-foreground-muted"
-                              }`}
-                            >
-                              <option value="Pending">Pending</option>
-                              <option value="Reviewing">Reviewing</option>
-                              <option value="Shortlisted">Shortlisted</option>
-                              <option value="Interview Scheduled">Interview Scheduled</option>
-                              <option value="Hired">Hired</option>
-                              <option value="Rejected">Rejected (Auto-email)</option>
-                            </select>
-                          </td>
-
-                          <td className="px-4 py-3.5 text-right">
-                            <div className="flex items-center justify-end gap-1.5">
-                              {onOpenInterviewModal && (
+                            <td className="px-5 py-3.5 text-right">
+                              <div className="flex items-center justify-end gap-1.5">
+                                {onOpenInterviewModal && (
+                                  <button
+                                    type="button"
+                                    onClick={() => onOpenInterviewModal(app)}
+                                    className="rounded-lg p-1.5 bg-brand/10 border border-brand/20 text-brand hover:bg-brand hover:text-black transition-colors cursor-pointer flex items-center gap-1 font-bold text-[11px] px-2.5 shadow-xs"
+                                    title="Schedule Interview"
+                                  >
+                                    <Calendar className="h-3.5 w-3.5" />
+                                    <span className="hidden lg:inline">Interview</span>
+                                  </button>
+                                )}
                                 <button
                                   type="button"
-                                  onClick={() => onOpenInterviewModal(app)}
-                                  className="rounded-lg p-1.5 bg-brand/10 border border-brand/20 text-brand hover:bg-brand hover:text-black transition-colors cursor-pointer flex items-center gap-1 font-bold text-[11px] px-2.5 shadow-xs"
-                                  title="Schedule Interview"
+                                  onClick={() => onViewApplication(app)}
+                                  className="rounded-lg p-1.5 text-foreground-muted hover:bg-surface-hover hover:text-foreground transition-colors cursor-pointer"
+                                  title="Inspect Application"
                                 >
-                                  <Calendar className="h-3.5 w-3.5" />
-                                  <span className="hidden lg:inline">Interview</span>
+                                  <Eye className="h-4 w-4" />
                                 </button>
-                              )}
-                              <button
-                                type="button"
-                                onClick={() => onViewApplication(app)}
-                                className="rounded-lg p-1.5 text-foreground-muted hover:bg-surface-hover hover:text-foreground transition-colors cursor-pointer"
-                                title="Inspect Application"
-                              >
-                                <Eye className="h-4 w-4" />
-                              </button>
-                              <button
-                                type="button"
-                                onClick={() => onDeleteApplication(appId, app.fullName)}
-                                className="rounded-lg p-1.5 text-foreground-muted hover:bg-rose-500/10 hover:text-rose-500 transition-colors cursor-pointer"
-                                title="Delete Application"
-                              >
-                                <Trash2 className="h-4 w-4" />
-                              </button>
-                            </div>
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
+                                <button
+                                  type="button"
+                                  onClick={() => onDeleteApplication(appId, app.fullName)}
+                                  className="rounded-lg p-1.5 text-foreground-muted hover:bg-rose-500/10 hover:text-rose-500 transition-colors cursor-pointer"
+                                  title="Delete Application"
+                                >
+                                  <Trash2 className="h-4 w-4" />
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
           )}
@@ -486,3 +490,4 @@ export function CareersTab({
     </div>
   );
 }
+

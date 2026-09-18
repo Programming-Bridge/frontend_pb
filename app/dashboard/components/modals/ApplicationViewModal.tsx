@@ -1,8 +1,48 @@
 "use client";
 
-import { X, Mail, Phone, ExternalLink, Download, FileText, Award, Calendar, CheckCircle2 } from "lucide-react";
+import { X, Mail, Phone, ExternalLink, Download, FileText, Award, Calendar } from "lucide-react";
 import type { JobApplication } from "@/app/services/careerService";
 import { getMediaUrl } from "@/app/services/apiClient";
+import { StatusDropdown, type StatusOption } from "../ui/StatusDropdown";
+
+const APPLICATION_STATUS_OPTIONS: StatusOption[] = [
+  {
+    value: "Pending",
+    label: "Pending",
+    badgeClass: "bg-surface border-border text-foreground-muted",
+    dotClass: "bg-slate-400",
+  },
+  {
+    value: "Reviewing",
+    label: "Reviewing",
+    badgeClass: "bg-amber-500/15 border-amber-500/30 text-amber-500",
+    dotClass: "bg-amber-400",
+  },
+  {
+    value: "Shortlisted",
+    label: "Shortlisted",
+    badgeClass: "bg-cyan-500/15 border-cyan-500/30 text-cyan-400",
+    dotClass: "bg-cyan-400",
+  },
+  {
+    value: "Interview Scheduled",
+    label: "Interview Scheduled",
+    badgeClass: "bg-brand/15 border-brand/30 text-brand font-extrabold",
+    dotClass: "bg-brand",
+  },
+  {
+    value: "Hired",
+    label: "Hired",
+    badgeClass: "bg-emerald-500/15 border-emerald-500/30 text-emerald-400",
+    dotClass: "bg-emerald-400",
+  },
+  {
+    value: "Rejected",
+    label: "Rejected (Auto-email)",
+    badgeClass: "bg-rose-500/15 border-rose-500/30 text-rose-500",
+    dotClass: "bg-rose-500",
+  },
+];
 
 interface ApplicationViewModalProps {
   isOpen: boolean;
@@ -197,18 +237,11 @@ export function ApplicationViewModal({
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 border-t border-border px-4 sm:px-6 py-3.5 sm:py-4 bg-surface/50">
           <div className="flex items-center gap-2">
             <span className="text-xs font-bold text-foreground shrink-0">Stage:</span>
-            <select
+            <StatusDropdown
               value={application.status || "Pending"}
-              onChange={(e) => onUpdateStatus(appId, e.target.value)}
-              className="h-8.5 rounded-xl border border-border bg-surface px-3 text-xs font-bold text-foreground focus:border-brand focus:outline-none cursor-pointer transition-all"
-            >
-              <option value="Pending">Pending</option>
-              <option value="Reviewing">Reviewing</option>
-              <option value="Shortlisted">Shortlisted</option>
-              <option value="Interview Scheduled">Interview Scheduled</option>
-              <option value="Hired">Hired</option>
-              <option value="Rejected">Rejected (Auto-send email)</option>
-            </select>
+              options={APPLICATION_STATUS_OPTIONS}
+              onChange={(newVal) => onUpdateStatus(appId, newVal)}
+            />
           </div>
 
           <div className="flex items-center gap-2 justify-end">
@@ -239,3 +272,4 @@ export function ApplicationViewModal({
     </div>
   );
 }
+

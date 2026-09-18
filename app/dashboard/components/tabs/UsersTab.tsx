@@ -238,17 +238,17 @@ export function UsersTab({
           </div>
 
           {/* Desktop Data Table (Screen >= 768px) */}
-          <div className="hidden md:block overflow-hidden rounded-2xl border border-border bg-card shadow-xs">
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs">
+          <div className="hidden md:block w-full overflow-hidden rounded-2xl border border-border bg-card shadow-xs">
+            <div className="overflow-x-auto w-full scrollbar-thin">
+              <table className="w-full min-w-[800px] text-left text-xs">
                 <thead className="border-b border-border bg-surface/70 text-[10px] font-bold uppercase tracking-wider text-foreground-subtle">
                   <tr>
-                    <th className="px-5 py-3.5">User</th>
-                    <th className="px-5 py-3.5">Email Address</th>
-                    <th className="px-5 py-3.5">Assigned Role</th>
-                    <th className="px-5 py-3.5">Status</th>
-                    <th className="px-5 py-3.5">Last Login</th>
-                    <th className="px-5 py-3.5 text-right">Actions</th>
+                    <th className="px-5 py-3.5 whitespace-nowrap">User</th>
+                    <th className="px-5 py-3.5 whitespace-nowrap">Email Address</th>
+                    <th className="px-5 py-3.5 whitespace-nowrap">Assigned Role</th>
+                    <th className="px-5 py-3.5 whitespace-nowrap">Status</th>
+                    <th className="px-5 py-3.5 whitespace-nowrap">Last Login</th>
+                    <th className="px-5 py-3.5 text-right whitespace-nowrap">Actions</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-border/60">
