@@ -101,6 +101,7 @@ export interface SendClientEmailPayload {
   message: string;
   inquiryId?: string;
   clientName?: string;
+  senderAccount?: 'hasnain' | 'official' | 'hr';
 }
 
 export const sendClientEmail = async (

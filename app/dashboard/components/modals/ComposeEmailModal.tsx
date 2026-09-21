@@ -177,6 +177,7 @@ export function ComposeEmailModal({
   inquiry,
   onEmailSent,
 }: ComposeEmailModalProps) {
+  const [senderAccount, setSenderAccount] = useState<"hasnain" | "official">("hasnain");
   const [recipient, setRecipient] = useState<string>("");
   const [clientName, setClientName] = useState<string>("");
   const [subject, setSubject] = useState<string>("");
@@ -246,9 +247,10 @@ export function ComposeEmailModal({
         message: message.trim(),
         clientName: clientName.trim() || undefined,
         inquiryId: inqId || undefined,
+        senderAccount,
       });
 
-      setSuccess(res.message || "Email sent successfully from official@programmingbridge.org!");
+      setSuccess(res.message || `Email sent successfully from ${senderAccount === "hasnain" ? "hasnain@programmingbridge.org" : "official@programmingbridge.org"}!`);
 
       if (onEmailSent) {
         onEmailSent(res.data);
@@ -273,7 +275,7 @@ export function ComposeEmailModal({
       <div className="relative w-full max-w-3xl max-h-[94vh] flex flex-col rounded-3xl border border-border bg-card shadow-2xl overflow-hidden">
         
         {/* Header Bar */}
-        <div className="flex items-center justify-between border-b border-border px-6 py-4 bg-surface/60">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-border px-6 py-4 bg-surface/60 gap-3">
           <div className="flex items-center gap-3">
             <div className="flex h-11 w-11 shrink-0 aspect-square items-center justify-center rounded-2xl bg-brand/15 text-brand shadow-inner">
               <Mail className="h-5 w-5" />
@@ -281,22 +283,29 @@ export function ComposeEmailModal({
             <div>
               <div className="flex items-center gap-2">
                 <h3 className="text-base font-extrabold text-foreground">
-                  Official Client Email & Proposal Composer
+                  Client Proposal & Email Composer
                 </h3>
               </div>
-              <p className="text-[11px] text-foreground-muted flex items-center gap-2 mt-0.5">
-                <span>Sender:</span>
-                <span className="font-bold text-brand">official@programmingbridge.org</span>
+              <div className="flex items-center gap-2 mt-1">
+                <label className="text-[11px] text-foreground-muted font-medium">Sending as:</label>
+                <select
+                  value={senderAccount}
+                  onChange={(e) => setSenderAccount(e.target.value as "hasnain" | "official")}
+                  className="rounded-lg border border-border bg-surface px-2 py-0.5 text-[11px] font-bold text-brand focus:border-brand focus:outline-none cursor-pointer"
+                >
+                  <option value="hasnain">Hasnain Iqbal (hasnain@programmingbridge.org)</option>
+                  <option value="official">Programming Bridge (official@programmingbridge.org)</option>
+                </select>
                 <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-0.5 text-[10px] font-bold text-emerald-500 border border-emerald-500/20">
                   <ShieldCheck className="h-3 w-3" /> Zoho SMTP Active
                 </span>
-              </p>
+              </div>
             </div>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="rounded-xl p-2 text-foreground-muted hover:bg-surface-hover hover:text-foreground transition-colors cursor-pointer"
+            className="self-end sm:self-center rounded-xl p-2 text-foreground-muted hover:bg-surface-hover hover:text-foreground transition-colors cursor-pointer"
           >
             <X className="h-4 w-4" />
           </button>
@@ -589,12 +598,37 @@ export function ComposeEmailModal({
                           previewTheme === "dark" ? "text-white" : "text-slate-900"
                         }`}
                       >
-                        Programming Bridge <span className="text-emerald-400">Team</span>
+                        {senderAccount === "hasnain" ? "Hasnain Iqbal" : "Programming Bridge"}{" "}
+                        <span className="text-emerald-400">
+                          {senderAccount === "hasnain" ? "• Programming Bridge" : "Team"}
+                        </span>
                       </p>
-                      <p className="text-[11px] text-slate-400">Engineering & Client Advisory Department</p>
-                      <p className="text-[11px] text-emerald-400 font-semibold mt-1">
-                        official@programmingbridge.org • programmingbridge.org
+                      <p className="text-[11px] text-slate-400">
+                        {senderAccount === "hasnain"
+                          ? "Founder & Lead Software Architect"
+                          : "Engineering & Client Advisory Department"}
                       </p>
+                      
+                      {/* Clearly Labelled Contact & Website Rows */}
+                      <div className="mt-3 space-y-1.5 text-xs">
+                        <div className="flex items-center gap-1.5">
+                          <span className="text-slate-400 text-[11px] font-medium">✉️ Direct Email:</span>
+                          <span className="text-emerald-400 font-bold">
+                            {senderAccount === "hasnain" ? "hasnain@programmingbridge.org" : "official@programmingbridge.org"}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-1.5">
+                          <span className="text-slate-400 text-[11px] font-medium">🌐 Official Website:</span>
+                          <a
+                            href="https://programmingbridge.org"
+                            target="_blank"
+                            rel="noreferrer"
+                            className="text-sky-400 font-bold underline hover:text-sky-300 transition-colors"
+                          >
+                            https://programmingbridge.org
+                          </a>
+                        </div>
+                      </div>
                     </div>
                   </div>
 
