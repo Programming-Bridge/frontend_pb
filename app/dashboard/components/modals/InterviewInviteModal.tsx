@@ -470,7 +470,7 @@ export function InterviewInviteModal({
                         Talent Acquisition & HR Team
                       </p>
                       <p className="text-[11px] text-emerald-400 font-semibold mt-1">
-                        official@programmingbridge.org &bull; programmingbridge.org
+                        hr@programmingbridge.org &bull; programmingbridge.org
                       </p>
                     </div>
                   </div>
