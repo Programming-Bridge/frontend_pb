@@ -137,6 +137,10 @@ This frontend consumes REST API endpoints from the **Programming Bridge Backend 
 
 ## 📋 Changelog
 
+### v0.3.3 — Google Analytics GA4 & Zoho HR Email Routing
+- **Google Analytics GA4 Measurement**: Configured official GA4 measurement ID (`G-QCYK4XDQQN`) via Next.js `next/script` in RootLayout and `.env` environment variables.
+- **HR Email Recruitment Routing**: Integrated Zoho HR mailer routing (`hr@programmingbridge.org`) for all job candidate activities (interview invitations, status updates, rejection dispatches) and updated dashboard modal preview footers.
+
 ### v0.3.2 — Interactive AI Chatbot & WhatsApp Support Integration
 - **Interactive Floating Chatbot Widget**: Created native `ChatBot.tsx` component with instant AI conversational assistant, quick action suggestion chips, and dynamic dark/light mode compatibility.
 - **WhatsApp Live Support Integration**: Integrated direct WhatsApp click-to-chat connect with dedicated agency technical lead (`+923155831940`).

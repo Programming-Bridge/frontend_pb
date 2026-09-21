@@ -11,7 +11,7 @@ import { ChatBot } from "./components/ChatBot";
 import { Analytics } from "@vercel/analytics/react";
 
 const inter = Inter({ subsets: ["latin"] });
-const gaMeasurementId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || "G-PBENGINEER1";
+const gaMeasurementId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || "G-QCYK4XDQQN";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.programmingbridge.org"),
