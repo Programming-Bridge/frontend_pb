@@ -7,9 +7,13 @@ import type { Career, JobApplication } from "@/app/services/careerService";
 import type { InquiryItem } from "@/app/services/inquiryService";
 import type { TeamMember } from "@/app/services/teamService";
 import type { User } from "@/app/services/authService";
+import type { VisitorItem, VisitorStats } from "@/app/services/visitorService";
+
+export type { VisitorItem, VisitorStats };
 
 export type ActiveTab =
   | "overview"
+  | "visitors"
   | "banners"
   | "technologies"
   | "projects"
@@ -37,13 +41,14 @@ export type ModalType =
   | "edit-user"
   | "view-inquiry"
   | "view-application"
+  | "view-visitor"
   | "compose-email"
   | "invite-interview"
   | null;
 
 export interface DeleteModalState {
   isOpen: boolean;
-  type: "banner" | "project" | "tech" | "service" | "career" | "application" | "inquiry" | "team" | "user" | null;
+  type: "banner" | "project" | "tech" | "service" | "career" | "application" | "inquiry" | "team" | "user" | "visitor" | null;
   id: string | null;
   title: string;
   itemName?: string;
@@ -62,4 +67,8 @@ export interface DashboardStats {
   unreadInquiriesCount: number;
   teamCount: number;
   usersCount?: number;
+  visitorsCount?: number;
+  uniqueVisitorsCount?: number;
+  todayVisitorsCount?: number;
 }
+
