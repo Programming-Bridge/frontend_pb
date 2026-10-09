@@ -8,4 +8,5 @@ export * from "./techStackService";
 export * from "./teamService";
 export * from "./careerService";
 export * from "./authService";
+export * from "./visitorService";
 

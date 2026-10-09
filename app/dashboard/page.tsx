@@ -75,6 +75,13 @@ import {
   deleteTeamMember,
   type TeamMember,
 } from "@/app/services/teamService";
+import {
+  getVisitors,
+  deleteVisitor,
+  clearAllVisitors,
+  type VisitorItem,
+  type VisitorStats,
+} from "@/app/services/visitorService";
 
 // Types
 import type { ActiveTab, ModalType, DeleteModalState, DashboardStats } from "./types";
@@ -87,6 +94,7 @@ import { ConfirmDeleteModal } from "./components/ui/ConfirmDeleteModal";
 
 // Tab Views
 import { OverviewTab } from "./components/tabs/OverviewTab";
+import { VisitorsTab } from "./components/tabs/VisitorsTab";
 import { BannersTab } from "./components/tabs/BannersTab";
 import { ProjectsTab } from "./components/tabs/ProjectsTab";
 import { TechStackTab } from "./components/tabs/TechStackTab";
@@ -107,6 +115,7 @@ import { TeamModal } from "./components/modals/TeamModal";
 import { UserModal } from "./components/modals/UserModal";
 import { InquiryViewModal } from "./components/modals/InquiryViewModal";
 import { ApplicationViewModal } from "./components/modals/ApplicationViewModal";
+import { VisitorViewModal } from "./components/modals/VisitorViewModal";
 import { ComposeEmailModal } from "./components/modals/ComposeEmailModal";
 import { InterviewInviteModal } from "./components/modals/InterviewInviteModal";
 
@@ -133,6 +142,13 @@ export default function DashboardPage() {
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
   const [users, setUsers] = useState<User[]>([]);
 
+  // Visitor Traffic & IP States
+  const [visitors, setVisitors] = useState<VisitorItem[]>([]);
+  const [visitorStats, setVisitorStats] = useState<VisitorStats | null>(null);
+  const [isLoadingVisitors, setIsLoadingVisitors] = useState(false);
+  const [visitorPeriod, setVisitorPeriod] = useState<"all" | "today" | "7days" | "30days">("all");
+  const [visitorDeviceFilter, setVisitorDeviceFilter] = useState<string>("");
+
   // Search, Loading & Toast States
   const [isLoadingData, setIsLoadingData] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -155,6 +171,7 @@ export default function DashboardPage() {
 
   const tabTitleMap: Record<ActiveTab, string> = {
     overview: "System Overview",
+    visitors: "Visitor Traffic & IPs",
     banners: "Hero Banners",
     projects: "Portfolio Projects",
     technologies: "Tech Stack",
@@ -185,6 +202,7 @@ export default function DashboardPage() {
       const tabParam = params.get("tab") as ActiveTab | null;
       const validTabs: ActiveTab[] = [
         "overview",
+        "visitors",
         "banners",
         "projects",
         "technologies",
@@ -303,6 +321,28 @@ export default function DashboardPage() {
     }
   };
 
+  const fetchVisitorsData = async (
+    period = visitorPeriod,
+    device = visitorDeviceFilter
+  ) => {
+    try {
+      setIsLoadingVisitors(true);
+      const res = await getVisitors({
+        period,
+        device: device || undefined,
+        limit: 50,
+      });
+      if (res?.success) {
+        setVisitors(res.data || []);
+        setVisitorStats(res.stats || null);
+      }
+    } catch (e) {
+      console.error("Failed to fetch visitors:", e);
+    } finally {
+      setIsLoadingVisitors(false);
+    }
+  };
+
   // Fetch all collections
   const loadAllData = async () => {
     setIsLoadingData(true);
@@ -320,6 +360,7 @@ export default function DashboardPage() {
         inquiriesRes,
         teamRes,
         usersRes,
+        visitorsRes,
       ] = await Promise.allSettled([
         getBanners(),
         getProjects(),
@@ -330,6 +371,7 @@ export default function DashboardPage() {
         getInquiries(),
         getTeamMembers(),
         isSuper ? getAllUsers() : Promise.resolve([]),
+        getVisitors({ period: visitorPeriod, device: visitorDeviceFilter || undefined, limit: 50 }),
       ]);
 
       if (bannersRes.status === "fulfilled") setBanners(bannersRes.value || []);
@@ -341,6 +383,10 @@ export default function DashboardPage() {
       if (inquiriesRes.status === "fulfilled") setInquiries(inquiriesRes.value || []);
       if (teamRes.status === "fulfilled") setTeamMembers(teamRes.value || []);
       if (usersRes.status === "fulfilled") setUsers(usersRes.value || []);
+      if (visitorsRes.status === "fulfilled" && visitorsRes.value?.success) {
+        setVisitors(visitorsRes.value.data || []);
+        setVisitorStats(visitorsRes.value.stats || null);
+      }
     } catch (err) {
       console.error("Data loading error:", err);
     } finally {
@@ -775,6 +821,10 @@ export default function DashboardPage() {
         await deleteUserRecord(id);
         setUsers((prev) => prev.filter((u) => u._id !== id && u.id !== id));
         showToast("success", "User account removed.");
+      } else if (type === "visitor") {
+        await deleteVisitor(id);
+        setVisitors((prev) => prev.filter((v) => v._id !== id));
+        showToast("success", "Visitor log removed.");
       }
       setDeleteModal({ isOpen: false, type: null, id: null, title: "" });
     } catch (err) {
@@ -799,6 +849,9 @@ export default function DashboardPage() {
     unreadInquiriesCount: inquiries.filter((i) => !i.status || i.status === "New").length,
     teamCount: teamMembers.length,
     usersCount: users.length,
+    visitorsCount: visitorStats?.totalVisitsCount || visitors.reduce((sum, v) => sum + (v.totalVisits || 1), 0),
+    uniqueVisitorsCount: visitorStats?.totalUniqueVisitors || visitors.length,
+    todayVisitorsCount: visitorStats?.todayActiveVisitors || 0,
   };
 
   if (!authChecked) {
@@ -837,6 +890,7 @@ export default function DashboardPage() {
           pendingApplications: dashboardStats.pendingApplicationsCount,
           unreadInquiries: dashboardStats.unreadInquiriesCount,
           openCareers: dashboardStats.openCareersCount,
+          todayVisitors: dashboardStats.todayVisitorsCount,
         }}
       />
 
@@ -866,6 +920,7 @@ export default function DashboardPage() {
               }}
               recentInquiries={inquiries}
               recentApplications={applications}
+              recentVisitors={visitors}
               onViewInquiry={(inq) => {
                 setSelectedItem(inq);
                 setModalType("view-inquiry");
@@ -873,6 +928,53 @@ export default function DashboardPage() {
               onViewApplication={(app) => {
                 setSelectedItem(app);
                 setModalType("view-application");
+              }}
+              onViewVisitor={(v) => {
+                setSelectedItem(v);
+                setModalType("view-visitor");
+              }}
+            />
+          )}
+
+          {activeTab === "visitors" && (
+            <VisitorsTab
+              visitors={visitors}
+              stats={visitorStats}
+              searchQuery={searchQuery}
+              isLoading={isLoadingVisitors}
+              onRefresh={() => fetchVisitorsData(visitorPeriod, visitorDeviceFilter)}
+              onViewVisitor={(v) => {
+                setSelectedItem(v);
+                setModalType("view-visitor");
+              }}
+              onDeleteVisitor={(id, ip) =>
+                requestDelete("visitor", id, "Delete Visitor IP Record", ip)
+              }
+              onClearAllVisitors={
+                currentUser?.role === "superadmin" || authUser?.role === "superadmin"
+                  ? async () => {
+                      if (window.confirm("Are you sure you want to clear all visitor logs?")) {
+                        try {
+                          await clearAllVisitors();
+                          showToast("success", "All visitor logs cleared successfully.");
+                          fetchVisitorsData();
+                        } catch (e: any) {
+                          showToast("error", e.message || "Failed to clear logs.");
+                        }
+                      }
+                    }
+                  : undefined
+              }
+              isSuperAdmin={currentUser?.role === "superadmin" || authUser?.role === "superadmin"}
+              period={visitorPeriod}
+              onPeriodChange={(newPeriod) => {
+                setVisitorPeriod(newPeriod);
+                fetchVisitorsData(newPeriod, visitorDeviceFilter);
+              }}
+              deviceFilter={visitorDeviceFilter}
+              onDeviceFilterChange={(newDevice) => {
+                setVisitorDeviceFilter(newDevice);
+                fetchVisitorsData(visitorPeriod, newDevice);
               }}
             />
           )}
@@ -1192,6 +1294,16 @@ export default function DashboardPage() {
             )
           );
         }}
+      />
+
+      <VisitorViewModal
+        isOpen={modalType === "view-visitor"}
+        visitor={selectedItem}
+        onClose={() => {
+          setModalType(null);
+          setSelectedItem(null);
+        }}
+        onDelete={(id) => requestDelete("visitor", id, "Delete Visitor IP Record", selectedItem?.ip || "Visitor")}
       />
 
       {/* Accessible Confirmation Deletion Dialog */}

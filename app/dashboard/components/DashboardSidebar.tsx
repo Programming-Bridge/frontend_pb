@@ -7,6 +7,7 @@ import type { User } from "@/app/services/authService";
 import type { ActiveTab } from "../types";
 import {
   LayoutDashboard,
+  Globe,
   Image as ImageIcon,
   Code2,
   Briefcase,
@@ -26,7 +27,7 @@ interface NavItem {
   label: string;
   icon: any;
   badgeCount?: number;
-  badgeVariant?: "brand" | "amber" | "rose";
+  badgeVariant?: "brand" | "amber" | "rose" | "cyan";
 }
 
 interface DashboardSidebarProps {
@@ -40,6 +41,7 @@ interface DashboardSidebarProps {
     pendingApplications: number;
     unreadInquiries: number;
     openCareers: number;
+    todayVisitors?: number;
   };
 }
 
@@ -59,6 +61,13 @@ export function DashboardSidebar({
       id: "overview",
       label: "Overview",
       icon: LayoutDashboard,
+    },
+    {
+      id: "visitors",
+      label: "Visitor Traffic & IPs",
+      icon: Globe,
+      badgeCount: counts.todayVisitors !== undefined && counts.todayVisitors > 0 ? counts.todayVisitors : undefined,
+      badgeVariant: "brand",
     },
     {
       id: "banners",

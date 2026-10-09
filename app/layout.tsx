@@ -8,6 +8,7 @@ import { StoreProvider } from "./StoreProvider";
 import { AppPreloader } from "./components/AppPreloader";
 import { TawkTo } from "./components/TawkTo";
 import { ChatBot } from "./components/ChatBot";
+import { VisitorTracker } from "./components/VisitorTracker";
 import { Analytics } from "@vercel/analytics/react";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -158,6 +159,7 @@ export default function RootLayout({
 
             <ThemeSync />
             <AppPreloader />
+            <VisitorTracker />
             {children}
             <Analytics />
             <TawkTo />

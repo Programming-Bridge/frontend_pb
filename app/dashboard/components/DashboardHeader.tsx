@@ -30,6 +30,10 @@ const tabTitles: Record<ActiveTab, { title: string; subtitle: string }> = {
     title: "System Overview",
     subtitle: "Real-time metrics, system health, and quick actions",
   },
+  visitors: {
+    title: "Visitor Traffic & IPs",
+    subtitle: "Real-time client IP addresses, geolocation, devices, and page telemetry",
+  },
   banners: {
     title: "Hero Banners",
     subtitle: "Manage homepage hero sections, CTA buttons, and visuals",
